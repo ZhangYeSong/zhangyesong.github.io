@@ -1,0 +1,275 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  
+
+  
+  <title>使用jsonwebtoken完成nodejs的登陆系统 | 业松 Studio</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+  <meta name="description" content="今天我们继续，做一个简单的登陆系统，使用jsonwebtoken作鉴权。 Mongoose添加数据库账号集合首先我们定义一个AccountSchema，如下： 1234567891011const mongoose &#x3D; require(&#39;mongoose&#39;);const Schema &#x3D; mongoose.Schema;const AccountSchema &amp;">
+<meta property="og:type" content="article">
+<meta property="og:title" content="使用jsonwebtoken完成nodejs的登陆系统">
+<meta property="og:url" content="http://yoursite.com/2018/12/29/%E4%BD%BF%E7%94%A8jsonwebtoken%E5%AE%8C%E6%88%90nodejs%E7%9A%84%E7%99%BB%E9%99%86%E7%B3%BB%E7%BB%9F/index.html">
+<meta property="og:site_name" content="业松 Studio">
+<meta property="og:description" content="今天我们继续，做一个简单的登陆系统，使用jsonwebtoken作鉴权。 Mongoose添加数据库账号集合首先我们定义一个AccountSchema，如下： 1234567891011const mongoose &#x3D; require(&#39;mongoose&#39;);const Schema &#x3D; mongoose.Schema;const AccountSchema &amp;">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://upload-images.jianshu.io/upload_images/5586297-b2f04651b045ded3.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240">
+<meta property="article:published_time" content="2018-12-29T14:02:04.000Z">
+<meta property="article:modified_time" content="2020-12-24T11:34:17.252Z">
+<meta property="article:author" content="业松">
+<meta property="article:tag" content="Node.js">
+<meta property="article:tag" content="Koa">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://upload-images.jianshu.io/upload_images/5586297-b2f04651b045ded3.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240">
+  
+    <link rel="alternate" href="/atom.xml" title="业松 Studio" type="application/atom+xml">
+  
+  
+    <link rel="icon" href="/favicon.png">
+  
+  
+    <link href="//fonts.googleapis.com/css?family=Source+Code+Pro" rel="stylesheet" type="text/css">
+  
+  
+<link rel="stylesheet" href="/css/style.css">
+
+<meta name="generator" content="Hexo 5.3.0"></head>
+
+<body>
+  <div id="container">
+    <div id="wrap">
+      <header id="header">
+  <div id="banner"></div>
+  <div id="header-outer" class="outer">
+    <div id="header-title" class="inner">
+      <h1 id="logo-wrap">
+        <a href="/" id="logo">业松 Studio</a>
+      </h1>
+      
+    </div>
+    <div id="header-inner" class="inner">
+      <nav id="main-nav">
+        <a id="main-nav-toggle" class="nav-icon"></a>
+        
+          <a class="main-nav-link" href="/">Home</a>
+        
+          <a class="main-nav-link" href="/archives">Archives</a>
+        
+      </nav>
+      <nav id="sub-nav">
+        
+          <a id="nav-rss-link" class="nav-icon" href="/atom.xml" title="RSS Feed"></a>
+        
+        <a id="nav-search-btn" class="nav-icon" title="搜索"></a>
+      </nav>
+      <div id="search-form-wrap">
+        <form action="//google.com/search" method="get" accept-charset="UTF-8" class="search-form"><input type="search" name="q" class="search-form-input" placeholder="Search"><button type="submit" class="search-form-submit">&#xF002;</button><input type="hidden" name="sitesearch" value="http://yoursite.com"></form>
+      </div>
+    </div>
+  </div>
+</header>
+      <div class="outer">
+        <section id="main"><article id="post-使用jsonwebtoken完成nodejs的登陆系统" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/2018/12/29/%E4%BD%BF%E7%94%A8jsonwebtoken%E5%AE%8C%E6%88%90nodejs%E7%9A%84%E7%99%BB%E9%99%86%E7%B3%BB%E7%BB%9F/" class="article-date">
+  <time datetime="2018-12-29T14:02:04.000Z" itemprop="datePublished">2018-12-29</time>
+</a>
+    
+  <div class="article-category">
+    <a class="article-category-link" href="/categories/Node-js/">Node.js</a>
+  </div>
+
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 class="article-title" itemprop="name">
+      使用jsonwebtoken完成nodejs的登陆系统
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <p>今天我们继续，做一个简单的登陆系统，使用<a target="_blank" rel="noopener" href="https://jwt.io/">jsonwebtoken</a>作鉴权。</p>
+<h3 id="Mongoose添加数据库账号集合"><a href="#Mongoose添加数据库账号集合" class="headerlink" title="Mongoose添加数据库账号集合"></a>Mongoose添加数据库账号集合</h3><p>首先我们定义一个AccountSchema，如下：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">const mongoose &#x3D; require(&#39;mongoose&#39;);</span><br><span class="line">const Schema &#x3D; mongoose.Schema;</span><br><span class="line"></span><br><span class="line">const AccountSchema &#x3D; new Schema(&#123;</span><br><span class="line">    user_id: &#123;type: String, required: true&#125;,</span><br><span class="line">    username: &#123;type: String, required: true&#125;,</span><br><span class="line">    password: &#123;type: String, required: true&#125;,</span><br><span class="line">&#125;);</span><br><span class="line"></span><br><span class="line">const AccountModel &#x3D; mongoose.model(&#39;Account&#39;, AccountSchema);</span><br><span class="line">module.exports &#x3D; AccountModel;</span><br></pre></td></tr></table></figure>
+<p>然后我们创建一个名为account的路由，开始写接口。先写注册接口，<br>注册接口就是直接post account，代码如下：</p>
+<a id="more"></a>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br></pre></td><td class="code"><pre><span class="line">const response &#x3D; require(&#39;..&#x2F;util&#x2F;response-util&#39;);</span><br><span class="line">const router &#x3D; require(&quot;koa-router&quot;)();</span><br><span class="line">const AccountModel &#x3D; require(&#39;..&#x2F;model&#x2F;account&#39;);</span><br><span class="line">const key &#x3D; require(&#39;..&#x2F;config&#x2F;secret-key&#39;);</span><br><span class="line">const md5 &#x3D; require(&#39;md5&#39;);</span><br><span class="line"></span><br><span class="line">&#x2F;&#x2F;注册账号接口</span><br><span class="line">router.post(&#39;&#x2F;&#39;, async (ctx) &#x3D;&gt; &#123;</span><br><span class="line">    let requestAccount &#x3D; ctx.request.body;</span><br><span class="line">    if (!requestAccount.username || requestAccount.username.length &lt; 3) &#123;</span><br><span class="line">        ctx.throw(400, &#39;length of username need &gt;&#x3D; 3&#39;);</span><br><span class="line">    &#125;</span><br><span class="line">    if (!requestAccount.password || requestAccount.password.length &lt; 6) &#123;</span><br><span class="line">        ctx.throw(400, &#39;length of password need &gt;&#x3D; 6&#39;);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    const isDuplicatedUsername &#x3D; await AccountModel.findOne(&#123;&#39;username&#39;: requestAccount.username&#125;);</span><br><span class="line">    if(isDuplicatedUsername) &#123;</span><br><span class="line">        ctx.throw(400,&#39;duplicated username&#39;);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    requestAccount.password &#x3D; md5(key.accountPasswordKey + requestAccount.password);</span><br><span class="line">    let result &#x3D; await AccountModel.create(requestAccount);</span><br><span class="line">    if (result) &#123;</span><br><span class="line">        ctx.body &#x3D; response.createOKResponse(result);</span><br><span class="line">    &#125; else &#123;</span><br><span class="line">        ctx.body &#x3D; response.createFailedResponse(500, &#39;create account failed&#39;);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">&#125;);</span><br></pre></td></tr></table></figure>
+<p>账号使用password再加一个盐指一起做MD5加密，虽然对Schema里做了长度、唯一性限制，在接口上也要做限制来做json返回。<br>再写一个注销接口方便写做单元测试：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">&#x2F;&#x2F;注销账号接口</span><br><span class="line">router.delete(&#39;&#x2F;&#39;, async (ctx) &#x3D;&gt; &#123;</span><br><span class="line">    let username &#x3D; ctx.query.username;</span><br><span class="line">    if (!username) &#123;</span><br><span class="line">        ctx.throw(400, &#39;need username&#39;);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    let result &#x3D; await  AccountModel.findOneAndDelete(username);</span><br><span class="line">    if (result) ctx.body &#x3D; response.createOKResponse(result);</span><br><span class="line">    else ctx.body &#x3D; response.createFailedResponse(500, &#39;delete account fail&#39;)</span><br><span class="line">&#125;);</span><br></pre></td></tr></table></figure>
+<p>然后是登陆接口，先做校验，生成token令牌下面再做：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line">&#x2F;&#x2F;登陆接口</span><br><span class="line">router.post(&#39;&#x2F;user-token&#39;, async (ctx) &#x3D;&gt; &#123;</span><br><span class="line">    let requestAccount &#x3D; ctx.request.body;</span><br><span class="line">    if (!requestAccount.username || requestAccount.username.length &lt; 3) &#123;</span><br><span class="line">        ctx.throw(400, &#39;length of username need &gt;&#x3D; 3&#39;);</span><br><span class="line">    &#125;</span><br><span class="line">    if (!requestAccount.password || requestAccount.password.length &lt; 6) &#123;</span><br><span class="line">        ctx.throw(400, &#39;length of password need &gt;&#x3D; 6&#39;);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    requestAccount.password &#x3D; md5(key.accountPasswordKey + requestAccount.password);</span><br><span class="line">    let account &#x3D; await AccountModel.findOne(requestAccount);</span><br><span class="line">    if (account) &#123;</span><br><span class="line">        ctx.body &#x3D; response.createOKResponse(account);</span><br><span class="line">    &#125; else &#123;</span><br><span class="line">        ctx.body &#x3D; response.createFailedResponse(500, &#39;query account failed&#39;);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">&#125;);</span><br></pre></td></tr></table></figure>
+<p>这些都很简单。退出登陆不需要做，根据jwt的标准，后端不保存token，想要退出登陆前端把当前token删掉就可以了。</p>
+<h3 id="使用JWT作登陆认证"><a href="#使用JWT作登陆认证" class="headerlink" title="使用JWT作登陆认证"></a>使用JWT作登陆认证</h3><p>现在的应用都要作多终端认证，因此使用token来做认证是非常合适的，基本上移动端都是用accsess-token来验证用户的登陆信息。<br><a target="_blank" rel="noopener" href="https://jwt.io/">jsonwebtoken</a>是一个跨域认证标准，不了解的朋友可以先看看阮一峰老师的这篇博客<a target="_blank" rel="noopener" href="http://www.ruanyifeng.com/blog/2018/07/json_web_token-tutorial.html">JSON Web Token 入门教程</a>。<br>它的好处就是可以跨域，跨平台。而且由于服务端不需要保存token信息，开发起来非常简单。<br>JWT在不同语言、平台有不同的实现库，由于我们是nodejs，所以直接去npm上找，<a target="_blank" rel="noopener" href="https://www.npmjs.com/package/jsonwebtoken">node版JWT</a>这个就是了，可以看下使用方法，真的是非常简单呢。先运行下npm install jsonwebtoken安装JWT依赖。<br>下面我们继续写登陆接口，返回一个user-token给客户端，客户端拿到后保存起来，以后的请求在请求头里加上token信息，后端就可以识别了。<br>由于我打算用加密强度非常大的RSA256加密jwt，因此先生成一对RSA密钥，我们借助openssl来创建RSA256密钥对：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line">full-stacker&#x2F;full-stacker-api&#x2F;config  master ✗                                                                                                                                           2d ⚑  </span><br><span class="line">▶ openssl</span><br><span class="line">OpenSSL&gt; genrsa -out jwt.pem 1024                        </span><br><span class="line">Generating RSA private key, 1024 bit long modulus</span><br><span class="line">....++++++</span><br><span class="line">.......................++++++</span><br><span class="line">e is 65537 (0x10001)</span><br><span class="line">      </span><br><span class="line">OpenSSL&gt; rsa -in jwt.pem -pubout -out jwt_pub.pem</span><br><span class="line">writing RSA key</span><br><span class="line">OpenSSL&gt; exit</span><br><span class="line"></span><br><span class="line">full-stacker&#x2F;full-stacker-api&#x2F;config  master ✗                                                                                                                                         2d ⚑ ◒  </span><br><span class="line">▶ ls</span><br><span class="line">jwt.pem       jwt_pub.pem   mongo-db.js   secret-key.js</span><br></pre></td></tr></table></figure>
+<p>密钥有了，我们可以在登陆接口生成jwt给客户端了：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br></pre></td><td class="code"><pre><span class="line">&#x2F;&#x2F;登陆接口</span><br><span class="line">router.post(&#39;&#x2F;user-token&#39;, async (ctx) &#x3D;&gt; &#123;</span><br><span class="line">    let requestAccount &#x3D; ctx.request.body;</span><br><span class="line">    if (!requestAccount.username || requestAccount.username.length &lt; 3) &#123;</span><br><span class="line">        ctx.throw(400, &#39;length of username need &gt;&#x3D; 3&#39;);</span><br><span class="line">    &#125;</span><br><span class="line">    if (!requestAccount.password || requestAccount.password.length &lt; 6) &#123;</span><br><span class="line">        ctx.throw(400, &#39;length of password need &gt;&#x3D; 6&#39;);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    requestAccount.password &#x3D; md5(key.accountPasswordKey + requestAccount.password);</span><br><span class="line">    let account &#x3D; await AccountModel.findOne(requestAccount);</span><br><span class="line">    if (account) &#123;</span><br><span class="line">        let cert &#x3D; fs.readFileSync(path.resolve(__dirname, &#39;..&#x2F;config&#x2F;jwt.pem&#39;));</span><br><span class="line">        let userToken &#x3D; jwt.sign(&#123;</span><br><span class="line">                _id: account._id,</span><br><span class="line">                username: account.username</span><br><span class="line">            &#125;, cert,</span><br><span class="line">            &#123;</span><br><span class="line">                algorithm: &#39;RS256&#39;,</span><br><span class="line">                expiresIn: &#39;1h&#39;</span><br><span class="line">            &#125;);</span><br><span class="line">        ctx.body &#x3D; response.createOKResponse(userToken);</span><br><span class="line">    &#125; else &#123;</span><br><span class="line">        ctx.body &#x3D; response.createFailedResponse(500, &#39;wrong username or password&#39;);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">&#125;);</span><br></pre></td></tr></table></figure>
+<p>这其中，fs读取文件的时候读相对路径经常会找不到，无奈借助path来读绝对路径给fs，jwt里存储用户的id和username，这里expiresIn表示过期时间。<br>最后我们写个测试接口来测试一个jwt登陆鉴权：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line">&#x2F;&#x2F;登陆鉴权测试接口</span><br><span class="line">router.get(&#39;&#x2F;test&#39;, async (ctx) &#x3D;&gt; &#123;</span><br><span class="line">    userToken &#x3D; ctx.request.get(&#39;Authorization&#39;);</span><br><span class="line">    let cert &#x3D; fs.readFileSync(path.resolve(__dirname, &#39;..&#x2F;config&#x2F;jwt_pub.pem&#39;));</span><br><span class="line"></span><br><span class="line">    try &#123;</span><br><span class="line">        const decoded &#x3D; await jwt.verify(userToken, cert);</span><br><span class="line">        ctx.body &#x3D; response.createOKResponse(decoded);</span><br><span class="line">    &#125; catch (e) &#123;</span><br><span class="line">        ctx.throw(401, &#39;need authorization&#39;)</span><br><span class="line">    &#125;</span><br><span class="line">&#125;);</span><br></pre></td></tr></table></figure>
+<p><img src="https://upload-images.jianshu.io/upload_images/5586297-b2f04651b045ded3.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="Restlet Client"><br>这里推荐一个测试接口的chrome插件<a target="_blank" rel="noopener" href="https://chrome.google.com/webstore/detail/restlet-client-rest-api-t/aejoelaoggembcahagimdiliamlcdmfm">Restlet Client</a>，感觉比postman更好用。</p>
+<p>现在我们再把鉴权过程封装成方法，新建一个util文件login-authorization.js，如下：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line">const jwt &#x3D; require(&#39;jsonwebtoken&#39;);</span><br><span class="line">const fs &#x3D; require(&#39;fs&#39;);</span><br><span class="line">const path &#x3D; require(&#39;path&#39;);</span><br><span class="line"></span><br><span class="line">module.exports &#x3D; async function (ctx) &#123;</span><br><span class="line">    const requestToken &#x3D; ctx.request.get(&#39;Authorization&#39;);</span><br><span class="line">    let cert &#x3D; fs.readFileSync(path.resolve(__dirname, &#39;..&#x2F;config&#x2F;jwt_pub.pem&#39;));</span><br><span class="line">    try &#123;</span><br><span class="line">        return await jwt.verify(requestToken, cert);</span><br><span class="line">    &#125; catch (e) &#123;</span><br><span class="line">        ctx.throw(401);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;;</span><br><span class="line"></span><br><span class="line">这样其他地方要获取解析后的jwt直接调用该方法就可以了。</span><br></pre></td></tr></table></figure>
+<p>好了，这下我们基本的账号系统和登陆鉴权就做完了，使用JWT是不是超级简单呢？</p>
+<h3 id="编写单元测试"><a href="#编写单元测试" class="headerlink" title="编写单元测试"></a>编写单元测试</h3><p>使用ava+superkoa做单元测试，代码如下：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br></pre></td><td class="code"><pre><span class="line">import test from &#39;ava&#39;;</span><br><span class="line">import superKoa from &#39;superkoa&#39;;</span><br><span class="line">import app from &#39;..&#x2F;app&#39;;</span><br><span class="line"></span><br><span class="line">test.serial(&#39;register account&#39;, async t &#x3D;&gt; &#123;</span><br><span class="line">    let res &#x3D; await superKoa(app)</span><br><span class="line">        .post(&#39;&#x2F;account&#39;)</span><br><span class="line">        .send(&#123;username: &#39;test-account&#39;, password: &#39;123456&#39;&#125;);</span><br><span class="line">    t.is(200, res.status);</span><br><span class="line">    t.is(0, res.body.error);</span><br><span class="line">    t.is(&#39;test-account&#39;, res.body.data.username);</span><br><span class="line">&#125;);</span><br><span class="line"></span><br><span class="line">test.serial(&#39;login &amp;&amp; authorization&#39;, async t &#x3D;&gt; &#123;</span><br><span class="line">    let res &#x3D; await superKoa(app)</span><br><span class="line">        .post(&#39;&#x2F;account&#x2F;user-token&#39;)</span><br><span class="line">        .send(&#123;username: &#39;test-account&#39;, password: &#39;123456&#39;&#125;);</span><br><span class="line">    t.is(200, res.status);</span><br><span class="line">    t.is(0, res.body.error);</span><br><span class="line"></span><br><span class="line">    let res2 &#x3D; await superKoa(app)</span><br><span class="line">        .get(&#39;&#x2F;account&#x2F;test&#39;)</span><br><span class="line">        .set(&#39;Authorization&#39;, res.body.data);</span><br><span class="line">    t.is(200, res2.status);</span><br><span class="line">    t.is(0, res2.body.error);</span><br><span class="line">    t.is(&#39;test-account&#39;, res2.body.data.username);</span><br><span class="line">&#125;);</span><br><span class="line"></span><br><span class="line">test.serial(&#39;unregister authorization&#39;, async t &#x3D;&gt; &#123;</span><br><span class="line">    let res &#x3D; await superKoa(app)</span><br><span class="line">        .delete(&#39;&#x2F;account?username&#x3D;test-account&#39;);</span><br><span class="line">    t.is(200, res.status);</span><br><span class="line">    t.is(0, res.body.error);</span><br><span class="line">    t.is(&#39;test-account&#39;, res.body.data.username);</span><br><span class="line">&#125;);</span><br></pre></td></tr></table></figure>
+<p>运行一下，看看结果：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br></pre></td><td class="code"><pre><span class="line">▶ npm test</span><br><span class="line"></span><br><span class="line">&gt; full-stacker-server@0.1.0 test &#x2F;Users&#x2F;judy&#x2F;WeChatProjects&#x2F;full-stacker&#x2F;full-stacker-api</span><br><span class="line">&gt; ava -v</span><br><span class="line"></span><br><span class="line">POST &#x2F;category - 424ms</span><br><span class="line">  --&gt; POST &#x2F;category 200 431ms 89b</span><br><span class="line">  ✔ create category (473ms)</span><br><span class="line">  &lt;-- PATCH &#x2F;category</span><br><span class="line">PATCH &#x2F;category - 912ms</span><br><span class="line">  --&gt; PATCH &#x2F;category 200 913ms 90b</span><br><span class="line">  ✔ update category (920ms)</span><br><span class="line">  &lt;-- GET &#x2F;category&#x2F;list?parent&#x3D;root</span><br><span class="line">GET &#x2F;category&#x2F;list?parent&#x3D;root - 22ms</span><br><span class="line">  --&gt; GET &#x2F;category&#x2F;list?parent&#x3D;root 200 31ms 270b</span><br><span class="line">  ✔ query categories by parent</span><br><span class="line">  &lt;-- DELETE &#x2F;category?_id&#x3D;test</span><br><span class="line">DELETE &#x2F;category?_id&#x3D;test - 21ms</span><br><span class="line">  --&gt; DELETE &#x2F;category?_id&#x3D;test 200 22ms 90b</span><br><span class="line">  ✔ delete category</span><br><span class="line">  &lt;-- POST &#x2F;account</span><br><span class="line">POST &#x2F;account - 56ms</span><br><span class="line">  --&gt; POST &#x2F;account 200 58ms 133b</span><br><span class="line">  ✔ register account</span><br><span class="line">  &lt;-- POST &#x2F;account&#x2F;user-token</span><br><span class="line">POST &#x2F;account&#x2F;user-token - 25ms</span><br><span class="line">  --&gt; POST &#x2F;account&#x2F;user-token 200 25ms 356b</span><br><span class="line">  &lt;-- GET &#x2F;account&#x2F;test</span><br><span class="line">GET &#x2F;account&#x2F;test - 6ms</span><br><span class="line">  --&gt; GET &#x2F;account&#x2F;test 200 8ms 113b</span><br><span class="line">  ✔ login &amp;&amp; authorization</span><br><span class="line">  &lt;-- DELETE &#x2F;account?username&#x3D;test-account</span><br><span class="line">DELETE &#x2F;account?username&#x3D;test-account - 15ms</span><br><span class="line">  --&gt; DELETE &#x2F;account?username&#x3D;test-account 200 17ms 133b</span><br><span class="line">  ✔ unregister authorization</span><br><span class="line">  &lt;-- GET &#x2F;</span><br><span class="line">GET &#x2F; - 0ms</span><br><span class="line">  --&gt; GET &#x2F; 200 3ms 19b</span><br><span class="line">  ✔ hello full-stacker</span><br><span class="line"></span><br><span class="line">  8 tests passed</span><br></pre></td></tr></table></figure>
+<p>全部通过（有5个是之前的，有时间把测试包给分一下），happy，回家过元旦！</p>
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="http://yoursite.com/2018/12/29/%E4%BD%BF%E7%94%A8jsonwebtoken%E5%AE%8C%E6%88%90nodejs%E7%9A%84%E7%99%BB%E9%99%86%E7%B3%BB%E7%BB%9F/" data-id="ckj2v1sqy002ubkus1zpt400i" class="article-share-link">Share</a>
+      
+      
+  <ul class="article-tag-list" itemprop="keywords"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Koa/" rel="tag">Koa</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Node-js/" rel="tag">Node.js</a></li></ul>
+
+    </footer>
+  </div>
+  
+    
+<nav id="article-nav">
+  
+    <a href="/2018/12/31/2018%E7%BB%99%E8%87%AA%E5%B7%B1%E4%B8%80%E4%B8%AA%E7%AE%80%E5%8D%95%E7%9A%84%E6%80%BB%E7%BB%93/" id="article-nav-newer" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">Newer</strong>
+      <div class="article-nav-title">
+        
+          2018给自己一个简单的总结
+        
+      </div>
+    </a>
+  
+  
+    <a href="/2018/12/28/Android%E4%B8%89%E5%A4%A7%E9%A1%B9%E7%9B%AE%E6%9E%B6%E6%9E%84MVC%E3%80%81MVP%E3%80%81MVVM%E4%BD%BF%E7%94%A8%E4%BD%93%E9%AA%8C/" id="article-nav-older" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">Older</strong>
+      <div class="article-nav-title">Android三大项目架构MVC、MVP、MVVM使用体验</div>
+    </a>
+  
+</nav>
+
+  
+</article>
+
+</section>
+        
+          <aside id="sidebar">
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">分类</h3>
+    <div class="widget">
+      <ul class="category-list"><li class="category-list-item"><a class="category-list-link" href="/categories/Android/">Android</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/Java/">Java</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/JavaScript/">JavaScript</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/Linux/">Linux</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/Node-js/">Node.js</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/git/">git</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/%E7%88%AC%E8%99%AB/">爬虫</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/%E9%9A%8F%E7%AC%94/">随笔</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/%E9%A1%B9%E7%9B%AE%E7%AE%A1%E7%90%86/">项目管理</a></li></ul>
+    </div>
+  </div>
+
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">标签</h3>
+    <div class="widget">
+      <ul class="tag-list" itemprop="keywords"><li class="tag-list-item"><a class="tag-list-link" href="/tags/Android/" rel="tag">Android</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Android-Studio/" rel="tag">Android Studio</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Github/" rel="tag">Github</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/JPA/" rel="tag">JPA</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/JVM/" rel="tag">JVM</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Java/" rel="tag">Java</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/JavaScript/" rel="tag">JavaScript</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Koa/" rel="tag">Koa</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Kotlin/" rel="tag">Kotlin</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Linux/" rel="tag">Linux</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/MongoDB/" rel="tag">MongoDB</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Node-js/" rel="tag">Node.js</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/OKHttp/" rel="tag">OKHttp</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Profiler/" rel="tag">Profiler</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/RESTful/" rel="tag">RESTful</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Spring-Boot/" rel="tag">Spring Boot</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Ubuntu/" rel="tag">Ubuntu</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/ava/" rel="tag">ava</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/git/" rel="tag">git</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/mongoose/" rel="tag">mongoose</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/python/" rel="tag">python</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E6%80%A7%E8%83%BD%E4%BC%98%E5%8C%96/" rel="tag">性能优化</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E6%BA%90%E7%A0%81%E5%88%86%E6%9E%90/" rel="tag">源码分析</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E7%88%AC%E8%99%AB/" rel="tag">爬虫</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E7%8E%AF%E5%A2%83%E9%85%8D%E7%BD%AE/" rel="tag">环境配置</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E7%94%9F%E6%B4%BB/" rel="tag">生活</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E8%81%8C%E4%B8%9A%E8%A7%84%E5%88%92/" rel="tag">职业规划</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E9%9A%8F%E7%AC%94/" rel="tag">随笔</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E9%A1%B9%E7%9B%AE%E7%AE%A1%E7%90%86/" rel="tag">项目管理</a></li></ul>
+    </div>
+  </div>
+
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">标签云</h3>
+    <div class="widget tagcloud">
+      <a href="/tags/Android/" style="font-size: 20px;">Android</a> <a href="/tags/Android-Studio/" style="font-size: 12.5px;">Android Studio</a> <a href="/tags/Github/" style="font-size: 10px;">Github</a> <a href="/tags/JPA/" style="font-size: 10px;">JPA</a> <a href="/tags/JVM/" style="font-size: 12.5px;">JVM</a> <a href="/tags/Java/" style="font-size: 15px;">Java</a> <a href="/tags/JavaScript/" style="font-size: 10px;">JavaScript</a> <a href="/tags/Koa/" style="font-size: 10px;">Koa</a> <a href="/tags/Kotlin/" style="font-size: 12.5px;">Kotlin</a> <a href="/tags/Linux/" style="font-size: 12.5px;">Linux</a> <a href="/tags/MongoDB/" style="font-size: 10px;">MongoDB</a> <a href="/tags/Node-js/" style="font-size: 15px;">Node.js</a> <a href="/tags/OKHttp/" style="font-size: 15px;">OKHttp</a> <a href="/tags/Profiler/" style="font-size: 10px;">Profiler</a> <a href="/tags/RESTful/" style="font-size: 10px;">RESTful</a> <a href="/tags/Spring-Boot/" style="font-size: 10px;">Spring Boot</a> <a href="/tags/Ubuntu/" style="font-size: 10px;">Ubuntu</a> <a href="/tags/ava/" style="font-size: 10px;">ava</a> <a href="/tags/git/" style="font-size: 12.5px;">git</a> <a href="/tags/mongoose/" style="font-size: 10px;">mongoose</a> <a href="/tags/python/" style="font-size: 10px;">python</a> <a href="/tags/%E6%80%A7%E8%83%BD%E4%BC%98%E5%8C%96/" style="font-size: 10px;">性能优化</a> <a href="/tags/%E6%BA%90%E7%A0%81%E5%88%86%E6%9E%90/" style="font-size: 15px;">源码分析</a> <a href="/tags/%E7%88%AC%E8%99%AB/" style="font-size: 10px;">爬虫</a> <a href="/tags/%E7%8E%AF%E5%A2%83%E9%85%8D%E7%BD%AE/" style="font-size: 15px;">环境配置</a> <a href="/tags/%E7%94%9F%E6%B4%BB/" style="font-size: 12.5px;">生活</a> <a href="/tags/%E8%81%8C%E4%B8%9A%E8%A7%84%E5%88%92/" style="font-size: 10px;">职业规划</a> <a href="/tags/%E9%9A%8F%E7%AC%94/" style="font-size: 17.5px;">随笔</a> <a href="/tags/%E9%A1%B9%E7%9B%AE%E7%AE%A1%E7%90%86/" style="font-size: 10px;">项目管理</a>
+    </div>
+  </div>
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">归档</h3>
+    <div class="widget">
+      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2020/12/">十二月 2020</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/01/">一月 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/12/">十二月 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/11/">十一月 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/10/">十月 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/09/">九月 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/07/">七月 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/05/">五月 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/03/">三月 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/09/">九月 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/07/">七月 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/05/">五月 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/04/">四月 2017</a></li></ul>
+    </div>
+  </div>
+
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">最新文章</h3>
+    <div class="widget">
+      <ul>
+        
+          <li>
+            <a href="/2020/12/24/%E8%80%81%E5%AE%9E%E4%BA%BA%E6%80%95%E5%BC%80%E5%8F%A3/">老实人怕开口</a>
+          </li>
+        
+          <li>
+            <a href="/2019/01/01/2019%E7%AC%AC%E4%B8%80%E5%A4%A9%E5%85%88%E7%AB%8Bflag/">2019第一天先立flag</a>
+          </li>
+        
+          <li>
+            <a href="/2018/12/31/2018%E7%BB%99%E8%87%AA%E5%B7%B1%E4%B8%80%E4%B8%AA%E7%AE%80%E5%8D%95%E7%9A%84%E6%80%BB%E7%BB%93/">2018给自己一个简单的总结</a>
+          </li>
+        
+          <li>
+            <a href="/2018/12/29/%E4%BD%BF%E7%94%A8jsonwebtoken%E5%AE%8C%E6%88%90nodejs%E7%9A%84%E7%99%BB%E9%99%86%E7%B3%BB%E7%BB%9F/">使用jsonwebtoken完成nodejs的登陆系统</a>
+          </li>
+        
+          <li>
+            <a href="/2018/12/28/Android%E4%B8%89%E5%A4%A7%E9%A1%B9%E7%9B%AE%E6%9E%B6%E6%9E%84MVC%E3%80%81MVP%E3%80%81MVVM%E4%BD%BF%E7%94%A8%E4%BD%93%E9%AA%8C/">Android三大项目架构MVC、MVP、MVVM使用体验</a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+
+  
+</aside>
+        
+      </div>
+      <footer id="footer">
+  
+  <div class="outer">
+    <div id="footer-info" class="inner">
+      &copy; 2020 业松<br>
+      Powered by <a href="http://hexo.io/" target="_blank">Hexo</a>
+    </div>
+  </div>
+</footer>
+    </div>
+    <nav id="mobile-nav">
+  
+    <a href="/" class="mobile-nav-link">Home</a>
+  
+    <a href="/archives" class="mobile-nav-link">Archives</a>
+  
+</nav>
+    
+
+<script src="//ajax.googleapis.com/ajax/libs/jquery/2.0.3/jquery.min.js"></script>
+
+
+  
+<link rel="stylesheet" href="/fancybox/jquery.fancybox.css">
+
+  
+<script src="/fancybox/jquery.fancybox.pack.js"></script>
+
+
+
+
+<script src="/js/script.js"></script>
+
+
+
+
+  </div>
+</body>
+</html>

@@ -1,0 +1,716 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  
+
+  
+  <title>业松 Studio</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+  <meta name="description" content="业松的个人博客，主要有android，java，angular，个人散文等博客">
+<meta property="og:type" content="website">
+<meta property="og:title" content="业松 Studio">
+<meta property="og:url" content="http://yoursite.com/page/2/index.html">
+<meta property="og:site_name" content="业松 Studio">
+<meta property="og:description" content="业松的个人博客，主要有android，java，angular，个人散文等博客">
+<meta property="og:locale" content="zh_CN">
+<meta property="article:author" content="业松">
+<meta name="twitter:card" content="summary">
+  
+    <link rel="alternate" href="/atom.xml" title="业松 Studio" type="application/atom+xml">
+  
+  
+    <link rel="icon" href="/favicon.png">
+  
+  
+    <link href="//fonts.googleapis.com/css?family=Source+Code+Pro" rel="stylesheet" type="text/css">
+  
+  
+<link rel="stylesheet" href="/css/style.css">
+
+<meta name="generator" content="Hexo 5.3.0"></head>
+
+<body>
+  <div id="container">
+    <div id="wrap">
+      <header id="header">
+  <div id="banner"></div>
+  <div id="header-outer" class="outer">
+    <div id="header-title" class="inner">
+      <h1 id="logo-wrap">
+        <a href="/" id="logo">业松 Studio</a>
+      </h1>
+      
+    </div>
+    <div id="header-inner" class="inner">
+      <nav id="main-nav">
+        <a id="main-nav-toggle" class="nav-icon"></a>
+        
+          <a class="main-nav-link" href="/">Home</a>
+        
+          <a class="main-nav-link" href="/archives">Archives</a>
+        
+      </nav>
+      <nav id="sub-nav">
+        
+          <a id="nav-rss-link" class="nav-icon" href="/atom.xml" title="RSS Feed"></a>
+        
+        <a id="nav-search-btn" class="nav-icon" title="搜索"></a>
+      </nav>
+      <div id="search-form-wrap">
+        <form action="//google.com/search" method="get" accept-charset="UTF-8" class="search-form"><input type="search" name="q" class="search-form-input" placeholder="Search"><button type="submit" class="search-form-submit">&#xF002;</button><input type="hidden" name="sitesearch" value="http://yoursite.com"></form>
+      </div>
+    </div>
+  </div>
+</header>
+      <div class="outer">
+        <section id="main">
+  
+    <article id="post-深夜爬坑——Kotlin-DataBinding方法命名引起绑定问题" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/2018/11/23/%E6%B7%B1%E5%A4%9C%E7%88%AC%E5%9D%91%E2%80%94%E2%80%94Kotlin-DataBinding%E6%96%B9%E6%B3%95%E5%91%BD%E5%90%8D%E5%BC%95%E8%B5%B7%E7%BB%91%E5%AE%9A%E9%97%AE%E9%A2%98/" class="article-date">
+  <time datetime="2018-11-22T17:50:02.000Z" itemprop="datePublished">2018-11-23</time>
+</a>
+    
+  <div class="article-category">
+    <a class="article-category-link" href="/categories/Android/">Android</a>
+  </div>
+
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2018/11/23/%E6%B7%B1%E5%A4%9C%E7%88%AC%E5%9D%91%E2%80%94%E2%80%94Kotlin-DataBinding%E6%96%B9%E6%B3%95%E5%91%BD%E5%90%8D%E5%BC%95%E8%B5%B7%E7%BB%91%E5%AE%9A%E9%97%AE%E9%A2%98/">深夜爬坑——Kotlin+DataBinding方法命名引起绑定问题</a>
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <p>已经夜里一点多了，还是想分享下。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br></pre></td><td class="code"><pre><span class="line">class WalletViewModel : ViewModel() &#123;</span><br><span class="line">    var balance: MutableLiveData&lt;String&gt; &#x3D; MutableLiveData()</span><br><span class="line"></span><br><span class="line">    lateinit var disposable: Disposable</span><br><span class="line"></span><br><span class="line">    init &#123;</span><br><span class="line">        balance.value &#x3D; &quot;未知&quot;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    fun getBalance() &#123;</span><br><span class="line">        disposable &#x3D; RetrofitFactory.retrofitApi.getRestMoney(OTL.getToken().bearerAccessToken)</span><br><span class="line">                .observeOn(AndroidSchedulers.mainThread())</span><br><span class="line">                .subscribeOn(Schedulers.io())</span><br><span class="line">                .subscribe(&#123;</span><br><span class="line">                    balance.value &#x3D; it.balance</span><br><span class="line">                &#125;, &#123;</span><br><span class="line">                    showToast(&quot;获取余额失败&quot;)</span><br><span class="line">                    balance.value &#x3D; &quot;未知&quot;</span><br><span class="line">                &#125;)</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    override fun onCleared() &#123;</span><br><span class="line">        disposable.dispose()</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>这样一段代码死活绑定报错，java.lang.RuntimeException: Found data binding errors.<br><strong>**/ data binding error **</strong>msg:Could not find accessor …..<br>搜了下stackoverflow，说是绑定的对象一定要有get方法，可是我用的kotlin，非private变量默认就有get、set方法。这下一下子失了智，先是怀疑LiveData的问题，可是Google明确说了现在AS3.1以后可以用LiveData替代ObserveFiled。<br>完了，继续死磕，但是毫无头绪。<br>试着强行加get方法，当然还是报错，但是突然发现我加的get方法和我下面获取数据的getBalance()方法重名！一下子茅塞顿开，DataBinding默认去拿这个方法来获取我的liveData当然获取不到了。<br>最近写Kotlin+DataBinding+LiveData+MVVM有点上头，熬了几天终于有了点渐入佳境的赶脚。不说了，快两点了还没洗澡</p>
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="http://yoursite.com/2018/11/23/%E6%B7%B1%E5%A4%9C%E7%88%AC%E5%9D%91%E2%80%94%E2%80%94Kotlin-DataBinding%E6%96%B9%E6%B3%95%E5%91%BD%E5%90%8D%E5%BC%95%E8%B5%B7%E7%BB%91%E5%AE%9A%E9%97%AE%E9%A2%98/" data-id="ckj2v1sqq0027bkus9ijsb1l4" class="article-share-link">Share</a>
+      
+      
+  <ul class="article-tag-list" itemprop="keywords"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Kotlin/" rel="tag">Kotlin</a></li></ul>
+
+    </footer>
+  </div>
+  
+</article>
+
+
+  
+    <article id="post-外包软件公司究竟能不能去？" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/2018/11/16/%E5%A4%96%E5%8C%85%E8%BD%AF%E4%BB%B6%E5%85%AC%E5%8F%B8%E7%A9%B6%E7%AB%9F%E8%83%BD%E4%B8%8D%E8%83%BD%E5%8E%BB%EF%BC%9F/" class="article-date">
+  <time datetime="2018-11-16T13:40:18.000Z" itemprop="datePublished">2018-11-16</time>
+</a>
+    
+  <div class="article-category">
+    <a class="article-category-link" href="/categories/%E9%9A%8F%E7%AC%94/">随笔</a>
+  </div>
+
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2018/11/16/%E5%A4%96%E5%8C%85%E8%BD%AF%E4%BB%B6%E5%85%AC%E5%8F%B8%E7%A9%B6%E7%AB%9F%E8%83%BD%E4%B8%8D%E8%83%BD%E5%8E%BB%EF%BC%9F/">外包软件公司究竟能不能去？</a>
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <blockquote>
+<p>付钱干活，是平等的契约关系，正式员工反而有上下级关系。 ——来自某位微信群网友</p>
+</blockquote>
+<h3 id="写在前面"><a href="#写在前面" class="headerlink" title="写在前面"></a>写在前面</h3><p>本文以一个在外包软件公司工作近两年的程序员的角度来讲下真实的外包公司是什么样子的，并非是劝人进外包公司上班。而且首先要强调，外包公司和一二线大厂无可比性。相信有一二线大厂offer的人也不可能为外包公司的offer纠结。</p>
+<h3 id="正文"><a href="#正文" class="headerlink" title="正文"></a>正文</h3><p>先说下我的经历，毕业在某央企一线单位呆过，在某自研手机品牌公司呆过，最近一年多一直在某上市外包公司工作。我没在一二线自研公司呆过，但是身边同学基本上都在大厂做开发。说来也惭愧，同学聚会别人都是在大厂上班，我出口却只能自称外包公司员工。正如前面所说，这里不拿外包offer和一二线大厂的offer相比，相信大家都知道怎么选。</p>
+<p>很多同学在够不上一二线大厂的时候就比较尴尬了。因为一二线公司会大量招收应届生，规模中等以下的公司就很招的应届生就比较少了。原因也很简单，招应届生虽然可以节省成本，但是一方面这几年应届生工资水涨船高，薪资倒挂严重，还不一定能节省成本。另一方面更重要的原因，应届生很难留住，大部分程序员在三年工作经验左右的时候会迎来一波薪资上涨的小高峰，大公司能留得住人，中小公司就不容易了。基于此，很多人会面临小自研公司or大外包公司的选择。对了，这里小外包公司也pass，因为我没呆过不了解没有发言权。</p>
+<p>几乎所有的人都建议，外包能不进就不要进了。我今天不想聊外包好不好，只是想聊一聊在外包公司的真实工作状态。有的人可能确实在外包呆的不如意，而我却自认为在外包公司呆的很舒服。如人饮水，冷暖自知，我的情况代表不了所有人，但可以做个参考，不至于谈外包即色变。</p>
+<p>在我入行之前，就在CSDN上看到一位前辈说了这么一段话：在自研公司感觉在代码上花的时间很少，在外包公司反而感觉在真正写代码。如今我真的体会到这种感觉了：在自研公司的时候各种会议不断，各种活动不断，各种绩效考核标准你可以看看到底有多少是你光写好代码就能得高分的。各种日报、周报各种汇报ppt。而在外包公司，除了你的代码，没人关心你本人的其他东西。不能说因此在自研公司代码就写的不多了，但是不管怎么说你的程序员身份不如在外包公司纯粹。当然这话也可以反过来说，在外包公司的事纯粹码农，除了写代码没有任何价值。</p>
+<p>就我个人来说，我很享受这种纯粹的程序员/码农身份。同事、上级、客户评判我的唯一标准就是我的代码，与我的考勤、参加的单位活动（内部体育比赛、晚会等活动）、参加比赛的名次（我在那家央企的时候应届生第一年的晋升标准是参加公司内部的技能比武大赛的名字）、为人处事（为人处事在哪都非常重要，只是在外包公司你可以不那么care，但不意味着你可以干低情商的事）。更重要的是你无需刻意表现自己，干好自己的工作就可以了。在这个过程，实际上你是在拿你的输出的代码来换取报酬，在写好代码的情况下，你不需要考虑其他任何事情。</p>
+<p>很多人都会说在外包公司没有归属感。这话百分百正确！我在央企和自研公司的时候确实能感受到强烈的归属感，公司就像家，同事就像亲人。先来这种归属感的好处吧，基本上运气不太差公司和领导是能够给你足够的关怀的。公司规模不小的话，会有明确的个人晋升渠道，也会有完整的新人培训。这对应届生来说是很有吸引力的。这样离开校园进入公司就像又进入一个学校一样，可以极大对社会的恐惧。因为社会对大多数学生来说是有点害怕的，因为好不容易千军万马过独木桥上了大学，再去千军万马中讨生活总归让人不太情愿。而有完整的考核和晋升机制可以就像考试和升学一样对学生来说比较容易接受。</p>
+<p>如此说来，没有归属感的外包公司是不是真的不能进呢？相反，我十分享受这种没有归属感的工作。为何？在能够很好地完成代码的情况下，外包公司和客户对我是没有任何其他的评判标准的。因此我不需要被别人打分。这种感觉太爽了，从小到大总有人会给你打分。如今不再有考试了，这种感觉让我感受到了自由，给我打分的只能是我的薪水。但是对应届生来说这种感觉不太好接受，就像上大学一样，原本都有老师的教鞭指着学习，到了大学却感叹没有人强迫反而变废了。这种自由的代价是，你需要保证自己是有价值的，因为你与公司事契约关系。但是who care？反正在自研公司也不能保证不会裁员。这种契约关系反而促使我不断地学习，写代码，写博客。而且我不需要做任何表面工作，因为没有观众。我所做的都是我自己想做的，都是对我而言有一定意义的事。而在自研公司，可能难免会有很多表面工作要做。做表面工作是我最不能接受的事了，而到了外包公司你再也不需要做表面工作了。另外在自研公司，你相亲相爱的同事，对你的另一重身份是竞争对手，这种复杂的关系有时候会让人难受（比如和你一起进公司的伙伴屡屡受表扬难免会让自己有挫败感）。而在外包公司，只要提升自己就行了，不需要关心你的同事是否优秀。</p>
+<p>所以，归属感是个见仁见智的东西。对于我：归属感是什么？成年人的归属感只来自于家庭。</p>
+<p>最后简单说说小公司，虽然我没呆过，但是面试过不少。基本上小公司的老板都会画大饼，个人建议画大饼的公司就不要去了，去务实点（就是给钱到位，发工资及时其他都扯淡）的小公司很难会被坑。至于老板给你摊的大饼，不要太放在心上。反而去大公司如果可能的话尽量多争取股票期权、个人技术发展等薪资以外的东西。</p>
+<h3 id="最后"><a href="#最后" class="headerlink" title="最后"></a>最后</h3><p>其实这篇文章说到底是想说明一下，外包公司不是不能去。相反对某些崇尚自由性格的人可能会呆的更舒服。但是最后还是要强调下，我最怕写文章坑人的人，外包公司自然也有很多坏处，怎么抉择要结合自身情况。能够为自己行为选择负责的人相对更适合进外包公司，这些人被坑了不会无畏的抱怨，只会默默选择下一家公司来挽救自己错误的选择。如果你不是这样能为自己选择负责的人，裁员可能性很大的外包公司不是个好选择。</p>
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="http://yoursite.com/2018/11/16/%E5%A4%96%E5%8C%85%E8%BD%AF%E4%BB%B6%E5%85%AC%E5%8F%B8%E7%A9%B6%E7%AB%9F%E8%83%BD%E4%B8%8D%E8%83%BD%E5%8E%BB%EF%BC%9F/" data-id="ckj2v1sqo0023bkus1zmv77rf" class="article-share-link">Share</a>
+      
+      
+  <ul class="article-tag-list" itemprop="keywords"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/%E8%81%8C%E4%B8%9A%E8%A7%84%E5%88%92/" rel="tag">职业规划</a></li></ul>
+
+    </footer>
+  </div>
+  
+</article>
+
+
+  
+    <article id="post-JDK-bin目录下部分工具用途和使用方法整理" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/2018/11/13/JDK-bin%E7%9B%AE%E5%BD%95%E4%B8%8B%E9%83%A8%E5%88%86%E5%B7%A5%E5%85%B7%E7%94%A8%E9%80%94%E5%92%8C%E4%BD%BF%E7%94%A8%E6%96%B9%E6%B3%95%E6%95%B4%E7%90%86/" class="article-date">
+  <time datetime="2018-11-13T12:30:25.000Z" itemprop="datePublished">2018-11-13</time>
+</a>
+    
+  <div class="article-category">
+    <a class="article-category-link" href="/categories/Java/">Java</a>
+  </div>
+
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2018/11/13/JDK-bin%E7%9B%AE%E5%BD%95%E4%B8%8B%E9%83%A8%E5%88%86%E5%B7%A5%E5%85%B7%E7%94%A8%E9%80%94%E5%92%8C%E4%BD%BF%E7%94%A8%E6%96%B9%E6%B3%95%E6%95%B4%E7%90%86/">JDK-bin目录下部分工具用途和使用方法整理</a>
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <blockquote>
+<p>还是读《深入理解Java虚拟机》一书，提到了JDK目录下的很多已有的监控定位Java虚拟机运行状态的工具，好像这方面的资料不多，就连带着其他一些JDK工具一起整理下来。写着写着发现太多了，而且基本没用过，所以只记录部分我能理解的工具。另外要说下这些工具大家虽然没有直接用到，但是实际上很多工具在我们的IDE和其他开发工具链中是有用到的，例如用来debug的jdb。</p>
+</blockquote>
+<ul>
+<li><p>java<br>用来运行java程序的命令。用的不多，一般Java写的桌面软件都会有shell脚本或exe文件启动。偶尔也有项目组内部写的小Java软件会用到。<br>使用方法：java [options] -jar filename [args]</p>
+</li>
+<li><p>javac<br>初学Java都会用到的命令，用来把java文件编译成class文件。<br>使用方法：javac @sourcefiles</p>
+</li>
+<li><p>javadoc<br>用来把java文件中的文档注释转化成HTML文件。<br>使用方法：javadoc {packages|source-files} [options] [@argfiles]</p>
+</li>
+<li><p>javah<br>C 头文件和stub生成器，用于写本地化方法，例如生产JNI样式的头文件，好像我都忘光了。<br>使用方法：javah [ options ] fully-qualified-class-name …</p>
+        
+          <p class="article-more-link">
+            <a href="/2018/11/13/JDK-bin%E7%9B%AE%E5%BD%95%E4%B8%8B%E9%83%A8%E5%88%86%E5%B7%A5%E5%85%B7%E7%94%A8%E9%80%94%E5%92%8C%E4%BD%BF%E7%94%A8%E6%96%B9%E6%B3%95%E6%95%B4%E7%90%86/#more">Read More</a>
+          </p>
+        
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="http://yoursite.com/2018/11/13/JDK-bin%E7%9B%AE%E5%BD%95%E4%B8%8B%E9%83%A8%E5%88%86%E5%B7%A5%E5%85%B7%E7%94%A8%E9%80%94%E5%92%8C%E4%BD%BF%E7%94%A8%E6%96%B9%E6%B3%95%E6%95%B4%E7%90%86/" data-id="ckj2v1sqm001zbkushpuoey92" class="article-share-link">Share</a>
+      
+      
+  <ul class="article-tag-list" itemprop="keywords"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/JVM/" rel="tag">JVM</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Java/" rel="tag">Java</a></li></ul>
+
+    </footer>
+  </div>
+  
+</article>
+
+
+  
+    <article id="post-JVM的gc算法总结" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/2018/11/12/JVM%E7%9A%84gc%E7%AE%97%E6%B3%95%E6%80%BB%E7%BB%93/" class="article-date">
+  <time datetime="2018-11-12T07:14:08.000Z" itemprop="datePublished">2018-11-12</time>
+</a>
+    
+  <div class="article-category">
+    <a class="article-category-link" href="/categories/Java/">Java</a>
+  </div>
+
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2018/11/12/JVM%E7%9A%84gc%E7%AE%97%E6%B3%95%E6%80%BB%E7%BB%93/">JVM的gc算法总结</a>
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <blockquote>
+<p>Java虚拟机的内存回收算法面试经常会问到，最近在看《深入理解Java虚拟机》一书，对GC算法总算是有了一些粗略的理解。为了避免看完就忘掉的尴尬，在博客整理记录一下。</p>
+</blockquote>
+<p>首先要说一下，JVM的具体实现有很多，比如Sun公司的HotSpot VM，Android的Dalvik VM。因此这里说的算法是一个大致的策略，实际上的实现代码要去看具体的垃圾收集器，对于普通开发者来说了解算法的策略就够解决日常遇到的内存问题了。</p>
+<h3 id="0-引用计数法"><a href="#0-引用计数法" class="headerlink" title="0.引用计数法"></a>0.引用计数法</h3><p>记录对象的引用个数，当引用个数变为0的时候就代表没有地方引用这个对象，即这个对象成为应该被回收的“垃圾”。这是一个非常简单效率的算法，但实际上JVM并未使用它。因为它无法解决循环引用的对象回收。</p>
+<h3 id="1-可达性分析算法"><a href="#1-可达性分析算法" class="headerlink" title="1.可达性分析算法"></a>1.可达性分析算法</h3><p>以GC Root对象为起点，向下搜索引用链，当一个对象没有被任何GC Root对象引用的时候，就可以被回收。<br>可以作为GC Root对象的有：</p>
+<ul>
+<li>虚拟机栈中引用的对象</li>
+<li>方法区中静态属性引用的对象</li>
+<li>方法区中常量引用的对象</li>
+<li>本地方法栈中JNI引用的对象<br>由此我们也可以知道，不能滥用静态属性，如果使用的话需要在结束时去掉其引用。</li>
+</ul>
+<h3 id="2-分代收集算法"><a href="#2-分代收集算法" class="headerlink" title="2.分代收集算法"></a>2.分代收集算法</h3><p>根据对象存活周期将内存划为不同的区块。比如分成新生代和老年代。简单来说一个对象刚创建出来的时候都在新生代，每次gc的时候如果存活下来就年龄+1,当虚拟机判断这个对象年龄够了有资格成为“老年对象”了，就把它转移到老年代。新生代对象存活率低，老年代存活率高。虚拟机可以根据新生代老年代的特点执行不同的GC策略来提高效率。</p>
+<h3 id="3-标记-清除算法"><a href="#3-标记-清除算法" class="headerlink" title="3.标记-清除算法"></a>3.标记-清除算法</h3><p>最基础的收集算法。首先标记出所有需要回收的对象，在标记完成后统一回收这些对象。该收集方法有两个问题：一是标记和清除效率都不高，二是标记清除后会产生大量的不连续的内存碎片。</p>
+<h3 id="4-复制算法"><a href="#4-复制算法" class="headerlink" title="4.复制算法"></a>4.复制算法</h3><p>为了提高标记-清除算法的效率和内存不连续问题，复制算法将内存分为两块，每次使用其中的一块。回收的时候直接把不需要回收的对象直接丢到另一快内存，然后完全清除着一块内存。这样我们剩下的内存都是连续的，清除速度也得到了提高。代价就是我们需要把内存一分为二，浪费了一半的空间。<br>这种算法一般用在新生代内存上，因为新生代内存绝大多数很快就被回收，需要使用这种效率高的算法。而且实际上也不是把新生代内存一分为二，而是大概以8：1的比例分配出来一个Survivor内存区。正常情况下，新生代存活的对象比较少，Survivor区都是够用的。如果不够用的话，会跟老年代临时借用。</p>
+<h3 id="5-标记-整理算法"><a href="#5-标记-整理算法" class="headerlink" title="5 标记-整理算法"></a>5 标记-整理算法</h3><p>这是应用于老年代的算法。内存回收后会对老年代的内存做整理：让所有存活的对象向一端移动，然后直接清理掉剩下的内存。这样的话虽然效率比复制算法，但避免了内存空间浪费，适合存活率较高的老年代。</p>
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="http://yoursite.com/2018/11/12/JVM%E7%9A%84gc%E7%AE%97%E6%B3%95%E6%80%BB%E7%BB%93/" data-id="ckj2v1sql001wbkusf7k96vnk" class="article-share-link">Share</a>
+      
+      
+  <ul class="article-tag-list" itemprop="keywords"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/JVM/" rel="tag">JVM</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Java/" rel="tag">Java</a></li></ul>
+
+    </footer>
+  </div>
+  
+</article>
+
+
+  
+    <article id="post-Hexo-GithubPage-阿里云域名光速搭建个人博客网站" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/2018/11/11/Hexo-GithubPage-%E9%98%BF%E9%87%8C%E4%BA%91%E5%9F%9F%E5%90%8D%E5%85%89%E9%80%9F%E6%90%AD%E5%BB%BA%E4%B8%AA%E4%BA%BA%E5%8D%9A%E5%AE%A2%E7%BD%91%E7%AB%99/" class="article-date">
+  <time datetime="2018-11-11T09:29:06.000Z" itemprop="datePublished">2018-11-11</time>
+</a>
+    
+  <div class="article-category">
+    <a class="article-category-link" href="/categories/Node-js/">Node.js</a>
+  </div>
+
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2018/11/11/Hexo-GithubPage-%E9%98%BF%E9%87%8C%E4%BA%91%E5%9F%9F%E5%90%8D%E5%85%89%E9%80%9F%E6%90%AD%E5%BB%BA%E4%B8%AA%E4%BA%BA%E5%8D%9A%E5%AE%A2%E7%BD%91%E7%AB%99/">Hexo+GithubPage+阿里云域名光速搭建个人博客网站</a>
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <blockquote>
+<p>一直以为自己搭建博客会非常麻烦，结果试了下很有名的hexo框架，真的是光速建站。</p>
+</blockquote>
+<h3 id="为何要建个人博客网站"><a href="#为何要建个人博客网站" class="headerlink" title="为何要建个人博客网站"></a>为何要建个人博客网站</h3><p>已经有简书之类的博客网站了，为啥还要自己建一个？这个原因有很多，比如想学学建站知识，想使用个人域名等等。对于我来说个人网站比较自由吧，在不违法的情况下可以随便写自己想说的。对于程序员来说，拥有一个自己的博客网站我想反正不会是减分项。</p>
+<h3 id="建立Hexo工程"><a href="#建立Hexo工程" class="headerlink" title="建立Hexo工程"></a>建立Hexo工程</h3><p>Hexo是个nodejs框架，在安装hexo之前需要先安装npm，如果没有的话直接去npm官网安装最新版即可——<a target="_blank" rel="noopener" href="https://www.npmjs.com/get-npm">npm官网下载地址</a><br>有了npm之后，我们在终端输入命令npm install hexo-cli -g。这是一个npm的安装命令，-g的意思是global，全局安装。成功后我们就可以用hexo-cli来创建hexo工程了。<br>然后在终端建立一个文件夹用来存放我们接下来的hexo工程，比如我的是~/hexo目录。在终端cd进去后，执行hexo init，初始化工程。再执行npm install来安装依赖。安装依赖可能需要点时间。<br>成功后我们的工程就建好了，这个时候已经有一个默认的主题landscape，一个默认的文章hello world。建立新文章有关的命令大家可以去<a target="_blank" rel="noopener" href="https://hexo.io/zh-cn/docs/writing">hexo官网</a>去学习，这里暂时先讲建站部署。<br>现在我们可以执行hexo server命令来测试一下是否能运行成功，用浏览器localhost:4000看看能不能看到我们的博客网站。<br>如果能看到的话说明我们的网站已经搭建好了。</p>
+        
+          <p class="article-more-link">
+            <a href="/2018/11/11/Hexo-GithubPage-%E9%98%BF%E9%87%8C%E4%BA%91%E5%9F%9F%E5%90%8D%E5%85%89%E9%80%9F%E6%90%AD%E5%BB%BA%E4%B8%AA%E4%BA%BA%E5%8D%9A%E5%AE%A2%E7%BD%91%E7%AB%99/#more">Read More</a>
+          </p>
+        
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="http://yoursite.com/2018/11/11/Hexo-GithubPage-%E9%98%BF%E9%87%8C%E4%BA%91%E5%9F%9F%E5%90%8D%E5%85%89%E9%80%9F%E6%90%AD%E5%BB%BA%E4%B8%AA%E4%BA%BA%E5%8D%9A%E5%AE%A2%E7%BD%91%E7%AB%99/" data-id="ckj2v1sqk001tbkusdyln111a" class="article-share-link">Share</a>
+      
+      
+  <ul class="article-tag-list" itemprop="keywords"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Node-js/" rel="tag">Node.js</a></li></ul>
+
+    </footer>
+  </div>
+  
+</article>
+
+
+  
+    <article id="post-工作流的思考以及：Github项目管理神器——Projects" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/2018/11/08/%E5%B7%A5%E4%BD%9C%E6%B5%81%E7%9A%84%E6%80%9D%E8%80%83%E4%BB%A5%E5%8F%8A%EF%BC%9AGithub%E9%A1%B9%E7%9B%AE%E7%AE%A1%E7%90%86%E7%A5%9E%E5%99%A8%E2%80%94%E2%80%94Projects/" class="article-date">
+  <time datetime="2018-11-08T13:06:36.000Z" itemprop="datePublished">2018-11-08</time>
+</a>
+    
+  <div class="article-category">
+    <a class="article-category-link" href="/categories/%E9%A1%B9%E7%9B%AE%E7%AE%A1%E7%90%86/">项目管理</a>
+  </div>
+
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2018/11/08/%E5%B7%A5%E4%BD%9C%E6%B5%81%E7%9A%84%E6%80%9D%E8%80%83%E4%BB%A5%E5%8F%8A%EF%BC%9AGithub%E9%A1%B9%E7%9B%AE%E7%AE%A1%E7%90%86%E7%A5%9E%E5%99%A8%E2%80%94%E2%80%94Projects/">工作流的思考以及：Github项目管理神器——Projects</a>
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <blockquote>
+<p>我突然明白，提前完成工作的成就感对我是砒霜。</p>
+</blockquote>
+<p>最近手上活有点紧，被迫想寻找点改变来优化自己的工作流程，提升工作效率。第一个想到的就是计划，有计划地工作对效率的提升是巨大的。在以往很长的一段时间里，我写代码都是狼奔豕突式的疯狂突击。每次写代码就像是一次次冲锋，试图快速干完需求。</p>
+<p>先不谈这样写代码or工作的弊端，溯根求源，来分析下我为啥总喜欢这样的明显不好的方式写代码：表面上是想早点写完然后可以休息或者干其他事情，但我真诚地审视了下自己根本原因不是这样。根本原因是我对工作这件事上没有足够的信心，我希望快速把事情干完证明自己可以，害怕事情丢到明天完不成。</p>
+<p>冲锋式地工作在我提前完成工作的时候会让自己非常有成就感，但现在我才明白这种无谓的成就感是砒霜。它会让我只过分关注结果而忽略过程和质量，让我自我感觉良好。而如果一时攻克不下，那就更糟糕了，往往我会选择死磕很久。写代码这件事和其他工作相比，很多时候死磕是不可避免的。即使你已经冷静地debug，冷静地分析日志，向同事、同行、google、stackoverflow求助，还是会有很多时候找不到答案而疯狂。死磕不可避免，但是人的精力是有限的。死磕问题是最耗费精力的事，而冲锋式地工作往往会逼迫我自己去死磕，从而让自己身体和心理上都遭受沉重打击。</p>
+        
+          <p class="article-more-link">
+            <a href="/2018/11/08/%E5%B7%A5%E4%BD%9C%E6%B5%81%E7%9A%84%E6%80%9D%E8%80%83%E4%BB%A5%E5%8F%8A%EF%BC%9AGithub%E9%A1%B9%E7%9B%AE%E7%AE%A1%E7%90%86%E7%A5%9E%E5%99%A8%E2%80%94%E2%80%94Projects/#more">Read More</a>
+          </p>
+        
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="http://yoursite.com/2018/11/08/%E5%B7%A5%E4%BD%9C%E6%B5%81%E7%9A%84%E6%80%9D%E8%80%83%E4%BB%A5%E5%8F%8A%EF%BC%9AGithub%E9%A1%B9%E7%9B%AE%E7%AE%A1%E7%90%86%E7%A5%9E%E5%99%A8%E2%80%94%E2%80%94Projects/" data-id="ckj2v1sqh001qbkuse8734q5d" class="article-share-link">Share</a>
+      
+      
+  <ul class="article-tag-list" itemprop="keywords"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Github/" rel="tag">Github</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/%E9%A1%B9%E7%9B%AE%E7%AE%A1%E7%90%86/" rel="tag">项目管理</a></li></ul>
+
+    </footer>
+  </div>
+  
+</article>
+
+
+  
+    <article id="post-让早睡拯救我的人生" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/2018/11/07/%E8%AE%A9%E6%97%A9%E7%9D%A1%E6%8B%AF%E6%95%91%E6%88%91%E7%9A%84%E4%BA%BA%E7%94%9F/" class="article-date">
+  <time datetime="2018-11-07T06:20:04.000Z" itemprop="datePublished">2018-11-07</time>
+</a>
+    
+  <div class="article-category">
+    <a class="article-category-link" href="/categories/%E9%9A%8F%E7%AC%94/">随笔</a>
+  </div>
+
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2018/11/07/%E8%AE%A9%E6%97%A9%E7%9D%A1%E6%8B%AF%E6%95%91%E6%88%91%E7%9A%84%E4%BA%BA%E7%94%9F/">让早睡拯救我的人生</a>
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <blockquote>
+<p>最近晚睡晚起，深感精神和身体上的痛苦。我把希望寄托于早睡，我相信它会是我的灵药。</p>
+</blockquote>
+<p>去年在kinder上买了一本畅销书《自控力》，里面关于培养自控力的文章说的很好，很人性化。然并卵，单就看完这一本薄薄的书就用了很长很长时间。很久以来我一直以懒人自居，但是做个懒人实在是很辛苦。于是今天立个flag，从今天开始要改变熬夜晚睡的习惯。</p>
+        
+          <p class="article-more-link">
+            <a href="/2018/11/07/%E8%AE%A9%E6%97%A9%E7%9D%A1%E6%8B%AF%E6%95%91%E6%88%91%E7%9A%84%E4%BA%BA%E7%94%9F/#more">Read More</a>
+          </p>
+        
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="http://yoursite.com/2018/11/07/%E8%AE%A9%E6%97%A9%E7%9D%A1%E6%8B%AF%E6%95%91%E6%88%91%E7%9A%84%E4%BA%BA%E7%94%9F/" data-id="ckj2v1sqg001nbkusa1im6k5p" class="article-share-link">Share</a>
+      
+      
+  <ul class="article-tag-list" itemprop="keywords"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/%E7%94%9F%E6%B4%BB/" rel="tag">生活</a></li></ul>
+
+    </footer>
+  </div>
+  
+</article>
+
+
+  
+    <article id="post-Profiler入门系列（一）——内存分析" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/2018/11/01/Profiler%E5%85%A5%E9%97%A8%E7%B3%BB%E5%88%97%EF%BC%88%E4%B8%80%EF%BC%89%E2%80%94%E2%80%94%E5%86%85%E5%AD%98%E5%88%86%E6%9E%90/" class="article-date">
+  <time datetime="2018-11-01T14:06:39.000Z" itemprop="datePublished">2018-11-01</time>
+</a>
+    
+  <div class="article-category">
+    <a class="article-category-link" href="/categories/Android/">Android</a>
+  </div>
+
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2018/11/01/Profiler%E5%85%A5%E9%97%A8%E7%B3%BB%E5%88%97%EF%BC%88%E4%B8%80%EF%BC%89%E2%80%94%E2%80%94%E5%86%85%E5%AD%98%E5%88%86%E6%9E%90/">Profiler入门系列（一）——内存分析</a>
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <h3 id="0-前言"><a href="#0-前言" class="headerlink" title="0.前言"></a>0.前言</h3><p>Android Studio升级到3.0以后DDMS入口不见了，不要着急，取而代之的是<strong>Layout Inspector</strong>，<strong>File Explorer</strong>以及<strong>Profiler</strong>等新工具。很多人对新工具还不是很了解，Profiler是一个分析app性能的强大工具合辑，可以分析内存、cpu、启动时间、网络情况、功耗等各个指标，今天先来看看Profiler如何分析应用的内存情况吧。</p>
+<h3 id="1-打开Profiler"><a href="#1-打开Profiler" class="headerlink" title="1.打开Profiler"></a>1.打开Profiler</h3><p>如何打开Profiler呢？点击菜单栏上的Run -&gt; Profiler ‘app’可以开始分析app性能。不过我更喜欢用<strong>Ctrl+Shift+a</strong>，执行find action命令，搜索profiler，可以不用鼠标更快地打开Profiler。</p>
+        
+          <p class="article-more-link">
+            <a href="/2018/11/01/Profiler%E5%85%A5%E9%97%A8%E7%B3%BB%E5%88%97%EF%BC%88%E4%B8%80%EF%BC%89%E2%80%94%E2%80%94%E5%86%85%E5%AD%98%E5%88%86%E6%9E%90/#more">Read More</a>
+          </p>
+        
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="http://yoursite.com/2018/11/01/Profiler%E5%85%A5%E9%97%A8%E7%B3%BB%E5%88%97%EF%BC%88%E4%B8%80%EF%BC%89%E2%80%94%E2%80%94%E5%86%85%E5%AD%98%E5%88%86%E6%9E%90/" data-id="ckj2v1sqf001kbkuscw08faxo" class="article-share-link">Share</a>
+      
+      
+  <ul class="article-tag-list" itemprop="keywords"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Android/" rel="tag">Android</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Android-Studio/" rel="tag">Android Studio</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Profiler/" rel="tag">Profiler</a></li></ul>
+
+    </footer>
+  </div>
+  
+</article>
+
+
+  
+    <article id="post-Linux常用命令小记" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/2018/11/01/Linux%E5%B8%B8%E7%94%A8%E5%91%BD%E4%BB%A4%E5%B0%8F%E8%AE%B0/" class="article-date">
+  <time datetime="2018-10-31T17:06:39.000Z" itemprop="datePublished">2018-11-01</time>
+</a>
+    
+  <div class="article-category">
+    <a class="article-category-link" href="/categories/Linux/">Linux</a>
+  </div>
+
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2018/11/01/Linux%E5%B8%B8%E7%94%A8%E5%91%BD%E4%BB%A4%E5%B0%8F%E8%AE%B0/">Linux常用命令小记</a>
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <blockquote>
+<p>很多Linux命令总是会忘记，每次用到都要重新去查，这次看完鸟叔的Linux私房菜基础学习篇做个记录。写完之后发现真的也没多少，不要再害怕记命令啦。</p>
+</blockquote>
+<h3 id="Linux根目录"><a href="#Linux根目录" class="headerlink" title="Linux根目录"></a>Linux根目录</h3><ul>
+<li>/usr 软件放置处</li>
+<li>/usr/local 非系统发行版提供的软件放置处，例如包管理器安装的软件</li>
+<li>/etc 配置文件</li>
+<li>/opt 第三方软件,和/usr/local区别是手动安装的软件都放在这里</li>
+<li>/boot 开机与内核文件</li>
+<li>/var 与系统运作过程有关</li>
+<li>/home 用户目录
+        
+          <p class="article-more-link">
+            <a href="/2018/11/01/Linux%E5%B8%B8%E7%94%A8%E5%91%BD%E4%BB%A4%E5%B0%8F%E8%AE%B0/#more">Read More</a>
+          </p>
+        
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="http://yoursite.com/2018/11/01/Linux%E5%B8%B8%E7%94%A8%E5%91%BD%E4%BB%A4%E5%B0%8F%E8%AE%B0/" data-id="ckj2v1sqe001gbkusb79qgu0d" class="article-share-link">Share</a>
+      
+      
+  <ul class="article-tag-list" itemprop="keywords"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Linux/" rel="tag">Linux</a></li></ul>
+
+    </footer>
+  </div>
+  
+</article>
+
+
+  
+    <article id="post-使用Spring-Boot-JPA-MySQL光速构建RESTful风格API并使用Httpie进行测试" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/2018/10/17/%E4%BD%BF%E7%94%A8Spring-Boot-JPA-MySQL%E5%85%89%E9%80%9F%E6%9E%84%E5%BB%BARESTful%E9%A3%8E%E6%A0%BCAPI%E5%B9%B6%E4%BD%BF%E7%94%A8Httpie%E8%BF%9B%E8%A1%8C%E6%B5%8B%E8%AF%95/" class="article-date">
+  <time datetime="2018-10-17T13:13:56.000Z" itemprop="datePublished">2018-10-17</time>
+</a>
+    
+  <div class="article-category">
+    <a class="article-category-link" href="/categories/Java/">Java</a>
+  </div>
+
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2018/10/17/%E4%BD%BF%E7%94%A8Spring-Boot-JPA-MySQL%E5%85%89%E9%80%9F%E6%9E%84%E5%BB%BARESTful%E9%A3%8E%E6%A0%BCAPI%E5%B9%B6%E4%BD%BF%E7%94%A8Httpie%E8%BF%9B%E8%A1%8C%E6%B5%8B%E8%AF%95/">使用Spring Boot+JPA+MySQL光速构建RESTful风格API并使用Httpie进行测试</a>
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <blockquote>
+<p>笔者是个懒人，但是真没想到写一个RESTful风格的API接口可以这么快。官方文档地址：<a target="_blank" rel="noopener" href="https://spring.io/guides/gs/accessing-data-rest/">https://spring.io/guides/gs/accessing-data-rest/</a></p>
+</blockquote>
+<h4 id="0-使用Spring-Initializ初始化一个Spring-Boot项目"><a href="#0-使用Spring-Initializ初始化一个Spring-Boot项目" class="headerlink" title="0. 使用Spring Initializ初始化一个Spring Boot项目"></a>0. 使用Spring Initializ初始化一个Spring Boot项目</h4><p>用Idea的话点击New Project选择Spring Initializ, 一路next填上项目名包名等。然后可以先选上依赖，也可以就选一个core，后面在pom文件里写。</p>
+<p>不用Idea的话直接去<a target="_blank" rel="noopener" href="https://start.spring.io,选择maven,java(你也可以试试gradle+kotlin),然后选上依赖,当然我们这里先不选,生成好后下载下来.然后再用自己的ide或者编辑器打开./">https://start.spring.io，选择maven，java（你也可以试试gradle+kotlin），然后选上依赖，当然我们这里先不选，生成好后下载下来。然后再用自己的IDE或者编辑器打开。</a></p>
+        
+          <p class="article-more-link">
+            <a href="/2018/10/17/%E4%BD%BF%E7%94%A8Spring-Boot-JPA-MySQL%E5%85%89%E9%80%9F%E6%9E%84%E5%BB%BARESTful%E9%A3%8E%E6%A0%BCAPI%E5%B9%B6%E4%BD%BF%E7%94%A8Httpie%E8%BF%9B%E8%A1%8C%E6%B5%8B%E8%AF%95/#more">Read More</a>
+          </p>
+        
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="http://yoursite.com/2018/10/17/%E4%BD%BF%E7%94%A8Spring-Boot-JPA-MySQL%E5%85%89%E9%80%9F%E6%9E%84%E5%BB%BARESTful%E9%A3%8E%E6%A0%BCAPI%E5%B9%B6%E4%BD%BF%E7%94%A8Httpie%E8%BF%9B%E8%A1%8C%E6%B5%8B%E8%AF%95/" data-id="ckj2v1sqd001dbkus7chb71u8" class="article-share-link">Share</a>
+      
+      
+  <ul class="article-tag-list" itemprop="keywords"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/JPA/" rel="tag">JPA</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Java/" rel="tag">Java</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/RESTful/" rel="tag">RESTful</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Spring-Boot/" rel="tag">Spring Boot</a></li></ul>
+
+    </footer>
+  </div>
+  
+</article>
+
+
+  
+
+
+  <nav id="page-nav">
+    
+    <a class="extend prev" rel="prev" href="/">&amp;laquo; 上一页</a><a class="page-number" href="/">1</a><span class="page-number current">2</span><a class="page-number" href="/page/3/">3</a><a class="page-number" href="/page/4/">4</a><a class="extend next" rel="next" href="/page/3/">下一页 &amp;raquo;</a>
+  </nav>
+
+</section>
+        
+          <aside id="sidebar">
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">分类</h3>
+    <div class="widget">
+      <ul class="category-list"><li class="category-list-item"><a class="category-list-link" href="/categories/Android/">Android</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/Java/">Java</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/JavaScript/">JavaScript</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/Linux/">Linux</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/Node-js/">Node.js</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/git/">git</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/%E7%88%AC%E8%99%AB/">爬虫</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/%E9%9A%8F%E7%AC%94/">随笔</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/%E9%A1%B9%E7%9B%AE%E7%AE%A1%E7%90%86/">项目管理</a></li></ul>
+    </div>
+  </div>
+
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">标签</h3>
+    <div class="widget">
+      <ul class="tag-list" itemprop="keywords"><li class="tag-list-item"><a class="tag-list-link" href="/tags/Android/" rel="tag">Android</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Android-Studio/" rel="tag">Android Studio</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Github/" rel="tag">Github</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/JPA/" rel="tag">JPA</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/JVM/" rel="tag">JVM</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Java/" rel="tag">Java</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/JavaScript/" rel="tag">JavaScript</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Koa/" rel="tag">Koa</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Kotlin/" rel="tag">Kotlin</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Linux/" rel="tag">Linux</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/MongoDB/" rel="tag">MongoDB</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Node-js/" rel="tag">Node.js</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/OKHttp/" rel="tag">OKHttp</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Profiler/" rel="tag">Profiler</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/RESTful/" rel="tag">RESTful</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Spring-Boot/" rel="tag">Spring Boot</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Ubuntu/" rel="tag">Ubuntu</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/ava/" rel="tag">ava</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/git/" rel="tag">git</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/mongoose/" rel="tag">mongoose</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/python/" rel="tag">python</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E6%80%A7%E8%83%BD%E4%BC%98%E5%8C%96/" rel="tag">性能优化</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E6%BA%90%E7%A0%81%E5%88%86%E6%9E%90/" rel="tag">源码分析</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E7%88%AC%E8%99%AB/" rel="tag">爬虫</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E7%8E%AF%E5%A2%83%E9%85%8D%E7%BD%AE/" rel="tag">环境配置</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E7%94%9F%E6%B4%BB/" rel="tag">生活</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E8%81%8C%E4%B8%9A%E8%A7%84%E5%88%92/" rel="tag">职业规划</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E9%9A%8F%E7%AC%94/" rel="tag">随笔</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E9%A1%B9%E7%9B%AE%E7%AE%A1%E7%90%86/" rel="tag">项目管理</a></li></ul>
+    </div>
+  </div>
+
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">标签云</h3>
+    <div class="widget tagcloud">
+      <a href="/tags/Android/" style="font-size: 20px;">Android</a> <a href="/tags/Android-Studio/" style="font-size: 12.5px;">Android Studio</a> <a href="/tags/Github/" style="font-size: 10px;">Github</a> <a href="/tags/JPA/" style="font-size: 10px;">JPA</a> <a href="/tags/JVM/" style="font-size: 12.5px;">JVM</a> <a href="/tags/Java/" style="font-size: 15px;">Java</a> <a href="/tags/JavaScript/" style="font-size: 10px;">JavaScript</a> <a href="/tags/Koa/" style="font-size: 10px;">Koa</a> <a href="/tags/Kotlin/" style="font-size: 12.5px;">Kotlin</a> <a href="/tags/Linux/" style="font-size: 12.5px;">Linux</a> <a href="/tags/MongoDB/" style="font-size: 10px;">MongoDB</a> <a href="/tags/Node-js/" style="font-size: 15px;">Node.js</a> <a href="/tags/OKHttp/" style="font-size: 15px;">OKHttp</a> <a href="/tags/Profiler/" style="font-size: 10px;">Profiler</a> <a href="/tags/RESTful/" style="font-size: 10px;">RESTful</a> <a href="/tags/Spring-Boot/" style="font-size: 10px;">Spring Boot</a> <a href="/tags/Ubuntu/" style="font-size: 10px;">Ubuntu</a> <a href="/tags/ava/" style="font-size: 10px;">ava</a> <a href="/tags/git/" style="font-size: 12.5px;">git</a> <a href="/tags/mongoose/" style="font-size: 10px;">mongoose</a> <a href="/tags/python/" style="font-size: 10px;">python</a> <a href="/tags/%E6%80%A7%E8%83%BD%E4%BC%98%E5%8C%96/" style="font-size: 10px;">性能优化</a> <a href="/tags/%E6%BA%90%E7%A0%81%E5%88%86%E6%9E%90/" style="font-size: 15px;">源码分析</a> <a href="/tags/%E7%88%AC%E8%99%AB/" style="font-size: 10px;">爬虫</a> <a href="/tags/%E7%8E%AF%E5%A2%83%E9%85%8D%E7%BD%AE/" style="font-size: 15px;">环境配置</a> <a href="/tags/%E7%94%9F%E6%B4%BB/" style="font-size: 12.5px;">生活</a> <a href="/tags/%E8%81%8C%E4%B8%9A%E8%A7%84%E5%88%92/" style="font-size: 10px;">职业规划</a> <a href="/tags/%E9%9A%8F%E7%AC%94/" style="font-size: 17.5px;">随笔</a> <a href="/tags/%E9%A1%B9%E7%9B%AE%E7%AE%A1%E7%90%86/" style="font-size: 10px;">项目管理</a>
+    </div>
+  </div>
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">归档</h3>
+    <div class="widget">
+      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2020/12/">十二月 2020</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/01/">一月 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/12/">十二月 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/11/">十一月 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/10/">十月 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/09/">九月 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/07/">七月 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/05/">五月 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/03/">三月 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/09/">九月 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/07/">七月 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/05/">五月 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/04/">四月 2017</a></li></ul>
+    </div>
+  </div>
+
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">最新文章</h3>
+    <div class="widget">
+      <ul>
+        
+          <li>
+            <a href="/2020/12/24/%E8%80%81%E5%AE%9E%E4%BA%BA%E6%80%95%E5%BC%80%E5%8F%A3/">老实人怕开口</a>
+          </li>
+        
+          <li>
+            <a href="/2019/01/01/2019%E7%AC%AC%E4%B8%80%E5%A4%A9%E5%85%88%E7%AB%8Bflag/">2019第一天先立flag</a>
+          </li>
+        
+          <li>
+            <a href="/2018/12/31/2018%E7%BB%99%E8%87%AA%E5%B7%B1%E4%B8%80%E4%B8%AA%E7%AE%80%E5%8D%95%E7%9A%84%E6%80%BB%E7%BB%93/">2018给自己一个简单的总结</a>
+          </li>
+        
+          <li>
+            <a href="/2018/12/29/%E4%BD%BF%E7%94%A8jsonwebtoken%E5%AE%8C%E6%88%90nodejs%E7%9A%84%E7%99%BB%E9%99%86%E7%B3%BB%E7%BB%9F/">使用jsonwebtoken完成nodejs的登陆系统</a>
+          </li>
+        
+          <li>
+            <a href="/2018/12/28/Android%E4%B8%89%E5%A4%A7%E9%A1%B9%E7%9B%AE%E6%9E%B6%E6%9E%84MVC%E3%80%81MVP%E3%80%81MVVM%E4%BD%BF%E7%94%A8%E4%BD%93%E9%AA%8C/">Android三大项目架构MVC、MVP、MVVM使用体验</a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+
+  
+</aside>
+        
+      </div>
+      <footer id="footer">
+  
+  <div class="outer">
+    <div id="footer-info" class="inner">
+      &copy; 2020 业松<br>
+      Powered by <a href="http://hexo.io/" target="_blank">Hexo</a>
+    </div>
+  </div>
+</footer>
+    </div>
+    <nav id="mobile-nav">
+  
+    <a href="/" class="mobile-nav-link">Home</a>
+  
+    <a href="/archives" class="mobile-nav-link">Archives</a>
+  
+</nav>
+    
+
+<script src="//ajax.googleapis.com/ajax/libs/jquery/2.0.3/jquery.min.js"></script>
+
+
+  
+<link rel="stylesheet" href="/fancybox/jquery.fancybox.css">
+
+  
+<script src="/fancybox/jquery.fancybox.pack.js"></script>
+
+
+
+
+<script src="/js/script.js"></script>
+
+
+
+
+  </div>
+</body>
+</html>

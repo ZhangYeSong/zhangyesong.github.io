@@ -1,0 +1,314 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  
+
+  
+  <title>Android性能优化之工具和优化点总结 | 业松 Studio</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+  <meta name="description" content="Android性能优化学习 本文为作者原创，转载请注明作者和出处   最近公司主抓性能优化工作，借此春风也学习到了许多Android性能优化方面的知识。由于组内队友的给力，优化的成果也是比较喜人。同时也学习和实践了不少知识，特此记录。  1.性能优化分析工具学习工欲善其事，必先利其器。在开始代码优化之前，先得学会使用性能分析工具。以下三个工具都是谷歌官方推出的，可以帮助我们定位分析问题，从而优化我">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Android性能优化之工具和优化点总结">
+<meta property="og:url" content="http://yoursite.com/2017/07/24/Android%E6%80%A7%E8%83%BD%E4%BC%98%E5%8C%96%E4%B9%8B%E5%B7%A5%E5%85%B7%E5%92%8C%E4%BC%98%E5%8C%96%E7%82%B9%E6%80%BB%E7%BB%93/index.html">
+<meta property="og:site_name" content="业松 Studio">
+<meta property="og:description" content="Android性能优化学习 本文为作者原创，转载请注明作者和出处   最近公司主抓性能优化工作，借此春风也学习到了许多Android性能优化方面的知识。由于组内队友的给力，优化的成果也是比较喜人。同时也学习和实践了不少知识，特此记录。  1.性能优化分析工具学习工欲善其事，必先利其器。在开始代码优化之前，先得学会使用性能分析工具。以下三个工具都是谷歌官方推出的，可以帮助我们定位分析问题，从而优化我">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="http://upload-images.jianshu.io/upload_images/851999-8d1e74018a647416.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240">
+<meta property="og:image" content="http://upload-images.jianshu.io/upload_images/851999-62c25b5d13bbe59d.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240">
+<meta property="og:image" content="http://upload-images.jianshu.io/upload_images/851999-34ccf981a85d9175.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240">
+<meta property="article:published_time" content="2017-07-24T08:13:16.000Z">
+<meta property="article:modified_time" content="2020-12-24T11:34:17.235Z">
+<meta property="article:author" content="业松">
+<meta property="article:tag" content="Android">
+<meta property="article:tag" content="性能优化">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="http://upload-images.jianshu.io/upload_images/851999-8d1e74018a647416.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240">
+  
+    <link rel="alternate" href="/atom.xml" title="业松 Studio" type="application/atom+xml">
+  
+  
+    <link rel="icon" href="/favicon.png">
+  
+  
+    <link href="//fonts.googleapis.com/css?family=Source+Code+Pro" rel="stylesheet" type="text/css">
+  
+  
+<link rel="stylesheet" href="/css/style.css">
+
+<meta name="generator" content="Hexo 5.3.0"></head>
+
+<body>
+  <div id="container">
+    <div id="wrap">
+      <header id="header">
+  <div id="banner"></div>
+  <div id="header-outer" class="outer">
+    <div id="header-title" class="inner">
+      <h1 id="logo-wrap">
+        <a href="/" id="logo">业松 Studio</a>
+      </h1>
+      
+    </div>
+    <div id="header-inner" class="inner">
+      <nav id="main-nav">
+        <a id="main-nav-toggle" class="nav-icon"></a>
+        
+          <a class="main-nav-link" href="/">Home</a>
+        
+          <a class="main-nav-link" href="/archives">Archives</a>
+        
+      </nav>
+      <nav id="sub-nav">
+        
+          <a id="nav-rss-link" class="nav-icon" href="/atom.xml" title="RSS Feed"></a>
+        
+        <a id="nav-search-btn" class="nav-icon" title="搜索"></a>
+      </nav>
+      <div id="search-form-wrap">
+        <form action="//google.com/search" method="get" accept-charset="UTF-8" class="search-form"><input type="search" name="q" class="search-form-input" placeholder="Search"><button type="submit" class="search-form-submit">&#xF002;</button><input type="hidden" name="sitesearch" value="http://yoursite.com"></form>
+      </div>
+    </div>
+  </div>
+</header>
+      <div class="outer">
+        <section id="main"><article id="post-Android性能优化之工具和优化点总结" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/2017/07/24/Android%E6%80%A7%E8%83%BD%E4%BC%98%E5%8C%96%E4%B9%8B%E5%B7%A5%E5%85%B7%E5%92%8C%E4%BC%98%E5%8C%96%E7%82%B9%E6%80%BB%E7%BB%93/" class="article-date">
+  <time datetime="2017-07-24T08:13:16.000Z" itemprop="datePublished">2017-07-24</time>
+</a>
+    
+  <div class="article-category">
+    <a class="article-category-link" href="/categories/Android/">Android</a>
+  </div>
+
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 class="article-title" itemprop="name">
+      Android性能优化之工具和优化点总结
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <h1 id="Android性能优化学习"><a href="#Android性能优化学习" class="headerlink" title="Android性能优化学习"></a>Android性能优化学习</h1><blockquote>
+<p>本文为作者原创，转载请注明作者和出处</p>
+</blockquote>
+<blockquote>
+<p>最近公司主抓性能优化工作，借此春风也学习到了许多Android性能优化方面的知识。由于组内队友的给力，优化的成果也是比较喜人。同时也学习和实践了不少知识，特此记录。</p>
+</blockquote>
+<h2 id="1-性能优化分析工具学习"><a href="#1-性能优化分析工具学习" class="headerlink" title="1.性能优化分析工具学习"></a>1.性能优化分析工具学习</h2><p>工欲善其事，必先利其器。在开始代码优化之前，先得学会使用性能分析工具。以下三个工具都是谷歌官方推出的，可以帮助我们定位分析问题，从而优化我们的APP。</p>
+<ul>
+<li><strong>System Trace</strong></li>
+</ul>
+<p>Systrace是一个收集和检测时间信息的工具, 它能显示CPU和时间被消耗在哪儿了, 每个进程和线程都在其CPU时间片内做了什么事儿. 而且会指示哪个地方出了问题, 以及给出Fix建议。给出的结果trace文件是以html形式打开的，直接用浏览器打开查看十分方便。打开方法：打开DDMS后，连接手机，点击手机上方一排按钮中的SysTrace按钮。<br>打开的效果如下图：</p>
+<p><img src="http://upload-images.jianshu.io/upload_images/851999-8d1e74018a647416.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="System Trace"></p>
+<p>在代码中打点方式如下</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">Trace.beginSection(&quot;name&quot;);</span><br><span class="line">&#x2F;&#x2F;要检测运行时间的代码</span><br><span class="line">Trace.endSection();</span><br></pre></td></tr></table></figure>
+<ul>
+<li><strong>Hierarchy Viewer</strong></li>
+</ul>
+<p>Hierarchy Viewer提供了一个可视化的界面来观测布局的层级, 让我们可以优化布局层级, 删除多余的不必要的View层级, 提升布局速度。另外，开发者模式中调试GPU过度绘制选项也可以进行视图层级调试。在SDK-&gt; tools目录下打开hierarchyviewer.bat即可。<br>效果如下图：</p>
+<p><img src="http://upload-images.jianshu.io/upload_images/851999-62c25b5d13bbe59d.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="Hierarchy Viewer"></p>
+<ul>
+<li><strong>TraceView</strong></li>
+</ul>
+<p>一个图形化的工具, 用来展示和分析方法的执行时间。也是一款性能优化的神器。可以通过像打log一样的方式去定位代码的执行时间，从而可以准确定位是哪一段代码的执行消耗了太多时间。相比SysTrace，功能更强大，使用起来也更复杂。</p>
+<p><img src="http://upload-images.jianshu.io/upload_images/851999-34ccf981a85d9175.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="TraceView"></p>
+<h2 id="2-布局优化"><a href="#2-布局优化" class="headerlink" title="2.布局优化"></a>2.布局优化</h2><p>布局优化相对比较容易，优化可以先从布局来展开。使用Hierarchy Viewer和开发者模式中关于布局绘制的选项，可以查到一些问题然后进行修改。</p>
+<ul>
+<li><p><strong>布局嵌套过深</strong> 有的时候为了赶进度，布局设计的不是很好。层级嵌套过深的话，深度遍历各个节点会非常消耗时间，这也是布局优化余地最大的一个点了。很多过深的层级是不必要的。如果布局真的很复杂，不深度嵌套没法实现想要的效果。试试最新的约束布局Constraintlayout吧。没有使用过的话，下面这篇官方文档可以帮助你：<br><a target="_blank" rel="noopener" href="https://developer.android.com/training/constraint-layout/index.html">Constraintlayout官方介绍文档</a></p>
+</li>
+<li><p><strong>使用合适的布局</strong> 三种常见的ViewGroup的绘制速度：FrameLayout &gt; LinerLayout &gt; RelativeLayout。当然，如果用RelativeLayout可以避免布局嵌套的话是值得的。可以根据这些去决定选用什么样的布局。</p>
+</li>
+<li><p><strong>列表控件优化</strong> 不论是ListView还是RecycleView都有优化点，一个是convertView的复用，一个是ViewHolder的使用避免重复遍历节点。当然这些都是基础中的基础了。如果发现项目中的代码ListView或者RecycleView的使用不规范的话，赶紧进行修改吧。</p>
+</li>
+<li><p><strong>使用include标签</strong> 在布局文件中，<include>标签可以指定插入一段布局文件到当前布局。这样的话既提高了布局复用，也减少了我们的代码书写。另外，<merge>标签可以和<include>的标签一起使用从而减少布局层级。</p>
+</li>
+<li><p><strong>ViewStub延时加载</strong> 有些布局，比如网络出错的布局，没必要在所有时候都加载出来。使用ViewStub可以实现按需加载。ViewStub本身没有宽高，加载起来几乎不消耗什么资源。当对他setVisibility(View.VISIBLE)的时候会调用它引用的真实布局填充到当前位置，从而实现了延时加载，节省了正常加载的时间。</p>
+</li>
+<li><p><strong>移除Activity默认背景</strong> 只要我们不需要Activity的默认背景，就可以移除掉，以减少Activity启动时的渲染时间，提升启动效率。移动方法见下：</p>
+</li>
+</ul>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">&lt;style name&#x3D;&quot;MyStyle&quot; parent&#x3D;&quot;AppTheme&quot;&gt;</span><br><span class="line">       &lt;item name&#x3D;&quot;android:windowNoTitle&quot;&gt;true&lt;&#x2F;item&gt;</span><br><span class="line">       &lt;item name&#x3D;&quot;android:windowBackground&quot;&gt;@null&lt;&#x2F;item&gt;  </span><br><span class="line">&lt;&#x2F;style&gt;</span><br></pre></td></tr></table></figure>
+<h2 id="3-线程优化"><a href="#3-线程优化" class="headerlink" title="3.线程优化"></a>3.线程优化</h2><p>线程的创建和销毁会带来比较大的性能开销。因此线程优化也很有必要。查看项目中是否存在随意new thread，线程缺乏管理的情况。使用AsyncTask或者线程池对线程进行管理，可以提升APP的性能。另外，我比较推荐使用Rxjava来实现异步操作，既方便又优雅。</p>
+<p><a target="_blank" rel="noopener" href="http://gank.io/post/560e15be2dca930e00da1083">推荐一篇Rxjava的入门文章</a></p>
+<h2 id="4-内存泄露"><a href="#4-内存泄露" class="headerlink" title="4.内存泄露"></a>4.内存泄露</h2><p>内存泄露会导致APP占用内存过高，影响效率，严重的话会导致OOM。因此如果项目存在内存泄露的话要优先解决。查找内存泄露可以用LeakCanary等工具，具体怎么解决，有哪些泄露点，以后有时间也写篇总结。</p>
+<h2 id="5-算法优化"><a href="#5-算法优化" class="headerlink" title="5.算法优化"></a>5.算法优化</h2><p>毋庸置疑，使用合适的算法处理事务可以大幅提升APP的性能。当然算法不是我的强项，也只能给出一些大致的点：查询考虑二分查找节省时间，尽量不要使用耗时的递归算法。必要的时候可以空间换时间来提高APP运行效率。</p>
+<h2 id="6-其他优化点"><a href="#6-其他优化点" class="headerlink" title="6.其他优化点"></a>6.其他优化点</h2><ul>
+<li><p><strong>异步处理耗时任务</strong> 在Activity、Fragemnt的onCreate等初始化方法中，如果执行了太耗时的操作（例如读取各种数据），会影响页面的加载速度，让用户觉得APP太慢。这时候可以异步处理这些耗时任务，减小应用启动的时候的负担。</p>
+</li>
+<li><p><strong>替换矢量图</strong> 尽管矢量图有诸多优点，但矢量图的绘制是消耗性能的。在应用初始化加载等比较影响用户体验的地方，还是建议使用Bitmap来代替矢量图，提高APP开启效率。</p>
+</li>
+<li><p><strong>正则表达式</strong> 经小伙伴用TraceView不断的打点发现，正则表达式非常消耗时间。因此尽管正则表达式非常优雅，涉及到性能问题的时候，可以改为其他判断方式来提高APP性能。</p>
+</li>
+<li><p><strong>浮点类型</strong> 在Java中浮点类型的运算大概比整型数据慢两倍，因此整型数据能解决的问题尽量用整型。</p>
+</li>
+<li><p><strong>减少冗余log</strong> 开发的时候用于调试的log，在项目上线的时候没用的要及时删除。当然有用的log还是要留下，以便以后分析问题。</p>
+</li>
+<li><p><strong>删除无用资源</strong> 没用用的资源会增大APK大小，既然没有用了，上线的时候当然要及时删除。</p>
+</li>
+<li><p><strong>Lint代码检查</strong> 使用Lint等静态代码检查工具可以帮助我们发现很多隐藏的问题。Lint检查出来的问题越少，说明代码越规范，越不容易出现各种问题，APP性能自然也会提升。</p>
+</li>
+<li><p><strong>滥用全局广播</strong> 全局广播也是十分消耗性能的一个点。对于应用内的通讯，使用接口回调，EventBus等手段比起广播是更好地选择。动态注册广播的时候，也不要忘了广播的注销。</p>
+</li>
+</ul>
+<p>##7.总结<br>可以看到除了工具的使用外，性能优化是很考验代码功底的。因此想要做好性能优化，强化基本功不可少。性能优化也是一件相对枯燥而难度大的工作。因为很多优化的努力可能立马看不到效果，或者说优化的成果在数据上难以体现。我们在做性能优化的时候也遇到果瓶颈，找不到优化方向而感到泄气。但是坚持下来，利用好工具，从各个点去优化，总会有拨开云雾见青天的一天！</p>
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="http://yoursite.com/2017/07/24/Android%E6%80%A7%E8%83%BD%E4%BC%98%E5%8C%96%E4%B9%8B%E5%B7%A5%E5%85%B7%E5%92%8C%E4%BC%98%E5%8C%96%E7%82%B9%E6%80%BB%E7%BB%93/" data-id="ckj2v1spz000cbkus6h603kuw" class="article-share-link">Share</a>
+      
+      
+  <ul class="article-tag-list" itemprop="keywords"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Android/" rel="tag">Android</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/%E6%80%A7%E8%83%BD%E4%BC%98%E5%8C%96/" rel="tag">性能优化</a></li></ul>
+
+    </footer>
+  </div>
+  
+    
+<nav id="article-nav">
+  
+    <a href="/2017/07/24/%E9%AD%94%E9%83%BD%EF%BC%8C%E8%AE%A4%E7%9C%9F%E5%91%8A%E5%88%AB%E6%AF%8F%E4%B8%80%E4%B8%AA%E8%BF%87%E5%AE%A2/" id="article-nav-newer" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">Newer</strong>
+      <div class="article-nav-title">
+        
+          魔都，认真告别每一个过客
+        
+      </div>
+    </a>
+  
+  
+    <a href="/2017/05/10/Handler%E6%BA%90%E7%A0%81%E8%A7%A3%E6%9E%90/" id="article-nav-older" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">Older</strong>
+      <div class="article-nav-title">Handler源码解析</div>
+    </a>
+  
+</nav>
+
+  
+</article>
+
+</section>
+        
+          <aside id="sidebar">
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">分类</h3>
+    <div class="widget">
+      <ul class="category-list"><li class="category-list-item"><a class="category-list-link" href="/categories/Android/">Android</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/Java/">Java</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/JavaScript/">JavaScript</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/Linux/">Linux</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/Node-js/">Node.js</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/git/">git</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/%E7%88%AC%E8%99%AB/">爬虫</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/%E9%9A%8F%E7%AC%94/">随笔</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/%E9%A1%B9%E7%9B%AE%E7%AE%A1%E7%90%86/">项目管理</a></li></ul>
+    </div>
+  </div>
+
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">标签</h3>
+    <div class="widget">
+      <ul class="tag-list" itemprop="keywords"><li class="tag-list-item"><a class="tag-list-link" href="/tags/Android/" rel="tag">Android</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Android-Studio/" rel="tag">Android Studio</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Github/" rel="tag">Github</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/JPA/" rel="tag">JPA</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/JVM/" rel="tag">JVM</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Java/" rel="tag">Java</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/JavaScript/" rel="tag">JavaScript</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Koa/" rel="tag">Koa</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Kotlin/" rel="tag">Kotlin</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Linux/" rel="tag">Linux</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/MongoDB/" rel="tag">MongoDB</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Node-js/" rel="tag">Node.js</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/OKHttp/" rel="tag">OKHttp</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Profiler/" rel="tag">Profiler</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/RESTful/" rel="tag">RESTful</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Spring-Boot/" rel="tag">Spring Boot</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Ubuntu/" rel="tag">Ubuntu</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/ava/" rel="tag">ava</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/git/" rel="tag">git</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/mongoose/" rel="tag">mongoose</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/python/" rel="tag">python</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E6%80%A7%E8%83%BD%E4%BC%98%E5%8C%96/" rel="tag">性能优化</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E6%BA%90%E7%A0%81%E5%88%86%E6%9E%90/" rel="tag">源码分析</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E7%88%AC%E8%99%AB/" rel="tag">爬虫</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E7%8E%AF%E5%A2%83%E9%85%8D%E7%BD%AE/" rel="tag">环境配置</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E7%94%9F%E6%B4%BB/" rel="tag">生活</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E8%81%8C%E4%B8%9A%E8%A7%84%E5%88%92/" rel="tag">职业规划</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E9%9A%8F%E7%AC%94/" rel="tag">随笔</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E9%A1%B9%E7%9B%AE%E7%AE%A1%E7%90%86/" rel="tag">项目管理</a></li></ul>
+    </div>
+  </div>
+
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">标签云</h3>
+    <div class="widget tagcloud">
+      <a href="/tags/Android/" style="font-size: 20px;">Android</a> <a href="/tags/Android-Studio/" style="font-size: 12.5px;">Android Studio</a> <a href="/tags/Github/" style="font-size: 10px;">Github</a> <a href="/tags/JPA/" style="font-size: 10px;">JPA</a> <a href="/tags/JVM/" style="font-size: 12.5px;">JVM</a> <a href="/tags/Java/" style="font-size: 15px;">Java</a> <a href="/tags/JavaScript/" style="font-size: 10px;">JavaScript</a> <a href="/tags/Koa/" style="font-size: 10px;">Koa</a> <a href="/tags/Kotlin/" style="font-size: 12.5px;">Kotlin</a> <a href="/tags/Linux/" style="font-size: 12.5px;">Linux</a> <a href="/tags/MongoDB/" style="font-size: 10px;">MongoDB</a> <a href="/tags/Node-js/" style="font-size: 15px;">Node.js</a> <a href="/tags/OKHttp/" style="font-size: 15px;">OKHttp</a> <a href="/tags/Profiler/" style="font-size: 10px;">Profiler</a> <a href="/tags/RESTful/" style="font-size: 10px;">RESTful</a> <a href="/tags/Spring-Boot/" style="font-size: 10px;">Spring Boot</a> <a href="/tags/Ubuntu/" style="font-size: 10px;">Ubuntu</a> <a href="/tags/ava/" style="font-size: 10px;">ava</a> <a href="/tags/git/" style="font-size: 12.5px;">git</a> <a href="/tags/mongoose/" style="font-size: 10px;">mongoose</a> <a href="/tags/python/" style="font-size: 10px;">python</a> <a href="/tags/%E6%80%A7%E8%83%BD%E4%BC%98%E5%8C%96/" style="font-size: 10px;">性能优化</a> <a href="/tags/%E6%BA%90%E7%A0%81%E5%88%86%E6%9E%90/" style="font-size: 15px;">源码分析</a> <a href="/tags/%E7%88%AC%E8%99%AB/" style="font-size: 10px;">爬虫</a> <a href="/tags/%E7%8E%AF%E5%A2%83%E9%85%8D%E7%BD%AE/" style="font-size: 15px;">环境配置</a> <a href="/tags/%E7%94%9F%E6%B4%BB/" style="font-size: 12.5px;">生活</a> <a href="/tags/%E8%81%8C%E4%B8%9A%E8%A7%84%E5%88%92/" style="font-size: 10px;">职业规划</a> <a href="/tags/%E9%9A%8F%E7%AC%94/" style="font-size: 17.5px;">随笔</a> <a href="/tags/%E9%A1%B9%E7%9B%AE%E7%AE%A1%E7%90%86/" style="font-size: 10px;">项目管理</a>
+    </div>
+  </div>
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">归档</h3>
+    <div class="widget">
+      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2020/12/">十二月 2020</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/01/">一月 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/12/">十二月 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/11/">十一月 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/10/">十月 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/09/">九月 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/07/">七月 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/05/">五月 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/03/">三月 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/09/">九月 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/07/">七月 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/05/">五月 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/04/">四月 2017</a></li></ul>
+    </div>
+  </div>
+
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">最新文章</h3>
+    <div class="widget">
+      <ul>
+        
+          <li>
+            <a href="/2020/12/24/%E8%80%81%E5%AE%9E%E4%BA%BA%E6%80%95%E5%BC%80%E5%8F%A3/">老实人怕开口</a>
+          </li>
+        
+          <li>
+            <a href="/2019/01/01/2019%E7%AC%AC%E4%B8%80%E5%A4%A9%E5%85%88%E7%AB%8Bflag/">2019第一天先立flag</a>
+          </li>
+        
+          <li>
+            <a href="/2018/12/31/2018%E7%BB%99%E8%87%AA%E5%B7%B1%E4%B8%80%E4%B8%AA%E7%AE%80%E5%8D%95%E7%9A%84%E6%80%BB%E7%BB%93/">2018给自己一个简单的总结</a>
+          </li>
+        
+          <li>
+            <a href="/2018/12/29/%E4%BD%BF%E7%94%A8jsonwebtoken%E5%AE%8C%E6%88%90nodejs%E7%9A%84%E7%99%BB%E9%99%86%E7%B3%BB%E7%BB%9F/">使用jsonwebtoken完成nodejs的登陆系统</a>
+          </li>
+        
+          <li>
+            <a href="/2018/12/28/Android%E4%B8%89%E5%A4%A7%E9%A1%B9%E7%9B%AE%E6%9E%B6%E6%9E%84MVC%E3%80%81MVP%E3%80%81MVVM%E4%BD%BF%E7%94%A8%E4%BD%93%E9%AA%8C/">Android三大项目架构MVC、MVP、MVVM使用体验</a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+
+  
+</aside>
+        
+      </div>
+      <footer id="footer">
+  
+  <div class="outer">
+    <div id="footer-info" class="inner">
+      &copy; 2020 业松<br>
+      Powered by <a href="http://hexo.io/" target="_blank">Hexo</a>
+    </div>
+  </div>
+</footer>
+    </div>
+    <nav id="mobile-nav">
+  
+    <a href="/" class="mobile-nav-link">Home</a>
+  
+    <a href="/archives" class="mobile-nav-link">Archives</a>
+  
+</nav>
+    
+
+<script src="//ajax.googleapis.com/ajax/libs/jquery/2.0.3/jquery.min.js"></script>
+
+
+  
+<link rel="stylesheet" href="/fancybox/jquery.fancybox.css">
+
+  
+<script src="/fancybox/jquery.fancybox.pack.js"></script>
+
+
+
+
+<script src="/js/script.js"></script>
+
+
+
+
+  </div>
+</body>
+</html>

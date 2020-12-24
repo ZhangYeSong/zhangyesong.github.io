@@ -1,0 +1,297 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  
+
+  
+  <title>使用Spring Boot+JPA+MySQL光速构建RESTful风格API并使用Httpie进行测试 | 业松 Studio</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+  <meta name="description" content="笔者是个懒人，但是真没想到写一个RESTful风格的API接口可以这么快。官方文档地址：https:&#x2F;&#x2F;spring.io&#x2F;guides&#x2F;gs&#x2F;accessing-data-rest&#x2F;  0. 使用Spring Initializ初始化一个Spring Boot项目用Idea的话点击New Project选择Spring Initializ, 一路next填上项目名包名等。然后可以先选上依赖，也">
+<meta property="og:type" content="article">
+<meta property="og:title" content="使用Spring Boot+JPA+MySQL光速构建RESTful风格API并使用Httpie进行测试">
+<meta property="og:url" content="http://yoursite.com/2018/10/17/%E4%BD%BF%E7%94%A8Spring-Boot-JPA-MySQL%E5%85%89%E9%80%9F%E6%9E%84%E5%BB%BARESTful%E9%A3%8E%E6%A0%BCAPI%E5%B9%B6%E4%BD%BF%E7%94%A8Httpie%E8%BF%9B%E8%A1%8C%E6%B5%8B%E8%AF%95/index.html">
+<meta property="og:site_name" content="业松 Studio">
+<meta property="og:description" content="笔者是个懒人，但是真没想到写一个RESTful风格的API接口可以这么快。官方文档地址：https:&#x2F;&#x2F;spring.io&#x2F;guides&#x2F;gs&#x2F;accessing-data-rest&#x2F;  0. 使用Spring Initializ初始化一个Spring Boot项目用Idea的话点击New Project选择Spring Initializ, 一路next填上项目名包名等。然后可以先选上依赖，也">
+<meta property="og:locale" content="zh_CN">
+<meta property="article:published_time" content="2018-10-17T13:13:56.000Z">
+<meta property="article:modified_time" content="2020-12-24T11:34:17.241Z">
+<meta property="article:author" content="业松">
+<meta property="article:tag" content="Java">
+<meta property="article:tag" content="Spring Boot">
+<meta property="article:tag" content="RESTful">
+<meta property="article:tag" content="JPA">
+<meta name="twitter:card" content="summary">
+  
+    <link rel="alternate" href="/atom.xml" title="业松 Studio" type="application/atom+xml">
+  
+  
+    <link rel="icon" href="/favicon.png">
+  
+  
+    <link href="//fonts.googleapis.com/css?family=Source+Code+Pro" rel="stylesheet" type="text/css">
+  
+  
+<link rel="stylesheet" href="/css/style.css">
+
+<meta name="generator" content="Hexo 5.3.0"></head>
+
+<body>
+  <div id="container">
+    <div id="wrap">
+      <header id="header">
+  <div id="banner"></div>
+  <div id="header-outer" class="outer">
+    <div id="header-title" class="inner">
+      <h1 id="logo-wrap">
+        <a href="/" id="logo">业松 Studio</a>
+      </h1>
+      
+    </div>
+    <div id="header-inner" class="inner">
+      <nav id="main-nav">
+        <a id="main-nav-toggle" class="nav-icon"></a>
+        
+          <a class="main-nav-link" href="/">Home</a>
+        
+          <a class="main-nav-link" href="/archives">Archives</a>
+        
+      </nav>
+      <nav id="sub-nav">
+        
+          <a id="nav-rss-link" class="nav-icon" href="/atom.xml" title="RSS Feed"></a>
+        
+        <a id="nav-search-btn" class="nav-icon" title="搜索"></a>
+      </nav>
+      <div id="search-form-wrap">
+        <form action="//google.com/search" method="get" accept-charset="UTF-8" class="search-form"><input type="search" name="q" class="search-form-input" placeholder="Search"><button type="submit" class="search-form-submit">&#xF002;</button><input type="hidden" name="sitesearch" value="http://yoursite.com"></form>
+      </div>
+    </div>
+  </div>
+</header>
+      <div class="outer">
+        <section id="main"><article id="post-使用Spring-Boot-JPA-MySQL光速构建RESTful风格API并使用Httpie进行测试" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/2018/10/17/%E4%BD%BF%E7%94%A8Spring-Boot-JPA-MySQL%E5%85%89%E9%80%9F%E6%9E%84%E5%BB%BARESTful%E9%A3%8E%E6%A0%BCAPI%E5%B9%B6%E4%BD%BF%E7%94%A8Httpie%E8%BF%9B%E8%A1%8C%E6%B5%8B%E8%AF%95/" class="article-date">
+  <time datetime="2018-10-17T13:13:56.000Z" itemprop="datePublished">2018-10-17</time>
+</a>
+    
+  <div class="article-category">
+    <a class="article-category-link" href="/categories/Java/">Java</a>
+  </div>
+
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 class="article-title" itemprop="name">
+      使用Spring Boot+JPA+MySQL光速构建RESTful风格API并使用Httpie进行测试
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <blockquote>
+<p>笔者是个懒人，但是真没想到写一个RESTful风格的API接口可以这么快。官方文档地址：<a target="_blank" rel="noopener" href="https://spring.io/guides/gs/accessing-data-rest/">https://spring.io/guides/gs/accessing-data-rest/</a></p>
+</blockquote>
+<h4 id="0-使用Spring-Initializ初始化一个Spring-Boot项目"><a href="#0-使用Spring-Initializ初始化一个Spring-Boot项目" class="headerlink" title="0. 使用Spring Initializ初始化一个Spring Boot项目"></a>0. 使用Spring Initializ初始化一个Spring Boot项目</h4><p>用Idea的话点击New Project选择Spring Initializ, 一路next填上项目名包名等。然后可以先选上依赖，也可以就选一个core，后面在pom文件里写。</p>
+<p>不用Idea的话直接去<a target="_blank" rel="noopener" href="https://start.spring.io,选择maven,java(你也可以试试gradle+kotlin),然后选上依赖,当然我们这里先不选,生成好后下载下来.然后再用自己的ide或者编辑器打开./">https://start.spring.io，选择maven，java（你也可以试试gradle+kotlin），然后选上依赖，当然我们这里先不选，生成好后下载下来。然后再用自己的IDE或者编辑器打开。</a></p>
+<a id="more"></a>
+<h4 id="1-在pom文件里添加依赖"><a href="#1-在pom文件里添加依赖" class="headerlink" title="1. 在pom文件里添加依赖"></a>1. 在pom文件里添加依赖</h4><figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">dependencies</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">dependency</span>&gt;</span></span><br><span class="line">            <span class="tag">&lt;<span class="name">groupId</span>&gt;</span>org.springframework.boot<span class="tag">&lt;/<span class="name">groupId</span>&gt;</span></span><br><span class="line">            <span class="tag">&lt;<span class="name">artifactId</span>&gt;</span>spring-boot-starter-data-jpa<span class="tag">&lt;/<span class="name">artifactId</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;/<span class="name">dependency</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">dependency</span>&gt;</span></span><br><span class="line">            <span class="tag">&lt;<span class="name">groupId</span>&gt;</span>org.springframework.boot<span class="tag">&lt;/<span class="name">groupId</span>&gt;</span></span><br><span class="line">            <span class="tag">&lt;<span class="name">artifactId</span>&gt;</span>spring-boot-starter-data-rest<span class="tag">&lt;/<span class="name">artifactId</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;/<span class="name">dependency</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">dependency</span>&gt;</span></span><br><span class="line">            <span class="tag">&lt;<span class="name">groupId</span>&gt;</span>org.springframework.boot<span class="tag">&lt;/<span class="name">groupId</span>&gt;</span></span><br><span class="line">            <span class="tag">&lt;<span class="name">artifactId</span>&gt;</span>spring-boot-starter-web<span class="tag">&lt;/<span class="name">artifactId</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;/<span class="name">dependency</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">dependency</span>&gt;</span></span><br><span class="line">            <span class="tag">&lt;<span class="name">groupId</span>&gt;</span>mysql<span class="tag">&lt;/<span class="name">groupId</span>&gt;</span></span><br><span class="line">            <span class="tag">&lt;<span class="name">artifactId</span>&gt;</span>mysql-connector-java<span class="tag">&lt;/<span class="name">artifactId</span>&gt;</span></span><br><span class="line">            <span class="tag">&lt;<span class="name">version</span>&gt;</span>5.1.45<span class="tag">&lt;/<span class="name">version</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;/<span class="name">dependency</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">dependency</span>&gt;</span></span><br><span class="line">            <span class="tag">&lt;<span class="name">groupId</span>&gt;</span>org.springframework.boot<span class="tag">&lt;/<span class="name">groupId</span>&gt;</span></span><br><span class="line">            <span class="tag">&lt;<span class="name">artifactId</span>&gt;</span>spring-boot-starter-test<span class="tag">&lt;/<span class="name">artifactId</span>&gt;</span></span><br><span class="line">            <span class="tag">&lt;<span class="name">scope</span>&gt;</span>test<span class="tag">&lt;/<span class="name">scope</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;/<span class="name">dependency</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;/<span class="name">dependencies</span>&gt;</span></span><br></pre></td></tr></table></figure>
+<p>添加如上依赖，然后用maven sync一下把依赖包都下下来。</p>
+<p>简单说下，spring-boot-starter-web和spring-boot-starter-test是构建web应用必须要有的;mysql-connector-java是mysql的驱动;spring-boot-starter-data-jpa是一个ORM（Object Relational Mapping）对象映射框架，简单来说就是把应用内存中的对象和数据库中的数据建立映射关系，熟悉Android的朋友们知道的GreenDao和它做的就是同一类事;spring-boot-starter-data-rest是今天的重头戏，它真的可以帮助我们以光速写一个RESTful的API接口。</p>
+<h4 id="2-配置数据库"><a href="#2-配置数据库" class="headerlink" title="2.配置数据库"></a>2.配置数据库</h4><p>开启自己的Mysql服务，create一个数据库，我这里叫cloud_mall，然后在application.properties中写上连接数据库相关的参数：</p>
+<figure class="highlight properties"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">spring.jpa.hibernate.ddl-auto</span>=<span class="string">create</span></span><br><span class="line"><span class="meta">spring.datasource.url</span>=<span class="string">jdbc:mysql://localhost:3306/cloud_mall?useSSL=false</span></span><br><span class="line"><span class="meta">spring.datasource.username</span>=<span class="string">root</span></span><br><span class="line"><span class="meta">spring.datasource.password</span>=<span class="string">xxxx</span></span><br></pre></td></tr></table></figure>
+<p>这其中注意第一个参数，主要有以下这几种常见选择：</p>
+<ul>
+<li><p>ddl-auto:create—-没有表的Entity会在数据库中建表，已经有的会清空数据。</p>
+</li>
+<li><p>ddl-auto:create-drop—-每次程序结束的时候会清空表。</p>
+</li>
+<li><p>ddl-auto:update—-会根据Entity更新表的结构。</p>
+</li>
+<li><p>ddl-auto:validate—-运行程序会校验数据与数据库的字段类型是否相同，不同会报错。</p>
+</li>
+</ul>
+<p>因此第一次需要创建表的时候我们用create，后面再次运行我们用update比较好。</p>
+<h2 id="ddl-auto-validate—-运行程序会校验数据与数据库的字段类型是否相同，不同会报错"><a href="#ddl-auto-validate—-运行程序会校验数据与数据库的字段类型是否相同，不同会报错" class="headerlink" title="ddl-auto:validate—-运行程序会校验数据与数据库的字段类型是否相同，不同会报错"></a>ddl-auto:validate—-运行程序会校验数据与数据库的字段类型是否相同，不同会报错</h2><p>作者：万里飞鹏<br>来源：CSDN<br>原文：<a target="_blank" rel="noopener" href="https://blog.csdn.net/zhangtongpeng/article/details/79609942">https://blog.csdn.net/zhangtongpeng/article/details/79609942</a><br>版权声明：本文为博主原创文章，转载请附上博文链接！</p>
+<h4 id="3-建一个叫Commodity的商品java-bean类"><a href="#3-建一个叫Commodity的商品java-bean类" class="headerlink" title="3.建一个叫Commodity的商品java bean类"></a>3.建一个叫Commodity的商品java bean类</h4><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">@Entity</span></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span>  <span class="title">Commodity</span> </span>&#123;</span><br><span class="line">    <span class="meta">@Id</span></span><br><span class="line">    <span class="meta">@GeneratedValue(strategy = GenerationType.AUTO)</span></span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">long</span> id;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">int</span> category;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">private</span> String name;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">private</span> String subTitle;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">private</span> String picUrl;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">long</span> price;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">int</span> stock;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> String <span class="title">getName</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        <span class="keyword">return</span> name;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">setName</span><span class="params">(String name)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">this</span>.name = name;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> String <span class="title">getSubTitle</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        <span class="keyword">return</span> subTitle;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">setSubTitle</span><span class="params">(String subTitle)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">this</span>.subTitle = subTitle;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">int</span> <span class="title">getCategory</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        <span class="keyword">return</span> category;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">setCategory</span><span class="params">(<span class="keyword">int</span> category)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">this</span>.category = category;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> String <span class="title">getPicUrl</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        <span class="keyword">return</span> picUrl;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">setPicUrl</span><span class="params">(String picUrl)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">this</span>.picUrl = picUrl;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">long</span> <span class="title">getPrice</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        <span class="keyword">return</span> price;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">setPrice</span><span class="params">(<span class="keyword">long</span> price)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">this</span>.price = price;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">int</span> <span class="title">getStock</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        <span class="keyword">return</span> stock;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">setStock</span><span class="params">(<span class="keyword">int</span> stock)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">this</span>.stock = stock;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h4 id="4-写一个继承PagingAndSortingRepository的Repository接口"><a href="#4-写一个继承PagingAndSortingRepository的Repository接口" class="headerlink" title="4. 写一个继承PagingAndSortingRepository的Repository接口"></a>4. 写一个继承PagingAndSortingRepository的Repository接口</h4><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">@RepositoryRestResource(collectionResourceRel = &quot;commodity&quot;, path = &quot;commodity&quot;)</span></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">interface</span> <span class="title">CommodityRepository</span> <span class="keyword">extends</span> <span class="title">PagingAndSortingRepository</span>&lt;<span class="title">Commodity</span>, <span class="title">Long</span>&gt;</span>&#123;</span><br><span class="line">    <span class="function">List&lt;Commodity&gt; <span class="title">findByName</span><span class="params">(<span class="meta">@Param(&quot;name&quot;)</span> String name)</span></span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>是的，你没看错就这么简单，写完了。先看下自己的MySql数据库commodity表有没有建好，数据结构是不是和我们写的Commodity类一样。</p>
+<p>其中findByName是自己写的，你可以按照提示写其他的查找方法，至于剩下的CURD，统统都让spring-boot-starter-data-rest框架自己实现好了。</p>
+<h4 id="5-下载Httpie准备测试"><a href="#5-下载Httpie准备测试" class="headerlink" title="5.下载Httpie准备测试"></a>5.下载Httpie准备测试</h4><p>这里为啥给大家推荐这个命令行软件呢？Postman和Restlet Client这些Chrome插件已经够好用了啊？确实如此，但是笔者最近迷恋上了命令行- -。命令行软件的好处就是快，不用点来点去，适合写完一个接口立马测试用，系统性的测试API肯定还是Postman这些好使。另外就是命令行可以在没有GUI服务器上直接使用。当然curl也可以,一开始我也是用curl，但是参数太多，用起来还是有点不太方便。</p>
+<p>下载方式就不写了，见官方网站：<a target="_blank" rel="noopener" href="https://httpie.org/">https://httpie.org/</a></p>
+<h4 id="6-使用POST添加数据"><a href="#6-使用POST添加数据" class="headerlink" title="6. 使用POST添加数据"></a>6. 使用POST添加数据</h4><p>现在我们直接在终端输入http localhost:8080可以试一下，没用报错，但是没数据。因此我们先用POST请求加几个数据。直接输入http POST url json参数，注意string类型的直接key=value就好，整形和浮点型用key:=value。</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br></pre></td><td class="code"><pre><span class="line">judy:~$ http POST localhost:8080/commodity name=IPhone7 subTitle=IPhone7 price:=2588.88 stock:=12</span><br><span class="line">HTTP/1.1 201 </span><br><span class="line">Content-Type: application/json;charset=UTF-8</span><br><span class="line">Date: Wed, 17 Oct 2018 11:39:50 GMT</span><br><span class="line">Location: http://localhost:8080/commodity/3</span><br><span class="line">Transfer-Encoding: chunked</span><br><span class="line"></span><br><span class="line">&#123;</span><br><span class="line">    <span class="string">&quot;_links&quot;</span>: &#123;</span><br><span class="line">        <span class="string">&quot;commodity&quot;</span>: &#123;</span><br><span class="line">            <span class="string">&quot;href&quot;</span>: <span class="string">&quot;http://localhost:8080/commodity/3&quot;</span></span><br><span class="line">        &#125;, </span><br><span class="line">        <span class="string">&quot;self&quot;</span>: &#123;</span><br><span class="line">            <span class="string">&quot;href&quot;</span>: <span class="string">&quot;http://localhost:8080/commodity/3&quot;</span></span><br><span class="line">        &#125;</span><br><span class="line">    &#125;, </span><br><span class="line">    <span class="string">&quot;category&quot;</span>: 0, </span><br><span class="line">    <span class="string">&quot;name&quot;</span>: <span class="string">&quot;IPhone7&quot;</span>, </span><br><span class="line">    <span class="string">&quot;picUrl&quot;</span>: null, </span><br><span class="line">    <span class="string">&quot;price&quot;</span>: 2588, </span><br><span class="line">    <span class="string">&quot;stock&quot;</span>: 12, </span><br><span class="line">    <span class="string">&quot;subTitle&quot;</span>: <span class="string">&quot;IPhone7&quot;</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>可以看到返回的数据中给出了我这个IPhone7的url，以及详细属性，为了证明添加成功大家可以去数据库查一下表。</p>
+<h4 id="7-使用PUT替换数据"><a href="#7-使用PUT替换数据" class="headerlink" title="7.使用PUT替换数据"></a>7.使用PUT替换数据</h4><p>使用http PUT url json参数来替换数据，这里我要修改的是刚才POST上去的IPhone7, 因此url使用刚才POST返回的url。</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br></pre></td><td class="code"><pre><span class="line">judy:~$ http PUT localhost:8080/commodity/3 name=IPhone7Plus subTitle=IPhone7Plus price:=2588.88 stock:=12</span><br><span class="line">HTTP/1.1 200 </span><br><span class="line">Content-Type: application/json;charset=UTF-8</span><br><span class="line">Date: Wed, 17 Oct 2018 11:48:31 GMT</span><br><span class="line">Location: http://localhost:8080/commodity/3</span><br><span class="line">Transfer-Encoding: chunked</span><br><span class="line"></span><br><span class="line">&#123;</span><br><span class="line">    <span class="string">&quot;_links&quot;</span>: &#123;</span><br><span class="line">        <span class="string">&quot;commodity&quot;</span>: &#123;</span><br><span class="line">            <span class="string">&quot;href&quot;</span>: <span class="string">&quot;http://localhost:8080/commodity/3&quot;</span></span><br><span class="line">        &#125;, </span><br><span class="line">        <span class="string">&quot;self&quot;</span>: &#123;</span><br><span class="line">            <span class="string">&quot;href&quot;</span>: <span class="string">&quot;http://localhost:8080/commodity/3&quot;</span></span><br><span class="line">        &#125;</span><br><span class="line">    &#125;, </span><br><span class="line">    <span class="string">&quot;category&quot;</span>: 0, </span><br><span class="line">    <span class="string">&quot;name&quot;</span>: <span class="string">&quot;IPhone7Plus&quot;</span>, </span><br><span class="line">    <span class="string">&quot;picUrl&quot;</span>: null, </span><br><span class="line">    <span class="string">&quot;price&quot;</span>: 2588, </span><br><span class="line">    <span class="string">&quot;stock&quot;</span>: 12, </span><br><span class="line">    <span class="string">&quot;subTitle&quot;</span>: <span class="string">&quot;IPhone7Plus&quot;</span></span><br><span class="line">&#125;</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+<p>可以看到返回结果是没问题的。</p>
+<h4 id="8-使用PATCH来修改数据"><a href="#8-使用PATCH来修改数据" class="headerlink" title="8.使用PATCH来修改数据"></a>8.使用PATCH来修改数据</h4><p>PUT和PATCH是很容易弄混的两个请求，PUT是整体替换，而PATCH只会改变部分属性。命令格式和PUT一样，只是由于我们只修改部分属性，因此只要把修改的属性放上来就行了，这里我修改了下价格。</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br></pre></td><td class="code"><pre><span class="line">judy:~$ http PATCH localhost:8080/commodity/3 price:=3588HTTP/1.1 200 </span><br><span class="line">Content-Type: application/json;charset=UTF-8</span><br><span class="line">Date: Wed, 17 Oct 2018 11:54:57 GMT</span><br><span class="line">Transfer-Encoding: chunked</span><br><span class="line"></span><br><span class="line">&#123;</span><br><span class="line">    <span class="string">&quot;_links&quot;</span>: &#123;</span><br><span class="line">        <span class="string">&quot;commodity&quot;</span>: &#123;</span><br><span class="line">            <span class="string">&quot;href&quot;</span>: <span class="string">&quot;http://localhost:8080/commodity/3&quot;</span></span><br><span class="line">        &#125;, </span><br><span class="line">        <span class="string">&quot;self&quot;</span>: &#123;</span><br><span class="line">            <span class="string">&quot;href&quot;</span>: <span class="string">&quot;http://localhost:8080/commodity/3&quot;</span></span><br><span class="line">        &#125;</span><br><span class="line">    &#125;, </span><br><span class="line">    <span class="string">&quot;category&quot;</span>: 0, </span><br><span class="line">    <span class="string">&quot;name&quot;</span>: <span class="string">&quot;IPhone7Plus&quot;</span>, </span><br><span class="line">    <span class="string">&quot;picUrl&quot;</span>: null, </span><br><span class="line">    <span class="string">&quot;price&quot;</span>: 3588, </span><br><span class="line">    <span class="string">&quot;stock&quot;</span>: 12, </span><br><span class="line">    <span class="string">&quot;subTitle&quot;</span>: <span class="string">&quot;IPhone7Plus&quot;</span></span><br><span class="line">&#125;</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+<p>修改成功。</p>
+<h4 id="9-使用DELETE请求删除数据"><a href="#9-使用DELETE请求删除数据" class="headerlink" title="9.使用DELETE请求删除数据"></a>9.使用DELETE请求删除数据</h4><p>都不用猜了，肯定是http DELETE url这样的形式，来试一下：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">judy:~$ http DELETE localhost:8080/commodity/3</span><br><span class="line">HTTP/1.1 204 </span><br><span class="line">Date: Wed, 17 Oct 2018 11:58:21 GMT</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+<p>居然什么提示也没有，别着急，去数据库查一下是不是删除成功了呢？</p>
+<h4 id="10-使用GET请求查找数据"><a href="#10-使用GET请求查找数据" class="headerlink" title="10.使用GET请求查找数据"></a>10.使用GET请求查找数据</h4><p>GET的话是最常用的，因此可以省略不写。查找之前先用POST添加几条数据。</p>
+<p>我们来试一下：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br></pre></td><td class="code"><pre><span class="line">judy:~$ http localhost:8080/commodity</span><br><span class="line">HTTP/1.1 200 </span><br><span class="line">Content-Type: application/hal+json;charset=UTF-8</span><br><span class="line">Date: Wed, 17 Oct 2018 11:58:46 GMT</span><br><span class="line">Transfer-Encoding: chunked</span><br><span class="line"></span><br><span class="line">&#123;</span><br><span class="line">    <span class="string">&quot;_embedded&quot;</span>: &#123;</span><br><span class="line">        <span class="string">&quot;commodity&quot;</span>: [</span><br><span class="line">            &#123;</span><br><span class="line">                <span class="string">&quot;_links&quot;</span>: &#123;</span><br><span class="line">                    <span class="string">&quot;commodity&quot;</span>: &#123;</span><br><span class="line">                        <span class="string">&quot;href&quot;</span>: <span class="string">&quot;http://localhost:8080/commodity/1&quot;</span></span><br><span class="line">                    &#125;, </span><br><span class="line">                    <span class="string">&quot;self&quot;</span>: &#123;</span><br><span class="line">                        <span class="string">&quot;href&quot;</span>: <span class="string">&quot;http://localhost:8080/commodity/1&quot;</span></span><br><span class="line">                    &#125;</span><br><span class="line">                &#125;, </span><br><span class="line">                <span class="string">&quot;category&quot;</span>: 0, </span><br><span class="line">                <span class="string">&quot;name&quot;</span>: <span class="string">&quot;IPhone5&quot;</span>, </span><br><span class="line">                <span class="string">&quot;picUrl&quot;</span>: null, </span><br><span class="line">                <span class="string">&quot;price&quot;</span>: 588, </span><br><span class="line">                <span class="string">&quot;stock&quot;</span>: 10, </span><br><span class="line">                <span class="string">&quot;subTitle&quot;</span>: <span class="string">&quot;IPhone5&quot;</span></span><br><span class="line">            &#125;, </span><br><span class="line">            &#123;</span><br><span class="line">                <span class="string">&quot;_links&quot;</span>: &#123;</span><br><span class="line">                    <span class="string">&quot;commodity&quot;</span>: &#123;</span><br><span class="line">                        <span class="string">&quot;href&quot;</span>: <span class="string">&quot;http://localhost:8080/commodity/2&quot;</span></span><br><span class="line">                    &#125;, </span><br><span class="line">                    <span class="string">&quot;self&quot;</span>: &#123;</span><br><span class="line">                        <span class="string">&quot;href&quot;</span>: <span class="string">&quot;http://localhost:8080/commodity/2&quot;</span></span><br><span class="line">                    &#125;</span><br><span class="line">                &#125;, </span><br><span class="line">                <span class="string">&quot;category&quot;</span>: 0, </span><br><span class="line">                <span class="string">&quot;name&quot;</span>: <span class="string">&quot;IPhone6&quot;</span>, </span><br><span class="line">                <span class="string">&quot;picUrl&quot;</span>: null, </span><br><span class="line">                <span class="string">&quot;price&quot;</span>: 988, </span><br><span class="line">                <span class="string">&quot;stock&quot;</span>: 20, </span><br><span class="line">                <span class="string">&quot;subTitle&quot;</span>: <span class="string">&quot;IPhone6&quot;</span></span><br><span class="line">            &#125;</span><br><span class="line">        ]</span><br><span class="line">    &#125;, </span><br><span class="line">    <span class="string">&quot;_links&quot;</span>: &#123;</span><br><span class="line">        <span class="string">&quot;profile&quot;</span>: &#123;</span><br><span class="line">            <span class="string">&quot;href&quot;</span>: <span class="string">&quot;http://localhost:8080/profile/commodity&quot;</span></span><br><span class="line">        &#125;, </span><br><span class="line">        <span class="string">&quot;search&quot;</span>: &#123;</span><br><span class="line">            <span class="string">&quot;href&quot;</span>: <span class="string">&quot;http://localhost:8080/commodity/search&quot;</span></span><br><span class="line">        &#125;, </span><br><span class="line">        <span class="string">&quot;self&quot;</span>: &#123;</span><br><span class="line">            <span class="string">&quot;href&quot;</span>: <span class="string">&quot;http://localhost:8080/commodity&#123;?page,size,sort&#125;&quot;</span>, </span><br><span class="line">            <span class="string">&quot;templated&quot;</span>: <span class="literal">true</span></span><br><span class="line">        &#125;</span><br><span class="line">    &#125;, </span><br><span class="line">    <span class="string">&quot;page&quot;</span>: &#123;</span><br><span class="line">        <span class="string">&quot;number&quot;</span>: 0, </span><br><span class="line">        <span class="string">&quot;size&quot;</span>: 20, </span><br><span class="line">        <span class="string">&quot;totalElements&quot;</span>: 2, </span><br><span class="line">        <span class="string">&quot;totalPages&quot;</span>: 1</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+<p>可以看到我们要的数据都能查到，并且会提示我们可以用page、size、sort这些参数来控制查询范围和排序。还提示了我们可以用<a target="_blank" rel="noopener" href="http://localhost:8080/commodity/search%E6%9D%A5%E6%9F%A5%E8%AF%A2,%E6%9F%A5%E5%AE%8C%E4%BC%9A%E6%8F%90%E7%A4%BA%E4%BD%A0%E7%94%A8http://localhost:8080/commodity/search/findByName%7B?name%7D%E8%BF%99%E4%B8%AAurl%E6%9D%A5%E6%9F%A5%E8%AF%A2%EF%BC%8C%E8%BF%99%E4%B9%9F%E6%98%AF%E6%88%91%E4%BB%AC%E8%87%AA%E5%B7%B1%E5%AE%9A%E4%B9%89%E7%9A%84%E4%B8%80%E4%B8%AA%E6%8A%BD%E8%B1%A1%E6%9F%A5%E8%AF%A2%E6%96%B9%E6%B3%95%EF%BC%8C%E8%AF%95%E4%B8%80%E4%B8%8B%EF%BC%9A">http://localhost:8080/commodity/search来查询,查完会提示你用http://localhost:8080/commodity/search/findByName{?name}这个url来查询，这也是我们自己定义的一个抽象查询方法，试一下：</a></p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br></pre></td><td class="code"><pre><span class="line">judy:~$ http localhost:8080/commodity/search/findByName?name=IPhone5</span><br><span class="line">HTTP/1.1 200 </span><br><span class="line">Content-Type: application/hal+json;charset=UTF-8</span><br><span class="line">Date: Wed, 17 Oct 2018 12:04:38 GMT</span><br><span class="line">Transfer-Encoding: chunked</span><br><span class="line"></span><br><span class="line">&#123;</span><br><span class="line">    <span class="string">&quot;_embedded&quot;</span>: &#123;</span><br><span class="line">        <span class="string">&quot;commodity&quot;</span>: [</span><br><span class="line">            &#123;</span><br><span class="line">                <span class="string">&quot;_links&quot;</span>: &#123;</span><br><span class="line">                    <span class="string">&quot;commodity&quot;</span>: &#123;</span><br><span class="line">                        <span class="string">&quot;href&quot;</span>: <span class="string">&quot;http://localhost:8080/commodity/1&quot;</span></span><br><span class="line">                    &#125;, </span><br><span class="line">                    <span class="string">&quot;self&quot;</span>: &#123;</span><br><span class="line">                        <span class="string">&quot;href&quot;</span>: <span class="string">&quot;http://localhost:8080/commodity/1&quot;</span></span><br><span class="line">                    &#125;</span><br><span class="line">                &#125;, </span><br><span class="line">                <span class="string">&quot;category&quot;</span>: 0, </span><br><span class="line">                <span class="string">&quot;name&quot;</span>: <span class="string">&quot;IPhone5&quot;</span>, </span><br><span class="line">                <span class="string">&quot;picUrl&quot;</span>: null, </span><br><span class="line">                <span class="string">&quot;price&quot;</span>: 588, </span><br><span class="line">                <span class="string">&quot;stock&quot;</span>: 10, </span><br><span class="line">                <span class="string">&quot;subTitle&quot;</span>: <span class="string">&quot;IPhone5&quot;</span></span><br><span class="line">            &#125;</span><br><span class="line">        ]</span><br><span class="line">    &#125;, </span><br><span class="line">    <span class="string">&quot;_links&quot;</span>: &#123;</span><br><span class="line">        <span class="string">&quot;self&quot;</span>: &#123;</span><br><span class="line">            <span class="string">&quot;href&quot;</span>: <span class="string">&quot;http://localhost:8080/commodity/search/findByName?name=IPhone5&quot;</span></span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+<p>果然查到了，是不是很强大呢？当然了，用框架生成的接口灵活性还是不如自己写的接口。不过个人玩的话真的是懒人福利了。有疑问的大家可以互相交流。</p>
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="http://yoursite.com/2018/10/17/%E4%BD%BF%E7%94%A8Spring-Boot-JPA-MySQL%E5%85%89%E9%80%9F%E6%9E%84%E5%BB%BARESTful%E9%A3%8E%E6%A0%BCAPI%E5%B9%B6%E4%BD%BF%E7%94%A8Httpie%E8%BF%9B%E8%A1%8C%E6%B5%8B%E8%AF%95/" data-id="ckj2v1sqd001dbkus7chb71u8" class="article-share-link">Share</a>
+      
+      
+  <ul class="article-tag-list" itemprop="keywords"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/JPA/" rel="tag">JPA</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Java/" rel="tag">Java</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/RESTful/" rel="tag">RESTful</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Spring-Boot/" rel="tag">Spring Boot</a></li></ul>
+
+    </footer>
+  </div>
+  
+    
+<nav id="article-nav">
+  
+    <a href="/2018/11/01/Linux%E5%B8%B8%E7%94%A8%E5%91%BD%E4%BB%A4%E5%B0%8F%E8%AE%B0/" id="article-nav-newer" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">Newer</strong>
+      <div class="article-nav-title">
+        
+          Linux常用命令小记
+        
+      </div>
+    </a>
+  
+  
+    <a href="/2018/10/14/Android-Studio-Git-JetBrain%E5%85%A8%E5%AE%B6%E6%A1%B6%E9%80%9A%E7%94%A8/" id="article-nav-older" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">Older</strong>
+      <div class="article-nav-title">Android Studio + Git(JetBrain全家桶通用)</div>
+    </a>
+  
+</nav>
+
+  
+</article>
+
+</section>
+        
+          <aside id="sidebar">
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">分类</h3>
+    <div class="widget">
+      <ul class="category-list"><li class="category-list-item"><a class="category-list-link" href="/categories/Android/">Android</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/Java/">Java</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/JavaScript/">JavaScript</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/Linux/">Linux</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/Node-js/">Node.js</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/git/">git</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/%E7%88%AC%E8%99%AB/">爬虫</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/%E9%9A%8F%E7%AC%94/">随笔</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/%E9%A1%B9%E7%9B%AE%E7%AE%A1%E7%90%86/">项目管理</a></li></ul>
+    </div>
+  </div>
+
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">标签</h3>
+    <div class="widget">
+      <ul class="tag-list" itemprop="keywords"><li class="tag-list-item"><a class="tag-list-link" href="/tags/Android/" rel="tag">Android</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Android-Studio/" rel="tag">Android Studio</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Github/" rel="tag">Github</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/JPA/" rel="tag">JPA</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/JVM/" rel="tag">JVM</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Java/" rel="tag">Java</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/JavaScript/" rel="tag">JavaScript</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Koa/" rel="tag">Koa</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Kotlin/" rel="tag">Kotlin</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Linux/" rel="tag">Linux</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/MongoDB/" rel="tag">MongoDB</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Node-js/" rel="tag">Node.js</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/OKHttp/" rel="tag">OKHttp</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Profiler/" rel="tag">Profiler</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/RESTful/" rel="tag">RESTful</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Spring-Boot/" rel="tag">Spring Boot</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Ubuntu/" rel="tag">Ubuntu</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/ava/" rel="tag">ava</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/git/" rel="tag">git</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/mongoose/" rel="tag">mongoose</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/python/" rel="tag">python</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E6%80%A7%E8%83%BD%E4%BC%98%E5%8C%96/" rel="tag">性能优化</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E6%BA%90%E7%A0%81%E5%88%86%E6%9E%90/" rel="tag">源码分析</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E7%88%AC%E8%99%AB/" rel="tag">爬虫</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E7%8E%AF%E5%A2%83%E9%85%8D%E7%BD%AE/" rel="tag">环境配置</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E7%94%9F%E6%B4%BB/" rel="tag">生活</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E8%81%8C%E4%B8%9A%E8%A7%84%E5%88%92/" rel="tag">职业规划</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E9%9A%8F%E7%AC%94/" rel="tag">随笔</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E9%A1%B9%E7%9B%AE%E7%AE%A1%E7%90%86/" rel="tag">项目管理</a></li></ul>
+    </div>
+  </div>
+
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">标签云</h3>
+    <div class="widget tagcloud">
+      <a href="/tags/Android/" style="font-size: 20px;">Android</a> <a href="/tags/Android-Studio/" style="font-size: 12.5px;">Android Studio</a> <a href="/tags/Github/" style="font-size: 10px;">Github</a> <a href="/tags/JPA/" style="font-size: 10px;">JPA</a> <a href="/tags/JVM/" style="font-size: 12.5px;">JVM</a> <a href="/tags/Java/" style="font-size: 15px;">Java</a> <a href="/tags/JavaScript/" style="font-size: 10px;">JavaScript</a> <a href="/tags/Koa/" style="font-size: 10px;">Koa</a> <a href="/tags/Kotlin/" style="font-size: 12.5px;">Kotlin</a> <a href="/tags/Linux/" style="font-size: 12.5px;">Linux</a> <a href="/tags/MongoDB/" style="font-size: 10px;">MongoDB</a> <a href="/tags/Node-js/" style="font-size: 15px;">Node.js</a> <a href="/tags/OKHttp/" style="font-size: 15px;">OKHttp</a> <a href="/tags/Profiler/" style="font-size: 10px;">Profiler</a> <a href="/tags/RESTful/" style="font-size: 10px;">RESTful</a> <a href="/tags/Spring-Boot/" style="font-size: 10px;">Spring Boot</a> <a href="/tags/Ubuntu/" style="font-size: 10px;">Ubuntu</a> <a href="/tags/ava/" style="font-size: 10px;">ava</a> <a href="/tags/git/" style="font-size: 12.5px;">git</a> <a href="/tags/mongoose/" style="font-size: 10px;">mongoose</a> <a href="/tags/python/" style="font-size: 10px;">python</a> <a href="/tags/%E6%80%A7%E8%83%BD%E4%BC%98%E5%8C%96/" style="font-size: 10px;">性能优化</a> <a href="/tags/%E6%BA%90%E7%A0%81%E5%88%86%E6%9E%90/" style="font-size: 15px;">源码分析</a> <a href="/tags/%E7%88%AC%E8%99%AB/" style="font-size: 10px;">爬虫</a> <a href="/tags/%E7%8E%AF%E5%A2%83%E9%85%8D%E7%BD%AE/" style="font-size: 15px;">环境配置</a> <a href="/tags/%E7%94%9F%E6%B4%BB/" style="font-size: 12.5px;">生活</a> <a href="/tags/%E8%81%8C%E4%B8%9A%E8%A7%84%E5%88%92/" style="font-size: 10px;">职业规划</a> <a href="/tags/%E9%9A%8F%E7%AC%94/" style="font-size: 17.5px;">随笔</a> <a href="/tags/%E9%A1%B9%E7%9B%AE%E7%AE%A1%E7%90%86/" style="font-size: 10px;">项目管理</a>
+    </div>
+  </div>
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">归档</h3>
+    <div class="widget">
+      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2020/12/">十二月 2020</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/01/">一月 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/12/">十二月 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/11/">十一月 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/10/">十月 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/09/">九月 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/07/">七月 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/05/">五月 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/03/">三月 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/09/">九月 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/07/">七月 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/05/">五月 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/04/">四月 2017</a></li></ul>
+    </div>
+  </div>
+
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">最新文章</h3>
+    <div class="widget">
+      <ul>
+        
+          <li>
+            <a href="/2020/12/24/%E8%80%81%E5%AE%9E%E4%BA%BA%E6%80%95%E5%BC%80%E5%8F%A3/">老实人怕开口</a>
+          </li>
+        
+          <li>
+            <a href="/2019/01/01/2019%E7%AC%AC%E4%B8%80%E5%A4%A9%E5%85%88%E7%AB%8Bflag/">2019第一天先立flag</a>
+          </li>
+        
+          <li>
+            <a href="/2018/12/31/2018%E7%BB%99%E8%87%AA%E5%B7%B1%E4%B8%80%E4%B8%AA%E7%AE%80%E5%8D%95%E7%9A%84%E6%80%BB%E7%BB%93/">2018给自己一个简单的总结</a>
+          </li>
+        
+          <li>
+            <a href="/2018/12/29/%E4%BD%BF%E7%94%A8jsonwebtoken%E5%AE%8C%E6%88%90nodejs%E7%9A%84%E7%99%BB%E9%99%86%E7%B3%BB%E7%BB%9F/">使用jsonwebtoken完成nodejs的登陆系统</a>
+          </li>
+        
+          <li>
+            <a href="/2018/12/28/Android%E4%B8%89%E5%A4%A7%E9%A1%B9%E7%9B%AE%E6%9E%B6%E6%9E%84MVC%E3%80%81MVP%E3%80%81MVVM%E4%BD%BF%E7%94%A8%E4%BD%93%E9%AA%8C/">Android三大项目架构MVC、MVP、MVVM使用体验</a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+
+  
+</aside>
+        
+      </div>
+      <footer id="footer">
+  
+  <div class="outer">
+    <div id="footer-info" class="inner">
+      &copy; 2020 业松<br>
+      Powered by <a href="http://hexo.io/" target="_blank">Hexo</a>
+    </div>
+  </div>
+</footer>
+    </div>
+    <nav id="mobile-nav">
+  
+    <a href="/" class="mobile-nav-link">Home</a>
+  
+    <a href="/archives" class="mobile-nav-link">Archives</a>
+  
+</nav>
+    
+
+<script src="//ajax.googleapis.com/ajax/libs/jquery/2.0.3/jquery.min.js"></script>
+
+
+  
+<link rel="stylesheet" href="/fancybox/jquery.fancybox.css">
+
+  
+<script src="/fancybox/jquery.fancybox.pack.js"></script>
+
+
+
+
+<script src="/js/script.js"></script>
+
+
+
+
+  </div>
+</body>
+</html>

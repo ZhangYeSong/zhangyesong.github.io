@@ -1,0 +1,266 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  
+
+  
+  <title>Hexo+GithubPage+阿里云域名光速搭建个人博客网站 | 业松 Studio</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+  <meta name="description" content="一直以为自己搭建博客会非常麻烦，结果试了下很有名的hexo框架，真的是光速建站。  为何要建个人博客网站已经有简书之类的博客网站了，为啥还要自己建一个？这个原因有很多，比如想学学建站知识，想使用个人域名等等。对于我来说个人网站比较自由吧，在不违法的情况下可以随便写自己想说的。对于程序员来说，拥有一个自己的博客网站我想反正不会是减分项。 建立Hexo工程Hexo是个nodejs框架，在安装hexo">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Hexo+GithubPage+阿里云域名光速搭建个人博客网站">
+<meta property="og:url" content="http://yoursite.com/2018/11/11/Hexo-GithubPage-%E9%98%BF%E9%87%8C%E4%BA%91%E5%9F%9F%E5%90%8D%E5%85%89%E9%80%9F%E6%90%AD%E5%BB%BA%E4%B8%AA%E4%BA%BA%E5%8D%9A%E5%AE%A2%E7%BD%91%E7%AB%99/index.html">
+<meta property="og:site_name" content="业松 Studio">
+<meta property="og:description" content="一直以为自己搭建博客会非常麻烦，结果试了下很有名的hexo框架，真的是光速建站。  为何要建个人博客网站已经有简书之类的博客网站了，为啥还要自己建一个？这个原因有很多，比如想学学建站知识，想使用个人域名等等。对于我来说个人网站比较自由吧，在不违法的情况下可以随便写自己想说的。对于程序员来说，拥有一个自己的博客网站我想反正不会是减分项。 建立Hexo工程Hexo是个nodejs框架，在安装hexo">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://upload-images.jianshu.io/upload_images/5586297-ef630def035a370c.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240">
+<meta property="og:image" content="https://upload-images.jianshu.io/upload_images/5586297-1de550703397f443.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240">
+<meta property="og:image" content="https://upload-images.jianshu.io/upload_images/5586297-0419c33ccd3da814.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240">
+<meta property="og:image" content="https://upload-images.jianshu.io/upload_images/5586297-08d1d193f1b57986.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240">
+<meta property="article:published_time" content="2018-11-11T09:29:06.000Z">
+<meta property="article:modified_time" content="2020-12-24T11:34:17.248Z">
+<meta property="article:author" content="业松">
+<meta property="article:tag" content="Node.js">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://upload-images.jianshu.io/upload_images/5586297-ef630def035a370c.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240">
+  
+    <link rel="alternate" href="/atom.xml" title="业松 Studio" type="application/atom+xml">
+  
+  
+    <link rel="icon" href="/favicon.png">
+  
+  
+    <link href="//fonts.googleapis.com/css?family=Source+Code+Pro" rel="stylesheet" type="text/css">
+  
+  
+<link rel="stylesheet" href="/css/style.css">
+
+<meta name="generator" content="Hexo 5.3.0"></head>
+
+<body>
+  <div id="container">
+    <div id="wrap">
+      <header id="header">
+  <div id="banner"></div>
+  <div id="header-outer" class="outer">
+    <div id="header-title" class="inner">
+      <h1 id="logo-wrap">
+        <a href="/" id="logo">业松 Studio</a>
+      </h1>
+      
+    </div>
+    <div id="header-inner" class="inner">
+      <nav id="main-nav">
+        <a id="main-nav-toggle" class="nav-icon"></a>
+        
+          <a class="main-nav-link" href="/">Home</a>
+        
+          <a class="main-nav-link" href="/archives">Archives</a>
+        
+      </nav>
+      <nav id="sub-nav">
+        
+          <a id="nav-rss-link" class="nav-icon" href="/atom.xml" title="RSS Feed"></a>
+        
+        <a id="nav-search-btn" class="nav-icon" title="搜索"></a>
+      </nav>
+      <div id="search-form-wrap">
+        <form action="//google.com/search" method="get" accept-charset="UTF-8" class="search-form"><input type="search" name="q" class="search-form-input" placeholder="Search"><button type="submit" class="search-form-submit">&#xF002;</button><input type="hidden" name="sitesearch" value="http://yoursite.com"></form>
+      </div>
+    </div>
+  </div>
+</header>
+      <div class="outer">
+        <section id="main"><article id="post-Hexo-GithubPage-阿里云域名光速搭建个人博客网站" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/2018/11/11/Hexo-GithubPage-%E9%98%BF%E9%87%8C%E4%BA%91%E5%9F%9F%E5%90%8D%E5%85%89%E9%80%9F%E6%90%AD%E5%BB%BA%E4%B8%AA%E4%BA%BA%E5%8D%9A%E5%AE%A2%E7%BD%91%E7%AB%99/" class="article-date">
+  <time datetime="2018-11-11T09:29:06.000Z" itemprop="datePublished">2018-11-11</time>
+</a>
+    
+  <div class="article-category">
+    <a class="article-category-link" href="/categories/Node-js/">Node.js</a>
+  </div>
+
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 class="article-title" itemprop="name">
+      Hexo+GithubPage+阿里云域名光速搭建个人博客网站
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <blockquote>
+<p>一直以为自己搭建博客会非常麻烦，结果试了下很有名的hexo框架，真的是光速建站。</p>
+</blockquote>
+<h3 id="为何要建个人博客网站"><a href="#为何要建个人博客网站" class="headerlink" title="为何要建个人博客网站"></a>为何要建个人博客网站</h3><p>已经有简书之类的博客网站了，为啥还要自己建一个？这个原因有很多，比如想学学建站知识，想使用个人域名等等。对于我来说个人网站比较自由吧，在不违法的情况下可以随便写自己想说的。对于程序员来说，拥有一个自己的博客网站我想反正不会是减分项。</p>
+<h3 id="建立Hexo工程"><a href="#建立Hexo工程" class="headerlink" title="建立Hexo工程"></a>建立Hexo工程</h3><p>Hexo是个nodejs框架，在安装hexo之前需要先安装npm，如果没有的话直接去npm官网安装最新版即可——<a target="_blank" rel="noopener" href="https://www.npmjs.com/get-npm">npm官网下载地址</a><br>有了npm之后，我们在终端输入命令npm install hexo-cli -g。这是一个npm的安装命令，-g的意思是global，全局安装。成功后我们就可以用hexo-cli来创建hexo工程了。<br>然后在终端建立一个文件夹用来存放我们接下来的hexo工程，比如我的是~/hexo目录。在终端cd进去后，执行hexo init，初始化工程。再执行npm install来安装依赖。安装依赖可能需要点时间。<br>成功后我们的工程就建好了，这个时候已经有一个默认的主题landscape，一个默认的文章hello world。建立新文章有关的命令大家可以去<a target="_blank" rel="noopener" href="https://hexo.io/zh-cn/docs/writing">hexo官网</a>去学习，这里暂时先讲建站部署。<br>现在我们可以执行hexo server命令来测试一下是否能运行成功，用浏览器localhost:4000看看能不能看到我们的博客网站。<br>如果能看到的话说明我们的网站已经搭建好了。</p>
+<a id="more"></a>
+<h3 id="部署到GithubPage"><a href="#部署到GithubPage" class="headerlink" title="部署到GithubPage"></a>部署到GithubPage</h3><p>我们的网站虽然运行成功了，可是只能在本地访问毫无意义啊。部署到服务器的话需要先买服务器，还要备案，还要学习服务器部署网站的知识，想想就很凌乱了。<br>不要担心，我们可以一秒把网站部署到Github Page上，先登录<a target="_blank" rel="noopener" href="https://github.com/">Github网站</a>。Github是个开源代码的地方，很多公司、组织会把代码开源在这里，让大家都能看到，对个人当然也是可以在上面开源代码的。实际上Github不止可以开源代码，任何值得分享的东西都可以放在上面，比如我们的博客。没注册的先注册一下，然后跟着它的教程学一下基本的git+github流程。<br>注册好之后我们点击Start a project来创建一个Github Page项目，名字起为xxx.github.io，注意在创建的时候选中Initialize this repository with a README，否则等会还要上传点东西才能在放在page里。<br>然后进入我们创建好的项目仓库点击setting，<img src="https://upload-images.jianshu.io/upload_images/5586297-ef630def035a370c.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="使用Github Page"><br>往下拉看到Github Pages选项，source选择master branch，然后点击save。<br>然后我们编辑hexo工程根目录下的_config.yml配置文件，在最下面加入如下一段：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"># Deployment</span><br><span class="line">## Docs: https:&#x2F;&#x2F;hexo.io&#x2F;docs&#x2F;deployment.html</span><br><span class="line">deploy:</span><br><span class="line">  type: git</span><br><span class="line">  repo: ssh:&#x2F;&#x2F;git@github.com&#x2F;ZhangYeSong&#x2F;zhangyesong.github.io</span><br><span class="line">  branch: master</span><br></pre></td></tr></table></figure>
+<p>其中repo地址在我们github仓库网页上点击Clone or download可以看到如下所示：<br><img src="https://upload-images.jianshu.io/upload_images/5586297-1de550703397f443.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="仓库地址"><br>这些都搞定后，在终端hexo项目目录执行hexo deploy来试试能不能部署。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">▶ hexo deploy</span><br><span class="line">INFO  Deploying: git</span><br><span class="line">INFO  Clearing .deploy_git folder...</span><br><span class="line">INFO  Copying files from public folder...</span><br><span class="line">INFO  Copying files from extend dirs...</span><br><span class="line">On branch master</span><br><span class="line">nothing to commit, working tree clean</span><br><span class="line">Warning: Permanently added the RSA host key for IP address &#39;52.74.223.119&#39; to the list of known hosts.</span><br><span class="line">Everything up-to-date</span><br><span class="line">Branch master set up to track remote branch master from ssh:&#x2F;&#x2F;git@github.com&#x2F;ZhangYeSong&#x2F;zhangyesong.github.io.</span><br><span class="line">INFO  Deploy done: git</span><br></pre></td></tr></table></figure>
+<p>结束后我们在浏览器打开xxx.github.io看看有没有内容，有内容的话我们就成功啦！</p>
+<h3 id="使用阿里云域名"><a href="#使用阿里云域名" class="headerlink" title="使用阿里云域名"></a>使用阿里云域名</h3><p>使用github的域名不满意咋办，没关系Github Page可以指定我们自己的域名。<br>这里我使用的是阿里云上买的域名，没有的话先上去买一个，然后进入域名解析界面，如下：<br><img src="https://upload-images.jianshu.io/upload_images/5586297-0419c33ccd3da814.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="阿里云域名解析"><br>这里我只把blog开头的域名指向我们这个github page页面，需要www的话就把blog改成www，添加之后可能需要点时间才能生效，可以先去吃个饭。<br>然后我们在github上面也要改，进入setting界面，还是Github Pages选项，如下：<br><img src="https://upload-images.jianshu.io/upload_images/5586297-08d1d193f1b57986.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="指定域名"><br>在Custom domain填上我们的阿里云域名，点击save，最好把Enforce HTTPS也点上。<br>如果阿里云域名解析生效的话，我们就可以用我们自己的域名登录我们的个人博客网站啦！</p>
+<h3 id="把hexo项目也上传到github吧"><a href="#把hexo项目也上传到github吧" class="headerlink" title="把hexo项目也上传到github吧"></a>把hexo项目也上传到github吧</h3><p>现在还有个问题，我们想在其他电脑设备上继续写我们的博客咋办？很简单，把我们的hexo项目也上传到github就行了，在github上再建一个仓库，把我们本地的hexo项目上传上去，相当于是我们网站的源码了。<br>这样我们每次写一篇文章，先把hexo项目push下，再deploy一下，github上会有两笔commit，是不是很有心机～</p>
+<p>还有个重要的问题，你会发现我们每次hexo deploy的时候，域名解析都失效了，需要重现配置解析，这是因为每次deploy后我们的CNAME文件被删除了，我们进入hexo项目根目录，进入public文件夹，新建一个CNAME文件，里面填上我们的域名，比如我的是blog.zhangyesong.com，保存。然后我们deploy的时候会加上这个CNAME域名解析，就不需要每次都要重新配置了。</p>
+<h3 id="其他"><a href="#其他" class="headerlink" title="其他"></a>其他</h3><p>简单讲下，怎样写博客，有的小伙伴很懵逼，我的博客到底在哪里写？其实hexo只是个web工程，我们每次hexo new &lt;博客名称&gt;会生成一个博客名称.md文件，我们在这个markdown文件里编写博客就行了。至于你用啥编辑器去写就随意了，可以百度搜索markdown编辑器。至于markdown语法，不要害怕，很容易就学会了，而且我保证你肯定会爱上它，它是一个让人专心写内容不需要care样式的语法，学了它你就再也不想用word之类的重型文档编辑器了。<br>时间关系，这里先讲这么多，其实想把博客进一步弄好，还要学习很多web知识的，或者选一个别人做好的主题就行了。<br>最后，欢迎大家访问我的博客：blog.zhangyesong.com</p>
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="http://yoursite.com/2018/11/11/Hexo-GithubPage-%E9%98%BF%E9%87%8C%E4%BA%91%E5%9F%9F%E5%90%8D%E5%85%89%E9%80%9F%E6%90%AD%E5%BB%BA%E4%B8%AA%E4%BA%BA%E5%8D%9A%E5%AE%A2%E7%BD%91%E7%AB%99/" data-id="ckj2v1sqk001tbkusdyln111a" class="article-share-link">Share</a>
+      
+      
+  <ul class="article-tag-list" itemprop="keywords"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Node-js/" rel="tag">Node.js</a></li></ul>
+
+    </footer>
+  </div>
+  
+    
+<nav id="article-nav">
+  
+    <a href="/2018/11/12/JVM%E7%9A%84gc%E7%AE%97%E6%B3%95%E6%80%BB%E7%BB%93/" id="article-nav-newer" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">Newer</strong>
+      <div class="article-nav-title">
+        
+          JVM的gc算法总结
+        
+      </div>
+    </a>
+  
+  
+    <a href="/2018/11/08/%E5%B7%A5%E4%BD%9C%E6%B5%81%E7%9A%84%E6%80%9D%E8%80%83%E4%BB%A5%E5%8F%8A%EF%BC%9AGithub%E9%A1%B9%E7%9B%AE%E7%AE%A1%E7%90%86%E7%A5%9E%E5%99%A8%E2%80%94%E2%80%94Projects/" id="article-nav-older" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">Older</strong>
+      <div class="article-nav-title">工作流的思考以及：Github项目管理神器——Projects</div>
+    </a>
+  
+</nav>
+
+  
+</article>
+
+</section>
+        
+          <aside id="sidebar">
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">分类</h3>
+    <div class="widget">
+      <ul class="category-list"><li class="category-list-item"><a class="category-list-link" href="/categories/Android/">Android</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/Java/">Java</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/JavaScript/">JavaScript</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/Linux/">Linux</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/Node-js/">Node.js</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/git/">git</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/%E7%88%AC%E8%99%AB/">爬虫</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/%E9%9A%8F%E7%AC%94/">随笔</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/%E9%A1%B9%E7%9B%AE%E7%AE%A1%E7%90%86/">项目管理</a></li></ul>
+    </div>
+  </div>
+
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">标签</h3>
+    <div class="widget">
+      <ul class="tag-list" itemprop="keywords"><li class="tag-list-item"><a class="tag-list-link" href="/tags/Android/" rel="tag">Android</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Android-Studio/" rel="tag">Android Studio</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Github/" rel="tag">Github</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/JPA/" rel="tag">JPA</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/JVM/" rel="tag">JVM</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Java/" rel="tag">Java</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/JavaScript/" rel="tag">JavaScript</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Koa/" rel="tag">Koa</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Kotlin/" rel="tag">Kotlin</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Linux/" rel="tag">Linux</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/MongoDB/" rel="tag">MongoDB</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Node-js/" rel="tag">Node.js</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/OKHttp/" rel="tag">OKHttp</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Profiler/" rel="tag">Profiler</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/RESTful/" rel="tag">RESTful</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Spring-Boot/" rel="tag">Spring Boot</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Ubuntu/" rel="tag">Ubuntu</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/ava/" rel="tag">ava</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/git/" rel="tag">git</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/mongoose/" rel="tag">mongoose</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/python/" rel="tag">python</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E6%80%A7%E8%83%BD%E4%BC%98%E5%8C%96/" rel="tag">性能优化</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E6%BA%90%E7%A0%81%E5%88%86%E6%9E%90/" rel="tag">源码分析</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E7%88%AC%E8%99%AB/" rel="tag">爬虫</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E7%8E%AF%E5%A2%83%E9%85%8D%E7%BD%AE/" rel="tag">环境配置</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E7%94%9F%E6%B4%BB/" rel="tag">生活</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E8%81%8C%E4%B8%9A%E8%A7%84%E5%88%92/" rel="tag">职业规划</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E9%9A%8F%E7%AC%94/" rel="tag">随笔</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E9%A1%B9%E7%9B%AE%E7%AE%A1%E7%90%86/" rel="tag">项目管理</a></li></ul>
+    </div>
+  </div>
+
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">标签云</h3>
+    <div class="widget tagcloud">
+      <a href="/tags/Android/" style="font-size: 20px;">Android</a> <a href="/tags/Android-Studio/" style="font-size: 12.5px;">Android Studio</a> <a href="/tags/Github/" style="font-size: 10px;">Github</a> <a href="/tags/JPA/" style="font-size: 10px;">JPA</a> <a href="/tags/JVM/" style="font-size: 12.5px;">JVM</a> <a href="/tags/Java/" style="font-size: 15px;">Java</a> <a href="/tags/JavaScript/" style="font-size: 10px;">JavaScript</a> <a href="/tags/Koa/" style="font-size: 10px;">Koa</a> <a href="/tags/Kotlin/" style="font-size: 12.5px;">Kotlin</a> <a href="/tags/Linux/" style="font-size: 12.5px;">Linux</a> <a href="/tags/MongoDB/" style="font-size: 10px;">MongoDB</a> <a href="/tags/Node-js/" style="font-size: 15px;">Node.js</a> <a href="/tags/OKHttp/" style="font-size: 15px;">OKHttp</a> <a href="/tags/Profiler/" style="font-size: 10px;">Profiler</a> <a href="/tags/RESTful/" style="font-size: 10px;">RESTful</a> <a href="/tags/Spring-Boot/" style="font-size: 10px;">Spring Boot</a> <a href="/tags/Ubuntu/" style="font-size: 10px;">Ubuntu</a> <a href="/tags/ava/" style="font-size: 10px;">ava</a> <a href="/tags/git/" style="font-size: 12.5px;">git</a> <a href="/tags/mongoose/" style="font-size: 10px;">mongoose</a> <a href="/tags/python/" style="font-size: 10px;">python</a> <a href="/tags/%E6%80%A7%E8%83%BD%E4%BC%98%E5%8C%96/" style="font-size: 10px;">性能优化</a> <a href="/tags/%E6%BA%90%E7%A0%81%E5%88%86%E6%9E%90/" style="font-size: 15px;">源码分析</a> <a href="/tags/%E7%88%AC%E8%99%AB/" style="font-size: 10px;">爬虫</a> <a href="/tags/%E7%8E%AF%E5%A2%83%E9%85%8D%E7%BD%AE/" style="font-size: 15px;">环境配置</a> <a href="/tags/%E7%94%9F%E6%B4%BB/" style="font-size: 12.5px;">生活</a> <a href="/tags/%E8%81%8C%E4%B8%9A%E8%A7%84%E5%88%92/" style="font-size: 10px;">职业规划</a> <a href="/tags/%E9%9A%8F%E7%AC%94/" style="font-size: 17.5px;">随笔</a> <a href="/tags/%E9%A1%B9%E7%9B%AE%E7%AE%A1%E7%90%86/" style="font-size: 10px;">项目管理</a>
+    </div>
+  </div>
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">归档</h3>
+    <div class="widget">
+      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2020/12/">十二月 2020</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/01/">一月 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/12/">十二月 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/11/">十一月 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/10/">十月 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/09/">九月 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/07/">七月 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/05/">五月 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/03/">三月 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/09/">九月 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/07/">七月 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/05/">五月 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/04/">四月 2017</a></li></ul>
+    </div>
+  </div>
+
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">最新文章</h3>
+    <div class="widget">
+      <ul>
+        
+          <li>
+            <a href="/2020/12/24/%E8%80%81%E5%AE%9E%E4%BA%BA%E6%80%95%E5%BC%80%E5%8F%A3/">老实人怕开口</a>
+          </li>
+        
+          <li>
+            <a href="/2019/01/01/2019%E7%AC%AC%E4%B8%80%E5%A4%A9%E5%85%88%E7%AB%8Bflag/">2019第一天先立flag</a>
+          </li>
+        
+          <li>
+            <a href="/2018/12/31/2018%E7%BB%99%E8%87%AA%E5%B7%B1%E4%B8%80%E4%B8%AA%E7%AE%80%E5%8D%95%E7%9A%84%E6%80%BB%E7%BB%93/">2018给自己一个简单的总结</a>
+          </li>
+        
+          <li>
+            <a href="/2018/12/29/%E4%BD%BF%E7%94%A8jsonwebtoken%E5%AE%8C%E6%88%90nodejs%E7%9A%84%E7%99%BB%E9%99%86%E7%B3%BB%E7%BB%9F/">使用jsonwebtoken完成nodejs的登陆系统</a>
+          </li>
+        
+          <li>
+            <a href="/2018/12/28/Android%E4%B8%89%E5%A4%A7%E9%A1%B9%E7%9B%AE%E6%9E%B6%E6%9E%84MVC%E3%80%81MVP%E3%80%81MVVM%E4%BD%BF%E7%94%A8%E4%BD%93%E9%AA%8C/">Android三大项目架构MVC、MVP、MVVM使用体验</a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+
+  
+</aside>
+        
+      </div>
+      <footer id="footer">
+  
+  <div class="outer">
+    <div id="footer-info" class="inner">
+      &copy; 2020 业松<br>
+      Powered by <a href="http://hexo.io/" target="_blank">Hexo</a>
+    </div>
+  </div>
+</footer>
+    </div>
+    <nav id="mobile-nav">
+  
+    <a href="/" class="mobile-nav-link">Home</a>
+  
+    <a href="/archives" class="mobile-nav-link">Archives</a>
+  
+</nav>
+    
+
+<script src="//ajax.googleapis.com/ajax/libs/jquery/2.0.3/jquery.min.js"></script>
+
+
+  
+<link rel="stylesheet" href="/fancybox/jquery.fancybox.css">
+
+  
+<script src="/fancybox/jquery.fancybox.pack.js"></script>
+
+
+
+
+<script src="/js/script.js"></script>
+
+
+
+
+  </div>
+</body>
+</html>

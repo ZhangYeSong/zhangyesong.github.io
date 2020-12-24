@@ -1,0 +1,288 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  
+
+  
+  <title>OkHttp源码学习系列三：缓存总结 | 业松 Studio</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+  <meta name="description" content="本文为本人原创，转载请注明作者和出处。   缓存在面试中经常被问到，在这一章我会单独讲解有关于http缓存以及我们okhttp实现缓存的方方面面。  系列文章索引：OkHttp源码学习系列一：总流程和Dispatcher分析OkHttp源码学习系列二：拦截链分析OkHttp源码学习系列三：缓存总结 ###零、http缓存规则试想一下如果我们使用了缓存，那我们应该在何时使用缓存呢，或者说我们如何才">
+<meta property="og:type" content="article">
+<meta property="og:title" content="OkHttp源码学习系列三：缓存总结">
+<meta property="og:url" content="http://yoursite.com/2018/07/21/OkHttp%E6%BA%90%E7%A0%81%E5%AD%A6%E4%B9%A0%E7%B3%BB%E5%88%97%E4%B8%89%EF%BC%9A%E7%BC%93%E5%AD%98%E6%80%BB%E7%BB%93/index.html">
+<meta property="og:site_name" content="业松 Studio">
+<meta property="og:description" content="本文为本人原创，转载请注明作者和出处。   缓存在面试中经常被问到，在这一章我会单独讲解有关于http缓存以及我们okhttp实现缓存的方方面面。  系列文章索引：OkHttp源码学习系列一：总流程和Dispatcher分析OkHttp源码学习系列二：拦截链分析OkHttp源码学习系列三：缓存总结 ###零、http缓存规则试想一下如果我们使用了缓存，那我们应该在何时使用缓存呢，或者说我们如何才">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://upload-images.jianshu.io/upload_images/5586297-2ed10f64421500ff.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240">
+<meta property="article:published_time" content="2018-07-21T13:19:55.000Z">
+<meta property="article:modified_time" content="2020-12-24T11:34:17.239Z">
+<meta property="article:author" content="业松">
+<meta property="article:tag" content="Android">
+<meta property="article:tag" content="OKHttp">
+<meta property="article:tag" content="源码分析">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://upload-images.jianshu.io/upload_images/5586297-2ed10f64421500ff.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240">
+  
+    <link rel="alternate" href="/atom.xml" title="业松 Studio" type="application/atom+xml">
+  
+  
+    <link rel="icon" href="/favicon.png">
+  
+  
+    <link href="//fonts.googleapis.com/css?family=Source+Code+Pro" rel="stylesheet" type="text/css">
+  
+  
+<link rel="stylesheet" href="/css/style.css">
+
+<meta name="generator" content="Hexo 5.3.0"></head>
+
+<body>
+  <div id="container">
+    <div id="wrap">
+      <header id="header">
+  <div id="banner"></div>
+  <div id="header-outer" class="outer">
+    <div id="header-title" class="inner">
+      <h1 id="logo-wrap">
+        <a href="/" id="logo">业松 Studio</a>
+      </h1>
+      
+    </div>
+    <div id="header-inner" class="inner">
+      <nav id="main-nav">
+        <a id="main-nav-toggle" class="nav-icon"></a>
+        
+          <a class="main-nav-link" href="/">Home</a>
+        
+          <a class="main-nav-link" href="/archives">Archives</a>
+        
+      </nav>
+      <nav id="sub-nav">
+        
+          <a id="nav-rss-link" class="nav-icon" href="/atom.xml" title="RSS Feed"></a>
+        
+        <a id="nav-search-btn" class="nav-icon" title="搜索"></a>
+      </nav>
+      <div id="search-form-wrap">
+        <form action="//google.com/search" method="get" accept-charset="UTF-8" class="search-form"><input type="search" name="q" class="search-form-input" placeholder="Search"><button type="submit" class="search-form-submit">&#xF002;</button><input type="hidden" name="sitesearch" value="http://yoursite.com"></form>
+      </div>
+    </div>
+  </div>
+</header>
+      <div class="outer">
+        <section id="main"><article id="post-OkHttp源码学习系列三：缓存总结" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/2018/07/21/OkHttp%E6%BA%90%E7%A0%81%E5%AD%A6%E4%B9%A0%E7%B3%BB%E5%88%97%E4%B8%89%EF%BC%9A%E7%BC%93%E5%AD%98%E6%80%BB%E7%BB%93/" class="article-date">
+  <time datetime="2018-07-21T13:19:55.000Z" itemprop="datePublished">2018-07-21</time>
+</a>
+    
+  <div class="article-category">
+    <a class="article-category-link" href="/categories/Android/">Android</a>
+  </div>
+
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 class="article-title" itemprop="name">
+      OkHttp源码学习系列三：缓存总结
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <blockquote>
+<p>本文为本人原创，转载请注明作者和出处。</p>
+</blockquote>
+<blockquote>
+<p>缓存在面试中经常被问到，在这一章我会单独讲解有关于http缓存以及我们okhttp实现缓存的方方面面。</p>
+</blockquote>
+<p>系列文章索引：<br><a target="_blank" rel="noopener" href="https://www.jianshu.com/p/425695e3ae03">OkHttp源码学习系列一：总流程和Dispatcher分析</a><br><a target="_blank" rel="noopener" href="https://www.jianshu.com/p/41a5d45085b4">OkHttp源码学习系列二：拦截链分析</a><br><a target="_blank" rel="noopener" href="https://www.jianshu.com/p/8928f4b128f1">OkHttp源码学习系列三：缓存总结</a></p>
+<p>###零、http缓存规则<br>试想一下如果我们使用了缓存，那我们应该在何时使用缓存呢，或者说我们如何才能知道我们的缓存没有过期，可以使用。这就需要我们先学习http的缓存规则。服务端和客户端都必须遵守这套规则才能够使得我们的缓存可以在合适的时机被使用。其实这套规则还是稍微有点复杂的，笔者也是花了不少时间才完全明白这一套规则是怎么回事。为了全面搞清楚这套流程，我画了如下这张图，一起来看下吧：<br><img src="https://upload-images.jianshu.io/upload_images/5586297-2ed10f64421500ff.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="http缓存规则"></p>
+<a id="more"></a>
+
+<p>从客户端发起请求开始，客户端先去缓存文件中根据url查找是否有缓存，取到缓存的http报文后，首先要做的事是判断是否过期。判断过期的标志是根据报文的两个头域，Expires和Cache-Control。</p>
+<p>Expires规定了缓存的报文的过期时间，Cache-Control规定了缓存的有效期。前者是http1.0的标准，基本已被弃用，后者是http1.1的标准，两者同时存在的话以Cache-Control为准。Cache-Control设定过期时间一般是Cache-Control: max-age=3600这样的形式，3600代表3600秒，即一小时后过期。如果判断后没有过期的话，则客户端直接使用缓存，不会向服务器发起请求。</p>
+<p>看到这里你会不会有疑问？那这样缓存策略岂不是很简单，过期就重新请求，没过期就直接用，怎么那张图后面还有那么多流程？是的，如果我们要请求的资源对即时性要求不高，我们确实可以这样，服务器规定个过期时间，过期就重新请求，没过期就直接使用缓存。但是但是，我们大部分请求都不会使用这种过期策略，即使是对即时性要求不高的。为什么？举个例子，假如运维小哥在首页中不小心加入了些不和谐内容，如果使用过期策略，那即使运维小哥秒删，用户也得等缓存过期后才会重现请求，这样是不是很囧？</p>
+<p>那么又有疑问了，既然绝大多数请求都不会设定一个缓存有效期，或者说我们的缓存永远都是过期的，那缓存还有什么用？其实，上图中后面的流程也很简单，就是服务器会把我们将要使用的缓存与服务器实时数据进行对比，如果服务器的更新则缓存不可用，需要使用服务器返回的最新数据。假如服务器对比发现客户端的缓存已经说最新的了，那么就会返回304响应码，不返回资源内容，客户端接受到304响应码后直接使用缓存。</p>
+<p>那么服务器是如何对比呢？有两种情况，一种是ETag。服务器会对资源做一个ETag算法，生成一个字符串。这个字符串实际上代表了资源在服务器的版本。服务器在响应头中会加入这个ETag给客户端。客户端缓存后下次继续请求的时候把缓存中的ETag取出来加入到请求头。服务器取出请求头中的ETag，与当前服务器该资源实时的ETag作对比。如果不一致则表明服务器有更新资源，则返回200响应码，并返回资源。如果客户端的ETag和服务端的相同，代表服务端没有更新数据，则返回304响应码，并不返回资源。这样就达到了使用缓存去节省时间和流量的目的。另一种是Last-Modified，它代表的是资源在服务器更新的时间，和ETag类似客户端从缓存中取出这个时间加入到请求头，服务器根据最近的一次更新时间与之对比，决定是返回资源还是返回304。</p>
+<p>总结下，如果服务器通过Cache-Control头规定了过期时间，没过期的话可以直接使用缓存。否则，使用Etag或者Last-Modified加入请求体，服务器接收后与最新的数据进行比对，决定直接返回最新数据还是304响应码。是不是其实一点都不复杂呢？<br>###一、Okhttp的缓存策略的实现<br>http协议规定了缓存的使用规则，那么Okhttp是如何实现这些规则的呢？<br>其实我写到这块有点无从起笔了，在上一章讲解CacheIntercept的时候已经将Okhttp使用缓存的过程讲的差不多了，没有看过的同学可以先翻去看上一章。此时我们可以不着急看源码，在学习完http缓存规则后，我们可以思考下，我们的客户端也就是OkHttpClient在缓存这块要做哪些事呢？首先，需要取缓存，并确定缓存有无过期。如果过期，看看有没有Etag或Last-Modified可以加到请求体。最后如果服务器返回304，我们要直接使用缓存，如果返回200，我们需要更新缓存。按照这个顺序，我们来在源码中找一找，这些操作是如何实现的。</p>
+<p>在上一章中，CacheIntercept先取缓存，再通过缓存策略类CacheStrategy获取处理后的缓存response，一起来回顾下这段代码：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">Response cacheCandidate &#x3D; cache !&#x3D; null</span><br><span class="line">    ? cache.get(chain.request())</span><br><span class="line">    : null;</span><br><span class="line"></span><br><span class="line">long now &#x3D; System.currentTimeMillis();</span><br><span class="line"></span><br><span class="line">CacheStrategy strategy &#x3D; new CacheStrategy.Factory(now, chain.request(), cacheCandidate).get();</span><br><span class="line">Request networkRequest &#x3D; strategy.networkRequest;</span><br><span class="line">Response cacheResponse &#x3D; strategy.cacheResponse;</span><br></pre></td></tr></table></figure>
+<p>首先从cache对象中根据request取到缓存的response，然后调用CacheStrategy的构建方法并获取实例对象，从这个CacheStrategy中获取处理后的response。现在我们就来看下CacheStrategy到底怎么处理的cacheResponse，先从factory方法开始吧：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br></pre></td><td class="code"><pre><span class="line">public Factory(long nowMillis, Request request, Response cacheResponse) &#123;</span><br><span class="line">  this.nowMillis &#x3D; nowMillis;</span><br><span class="line">  this.request &#x3D; request;</span><br><span class="line">  this.cacheResponse &#x3D; cacheResponse;</span><br><span class="line"></span><br><span class="line">  if (cacheResponse !&#x3D; null) &#123;</span><br><span class="line">    this.sentRequestMillis &#x3D; cacheResponse.sentRequestAtMillis();</span><br><span class="line">    this.receivedResponseMillis &#x3D; cacheResponse.receivedResponseAtMillis();</span><br><span class="line">    Headers headers &#x3D; cacheResponse.headers();</span><br><span class="line">    for (int i &#x3D; 0, size &#x3D; headers.size(); i &lt; size; i++) &#123;</span><br><span class="line">      String fieldName &#x3D; headers.name(i);</span><br><span class="line">      String value &#x3D; headers.value(i);</span><br><span class="line">      if (&quot;Date&quot;.equalsIgnoreCase(fieldName)) &#123;</span><br><span class="line">        servedDate &#x3D; HttpDate.parse(value);</span><br><span class="line">        servedDateString &#x3D; value;</span><br><span class="line">      &#125; else if (&quot;Expires&quot;.equalsIgnoreCase(fieldName)) &#123;</span><br><span class="line">        expires &#x3D; HttpDate.parse(value);</span><br><span class="line">      &#125; else if (&quot;Last-Modified&quot;.equalsIgnoreCase(fieldName)) &#123;</span><br><span class="line">        lastModified &#x3D; HttpDate.parse(value);</span><br><span class="line">        lastModifiedString &#x3D; value;</span><br><span class="line">      &#125; else if (&quot;ETag&quot;.equalsIgnoreCase(fieldName)) &#123;</span><br><span class="line">        etag &#x3D; value;</span><br><span class="line">      &#125; else if (&quot;Age&quot;.equalsIgnoreCase(fieldName)) &#123;</span><br><span class="line">        ageSeconds &#x3D; HttpHeaders.parseSeconds(value, -1);</span><br><span class="line">      &#125;</span><br><span class="line">    &#125;</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>这个构造方法做的事情很简单，就是记录下这个缓存的response的请求发送时间，接收response的时间，以及Expires、Last-Modified、ETag等与缓存有关的响应头，为后续的判断做准备。继续来看get方法：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">public CacheStrategy get() &#123;</span><br><span class="line">  CacheStrategy candidate &#x3D; getCandidate();</span><br><span class="line"></span><br><span class="line">  if (candidate.networkRequest !&#x3D; null &amp;&amp; request.cacheControl().onlyIfCached()) &#123;</span><br><span class="line">    &#x2F;&#x2F; We&#39;re forbidden from using the network and the cache is insufficient.</span><br><span class="line">    return new CacheStrategy(null, null);</span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line">  return candidate;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>这里调用了一个最为重要的getCandidate()方法，返回的仍然是一个CacheStrategy对象，后面的那个判断是在Cache-Control响应头为only-if-cached且需要进行网络请求的情况，遇到这种情况返回的CacheStrategy对象networkRequest和cacheResponse为空，在CacheIntercept中针对这种情况会返回504错误码。这种情况其实就是服务器要求使用缓存，而我们没有缓存或缓存过期了，只能作为错误情况处理。在CacheStrategy源码的时候要记得，networkRequest其实就是传进来的我们的request，只是如果不需要进行网络请求的话CacheStrategy为把它置为null；cacheResponse则是我们的缓存response，只是如果缓存不可用会将它置为null。现在我们来重点看下这个getCandidate()方法，该方法非常的长，我们还是一段一段地看：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line">if (cacheResponse &#x3D;&#x3D; null) &#123;</span><br><span class="line">  return new CacheStrategy(request, null);</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">&#x2F;&#x2F; Drop the cached response if it&#39;s missing a required handshake.</span><br><span class="line">if (request.isHttps() &amp;&amp; cacheResponse.handshake() &#x3D;&#x3D; null) &#123;</span><br><span class="line">  return new CacheStrategy(request, null);</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">if (!isCacheable(cacheResponse, request)) &#123;</span><br><span class="line">  return new CacheStrategy(request, null);</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">CacheControl requestCaching &#x3D; request.cacheControl();</span><br><span class="line">if (requestCaching.noCache() || hasConditions(request)) &#123;</span><br><span class="line">  return new CacheStrategy(request, null);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>这四种情况最终的结果都一样，networkRequest不为null，cacheResponse为null，代表我们的缓存不可用，需要请求网络。第一种是我们的缓存为空，即我们没取到缓存；第二种是连接上https，而缓存response没有握手信息，这时候缓存也用不了；第三种调用了isCacheable方法，这个方法就不贴了，大致就是判断响应码和Cache-Control是否符合缓存要求，不符合的缓存也不能使用；最后一种是判断请求头中的Cache-Control是否允许缓存，不允许的话也不能使用缓存。</p>
+<p>在这里额外说一下，一开始我也对请求头中的Cache-Control很困惑。后来了解到客户端请求头中确实是可以有Cache-Control用于让客户端来控制缓存策略。但由于这样对服务器来说有安全隐患，因此几乎很少有服务器会实现客户端的缓存策略。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br></pre></td><td class="code"><pre><span class="line">long ageMillis &#x3D; cacheResponseAge();</span><br><span class="line">long freshMillis &#x3D; computeFreshnessLifetime();</span><br><span class="line"></span><br><span class="line">&#x2F;&#x2F;略过requestCacheing部分</span><br><span class="line">      </span><br><span class="line">long maxStaleMillis &#x3D; 0;</span><br><span class="line">CacheControl responseCaching &#x3D; cacheResponse.cacheControl();</span><br><span class="line">if (!responseCaching.mustRevalidate() &amp;&amp; requestCaching.maxStaleSeconds() !&#x3D; -1) &#123;</span><br><span class="line">maxStaleMillis &#x3D; SECONDS.toMillis(requestCaching.maxStaleSeconds());</span><br><span class="line">&#125;</span><br><span class="line">    </span><br><span class="line">if (!responseCaching.noCache() &amp;&amp; ageMillis + minFreshMillis &lt; freshMillis + maxStaleMillis) &#123;</span><br><span class="line">    Response.Builder builder &#x3D; cacheResponse.newBuilder();</span><br><span class="line">    if (ageMillis + minFreshMillis &gt;&#x3D; freshMillis) &#123;</span><br><span class="line">    builder.addHeader(&quot;Warning&quot;, &quot;110 HttpURLConnection \&quot;Response is stale\&quot;&quot;);</span><br><span class="line">    &#125;</span><br><span class="line">    long oneDayMillis &#x3D; 24 * 60 * 60 * 1000L;</span><br><span class="line">    if (ageMillis &gt; oneDayMillis &amp;&amp; isFreshnessLifetimeHeuristic()) &#123;</span><br><span class="line">    builder.addHeader(&quot;Warning&quot;, &quot;113 HttpURLConnection \&quot;Heuristic expiration\&quot;&quot;);</span><br><span class="line">    &#125;</span><br><span class="line">    return new CacheStrategy(null, builder.build());</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>这一段的话就是计算过期时间的代码了。这里讲下ageMillis就是缓存的已存在的时间（当前时间减去缓存当时的时间），freshMillis就是缓存的过期时间。然后下面的一大段都是requestCaching里的缓存策略就不看了，原因我上面说了很少有服务器会实现客户端的缓存策略。然后通过response中的Cache-Control获取缓存的最大允许过期时间maxStaleMillis。接下来有个计算ageMillis + minFreshMillis &lt; freshMillis + maxStaleMillis，也就是缓存在允许过期的时间范围内。在这种情况缓存是可以使用的，因此后续return的CacheStrategy的networkRequest为null，cacheResponse不为null，代表我们客户端直接用缓存，不需要进行网络请求。但后续还有两个判断，第一个是在缓存过期的情况（虽然过期但是在允许的过期范围内），加入一个warning响应头；第二个是缓存存在超过一天且是否过期存在模糊不清的情况下，也加一个warning响应头作为提醒。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br></pre></td><td class="code"><pre><span class="line">String conditionName;</span><br><span class="line">String conditionValue;</span><br><span class="line">if (etag !&#x3D; null) &#123;</span><br><span class="line">  conditionName &#x3D; &quot;If-None-Match&quot;;</span><br><span class="line">  conditionValue &#x3D; etag;</span><br><span class="line">&#125; else if (lastModified !&#x3D; null) &#123;</span><br><span class="line">  conditionName &#x3D; &quot;If-Modified-Since&quot;;</span><br><span class="line">  conditionValue &#x3D; lastModifiedString;</span><br><span class="line">&#125; else if (servedDate !&#x3D; null) &#123;</span><br><span class="line">  conditionName &#x3D; &quot;If-Modified-Since&quot;;</span><br><span class="line">  conditionValue &#x3D; servedDateString;</span><br><span class="line">&#125; else &#123;</span><br><span class="line">  return new CacheStrategy(request, null); </span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">Headers.Builder conditionalRequestHeaders &#x3D; request.headers().newBuilder();</span><br><span class="line">Internal.instance.addLenient(conditionalRequestHeaders, conditionName, conditionValue);</span><br><span class="line"></span><br><span class="line">Request conditionalRequest &#x3D; request.newBuilder()</span><br><span class="line">    .headers(conditionalRequestHeaders.build())</span><br><span class="line">    .build();</span><br><span class="line">return new CacheStrategy(conditionalRequest, cacheResponse);</span><br></pre></td></tr></table></figure>
+<p>剩下的情况不说大家也能猜到了，即缓存可用，但是需要服务器根据ETag或lastModified来比对是否过期。可以看到Etag的优先级最高，如果这些判定条件都没有则缓存不可用。之后把Etag或lastModified加入到请求头中，让后续的网络请求发送给服务器，让服务器来比对该缓存是否可用。</p>
+<p>好了到这里，Okhttp判断缓存是否过期的代码已经讲完了，下面选择性的看下如果服务器返回304，即我们的缓存可用，客户端怎么处理的：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br></pre></td><td class="code"><pre><span class="line">&#x2F;&#x2F; If we have a cache response too, then we&#39;re doing a conditional get.</span><br><span class="line">if (cacheResponse !&#x3D; null) &#123;</span><br><span class="line">  if (networkResponse.code() &#x3D;&#x3D; HTTP_NOT_MODIFIED) &#123;</span><br><span class="line">    Response response &#x3D; cacheResponse.newBuilder()</span><br><span class="line">        .headers(combine(cacheResponse.headers(), networkResponse.headers()))</span><br><span class="line">        .sentRequestAtMillis(networkResponse.sentRequestAtMillis())</span><br><span class="line">        .receivedResponseAtMillis(networkResponse.receivedResponseAtMillis())</span><br><span class="line">        .cacheResponse(stripBody(cacheResponse))</span><br><span class="line">        .networkResponse(stripBody(networkResponse))</span><br><span class="line">        .build();</span><br><span class="line">    networkResponse.body().close();</span><br><span class="line"></span><br><span class="line">    &#x2F;&#x2F; Update the cache after combining headers but before stripping the</span><br><span class="line">    &#x2F;&#x2F; Content-Encoding header (as performed by initContentStream()).</span><br><span class="line">    cache.trackConditionalCacheHit();</span><br><span class="line">    cache.update(cacheResponse, response);</span><br><span class="line">    return response;</span><br><span class="line">  &#125; else &#123;</span><br><span class="line">    closeQuietly(cacheResponse.body());</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>首先当然是根据我们的缓存response封装成一个最终的response，然后调用cache类的trackConditionalCacheHit()方法。这个方法是干嘛的呢？我们的缓存大小是有限制的，由于我们底层缓存算法用的Lru算法，即最近最少使用原则更新缓存，我们需要记录缓存的命中次数，在缓存超出限制后就可以根据算法清除最近最少使用的缓存。另外如果服务器没有返回304，我们当然也会刷新缓存，用新的response替换旧的。</p>
+<p>###二、其它</p>
+<h5 id="Cache类"><a href="#Cache类" class="headerlink" title="Cache类"></a>Cache类</h5><p>除了缓存策略类CacheStrategy，还有一个重要的类Cache没讲。这里简单讲下这个类就是负责存取缓存的。它里面存储缓存的对象是DiskLruCache，而DiskLruCache内部又是LinkedHashMap&lt;String, Entry&gt;，关于LinkedHashMap大家有可以查阅一下相关文章，它底层是一个哈希表和链表的组合，并且由于同时维护了一个可以给存储对象排序的双向链表，因此可以实现Lru算法。关于DiskLruCache是如何在内存和文件之间来回读写的，这里就不展开讲解了，也是常考的面试题，有兴趣的同学可以自己看看。</p>
+<h5 id="无网情况下强制使用缓存"><a href="#无网情况下强制使用缓存" class="headerlink" title="无网情况下强制使用缓存"></a>无网情况下强制使用缓存</h5><p>当没有网络的时候，我们无法发送给服务器进行比对是否过期。在某些场景，可能会要求我们在无网的时候直接使用缓存，这该怎么做呢？很简单，我们只要自定义一个拦截器，在我们的请求头中判断没有网络可用时，缓存策略为强制使用缓存。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line">Interceptor interceptor &#x3D; new Interceptor() &#123;</span><br><span class="line">    @Override</span><br><span class="line">    public Response intercept(Chain chain) throws IOException &#123;</span><br><span class="line">        Request request &#x3D; chain.request();</span><br><span class="line">        if (!context.isNetworkReachable()) &#123;</span><br><span class="line">            request &#x3D; request.newBuilder()</span><br><span class="line">                    .cacheControl(CacheControl.FORCE_CACHE)</span><br><span class="line">                    .build();</span><br><span class="line">            Log.d(&quot;OkHttp&quot;, &quot;网络不可用请求拦截&quot;);</span><br><span class="line">        &#125; </span><br><span class="line"></span><br><span class="line">        Response response &#x3D; chain.proceed(request);</span><br><span class="line">        return response;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;;</span><br><span class="line"></span><br><span class="line">httpClient.interceptors().add(interceptor);</span><br><span class="line">httpClient.networkInterceptors().add(interceptor);</span><br></pre></td></tr></table></figure>
+<p>实际上就是当没有网络的时候，在请求头上加入Cache-Control：only-if-cached，同时还会把允许过期时间改为无限大，这样就可以强制使用缓存。</p>
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="http://yoursite.com/2018/07/21/OkHttp%E6%BA%90%E7%A0%81%E5%AD%A6%E4%B9%A0%E7%B3%BB%E5%88%97%E4%B8%89%EF%BC%9A%E7%BC%93%E5%AD%98%E6%80%BB%E7%BB%93/" data-id="ckj2v1srf0052bkusfsf72xrg" class="article-share-link">Share</a>
+      
+      
+  <ul class="article-tag-list" itemprop="keywords"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Android/" rel="tag">Android</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/OKHttp/" rel="tag">OKHttp</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/%E6%BA%90%E7%A0%81%E5%88%86%E6%9E%90/" rel="tag">源码分析</a></li></ul>
+
+    </footer>
+  </div>
+  
+    
+<nav id="article-nav">
+  
+    <a href="/2018/09/29/Ubuntu-%E5%BC%80%E5%8F%91%E7%8E%AF%E5%A2%83%E9%85%8D%E7%BD%AE/" id="article-nav-newer" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">Newer</strong>
+      <div class="article-nav-title">
+        
+          Ubuntu 开发环境配置
+        
+      </div>
+    </a>
+  
+  
+    <a href="/2018/05/18/OkHttp%E6%BA%90%E7%A0%81%E5%AD%A6%E4%B9%A0%E7%B3%BB%E5%88%97%E4%BA%8C%EF%BC%9A%E6%8B%A6%E6%88%AA%E9%93%BE%E5%88%86%E6%9E%90/" id="article-nav-older" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">Older</strong>
+      <div class="article-nav-title">OkHttp源码学习系列二：拦截链分析</div>
+    </a>
+  
+</nav>
+
+  
+</article>
+
+</section>
+        
+          <aside id="sidebar">
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">分类</h3>
+    <div class="widget">
+      <ul class="category-list"><li class="category-list-item"><a class="category-list-link" href="/categories/Android/">Android</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/Java/">Java</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/JavaScript/">JavaScript</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/Linux/">Linux</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/Node-js/">Node.js</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/git/">git</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/%E7%88%AC%E8%99%AB/">爬虫</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/%E9%9A%8F%E7%AC%94/">随笔</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/%E9%A1%B9%E7%9B%AE%E7%AE%A1%E7%90%86/">项目管理</a></li></ul>
+    </div>
+  </div>
+
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">标签</h3>
+    <div class="widget">
+      <ul class="tag-list" itemprop="keywords"><li class="tag-list-item"><a class="tag-list-link" href="/tags/Android/" rel="tag">Android</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Android-Studio/" rel="tag">Android Studio</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Github/" rel="tag">Github</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/JPA/" rel="tag">JPA</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/JVM/" rel="tag">JVM</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Java/" rel="tag">Java</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/JavaScript/" rel="tag">JavaScript</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Koa/" rel="tag">Koa</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Kotlin/" rel="tag">Kotlin</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Linux/" rel="tag">Linux</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/MongoDB/" rel="tag">MongoDB</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Node-js/" rel="tag">Node.js</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/OKHttp/" rel="tag">OKHttp</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Profiler/" rel="tag">Profiler</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/RESTful/" rel="tag">RESTful</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Spring-Boot/" rel="tag">Spring Boot</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Ubuntu/" rel="tag">Ubuntu</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/ava/" rel="tag">ava</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/git/" rel="tag">git</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/mongoose/" rel="tag">mongoose</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/python/" rel="tag">python</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E6%80%A7%E8%83%BD%E4%BC%98%E5%8C%96/" rel="tag">性能优化</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E6%BA%90%E7%A0%81%E5%88%86%E6%9E%90/" rel="tag">源码分析</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E7%88%AC%E8%99%AB/" rel="tag">爬虫</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E7%8E%AF%E5%A2%83%E9%85%8D%E7%BD%AE/" rel="tag">环境配置</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E7%94%9F%E6%B4%BB/" rel="tag">生活</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E8%81%8C%E4%B8%9A%E8%A7%84%E5%88%92/" rel="tag">职业规划</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E9%9A%8F%E7%AC%94/" rel="tag">随笔</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E9%A1%B9%E7%9B%AE%E7%AE%A1%E7%90%86/" rel="tag">项目管理</a></li></ul>
+    </div>
+  </div>
+
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">标签云</h3>
+    <div class="widget tagcloud">
+      <a href="/tags/Android/" style="font-size: 20px;">Android</a> <a href="/tags/Android-Studio/" style="font-size: 12.5px;">Android Studio</a> <a href="/tags/Github/" style="font-size: 10px;">Github</a> <a href="/tags/JPA/" style="font-size: 10px;">JPA</a> <a href="/tags/JVM/" style="font-size: 12.5px;">JVM</a> <a href="/tags/Java/" style="font-size: 15px;">Java</a> <a href="/tags/JavaScript/" style="font-size: 10px;">JavaScript</a> <a href="/tags/Koa/" style="font-size: 10px;">Koa</a> <a href="/tags/Kotlin/" style="font-size: 12.5px;">Kotlin</a> <a href="/tags/Linux/" style="font-size: 12.5px;">Linux</a> <a href="/tags/MongoDB/" style="font-size: 10px;">MongoDB</a> <a href="/tags/Node-js/" style="font-size: 15px;">Node.js</a> <a href="/tags/OKHttp/" style="font-size: 15px;">OKHttp</a> <a href="/tags/Profiler/" style="font-size: 10px;">Profiler</a> <a href="/tags/RESTful/" style="font-size: 10px;">RESTful</a> <a href="/tags/Spring-Boot/" style="font-size: 10px;">Spring Boot</a> <a href="/tags/Ubuntu/" style="font-size: 10px;">Ubuntu</a> <a href="/tags/ava/" style="font-size: 10px;">ava</a> <a href="/tags/git/" style="font-size: 12.5px;">git</a> <a href="/tags/mongoose/" style="font-size: 10px;">mongoose</a> <a href="/tags/python/" style="font-size: 10px;">python</a> <a href="/tags/%E6%80%A7%E8%83%BD%E4%BC%98%E5%8C%96/" style="font-size: 10px;">性能优化</a> <a href="/tags/%E6%BA%90%E7%A0%81%E5%88%86%E6%9E%90/" style="font-size: 15px;">源码分析</a> <a href="/tags/%E7%88%AC%E8%99%AB/" style="font-size: 10px;">爬虫</a> <a href="/tags/%E7%8E%AF%E5%A2%83%E9%85%8D%E7%BD%AE/" style="font-size: 15px;">环境配置</a> <a href="/tags/%E7%94%9F%E6%B4%BB/" style="font-size: 12.5px;">生活</a> <a href="/tags/%E8%81%8C%E4%B8%9A%E8%A7%84%E5%88%92/" style="font-size: 10px;">职业规划</a> <a href="/tags/%E9%9A%8F%E7%AC%94/" style="font-size: 17.5px;">随笔</a> <a href="/tags/%E9%A1%B9%E7%9B%AE%E7%AE%A1%E7%90%86/" style="font-size: 10px;">项目管理</a>
+    </div>
+  </div>
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">归档</h3>
+    <div class="widget">
+      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2020/12/">十二月 2020</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/01/">一月 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/12/">十二月 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/11/">十一月 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/10/">十月 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/09/">九月 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/07/">七月 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/05/">五月 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/03/">三月 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/09/">九月 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/07/">七月 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/05/">五月 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/04/">四月 2017</a></li></ul>
+    </div>
+  </div>
+
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">最新文章</h3>
+    <div class="widget">
+      <ul>
+        
+          <li>
+            <a href="/2020/12/24/%E8%80%81%E5%AE%9E%E4%BA%BA%E6%80%95%E5%BC%80%E5%8F%A3/">老实人怕开口</a>
+          </li>
+        
+          <li>
+            <a href="/2019/01/01/2019%E7%AC%AC%E4%B8%80%E5%A4%A9%E5%85%88%E7%AB%8Bflag/">2019第一天先立flag</a>
+          </li>
+        
+          <li>
+            <a href="/2018/12/31/2018%E7%BB%99%E8%87%AA%E5%B7%B1%E4%B8%80%E4%B8%AA%E7%AE%80%E5%8D%95%E7%9A%84%E6%80%BB%E7%BB%93/">2018给自己一个简单的总结</a>
+          </li>
+        
+          <li>
+            <a href="/2018/12/29/%E4%BD%BF%E7%94%A8jsonwebtoken%E5%AE%8C%E6%88%90nodejs%E7%9A%84%E7%99%BB%E9%99%86%E7%B3%BB%E7%BB%9F/">使用jsonwebtoken完成nodejs的登陆系统</a>
+          </li>
+        
+          <li>
+            <a href="/2018/12/28/Android%E4%B8%89%E5%A4%A7%E9%A1%B9%E7%9B%AE%E6%9E%B6%E6%9E%84MVC%E3%80%81MVP%E3%80%81MVVM%E4%BD%BF%E7%94%A8%E4%BD%93%E9%AA%8C/">Android三大项目架构MVC、MVP、MVVM使用体验</a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+
+  
+</aside>
+        
+      </div>
+      <footer id="footer">
+  
+  <div class="outer">
+    <div id="footer-info" class="inner">
+      &copy; 2020 业松<br>
+      Powered by <a href="http://hexo.io/" target="_blank">Hexo</a>
+    </div>
+  </div>
+</footer>
+    </div>
+    <nav id="mobile-nav">
+  
+    <a href="/" class="mobile-nav-link">Home</a>
+  
+    <a href="/archives" class="mobile-nav-link">Archives</a>
+  
+</nav>
+    
+
+<script src="//ajax.googleapis.com/ajax/libs/jquery/2.0.3/jquery.min.js"></script>
+
+
+  
+<link rel="stylesheet" href="/fancybox/jquery.fancybox.css">
+
+  
+<script src="/fancybox/jquery.fancybox.pack.js"></script>
+
+
+
+
+<script src="/js/script.js"></script>
+
+
+
+
+  </div>
+</body>
+</html>

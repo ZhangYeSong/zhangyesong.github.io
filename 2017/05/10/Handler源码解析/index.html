@@ -1,0 +1,356 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  
+
+  
+  <title>Handler源码解析 | 业松 Studio</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+  <meta name="description" content="本文为作者原创，转载请注明链接   Handler的运行机制是Android程序员面试中经常被问到的一个问题，因为该问题可以考察面试者对于Android源码的了解程度。本文将以源码的角度来探索Handler的机制和原理。   这张图是本人画的，下面通过绑定Looper和MessageQueue、发送消息、处理消息三个步骤来解析Handler的源码。##Looper.prepare()和Loope">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Handler源码解析">
+<meta property="og:url" content="http://yoursite.com/2017/05/10/Handler%E6%BA%90%E7%A0%81%E8%A7%A3%E6%9E%90/index.html">
+<meta property="og:site_name" content="业松 Studio">
+<meta property="og:description" content="本文为作者原创，转载请注明链接   Handler的运行机制是Android程序员面试中经常被问到的一个问题，因为该问题可以考察面试者对于Android源码的了解程度。本文将以源码的角度来探索Handler的机制和原理。   这张图是本人画的，下面通过绑定Looper和MessageQueue、发送消息、处理消息三个步骤来解析Handler的源码。##Looper.prepare()和Loope">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="http://upload-images.jianshu.io/upload_images/5586297-ebad33f3bcaf7fb8.jpg?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240">
+<meta property="article:published_time" content="2017-05-10T08:13:39.000Z">
+<meta property="article:modified_time" content="2020-12-24T11:34:17.234Z">
+<meta property="article:author" content="业松">
+<meta property="article:tag" content="Android">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="http://upload-images.jianshu.io/upload_images/5586297-ebad33f3bcaf7fb8.jpg?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240">
+  
+    <link rel="alternate" href="/atom.xml" title="业松 Studio" type="application/atom+xml">
+  
+  
+    <link rel="icon" href="/favicon.png">
+  
+  
+    <link href="//fonts.googleapis.com/css?family=Source+Code+Pro" rel="stylesheet" type="text/css">
+  
+  
+<link rel="stylesheet" href="/css/style.css">
+
+<meta name="generator" content="Hexo 5.3.0"></head>
+
+<body>
+  <div id="container">
+    <div id="wrap">
+      <header id="header">
+  <div id="banner"></div>
+  <div id="header-outer" class="outer">
+    <div id="header-title" class="inner">
+      <h1 id="logo-wrap">
+        <a href="/" id="logo">业松 Studio</a>
+      </h1>
+      
+    </div>
+    <div id="header-inner" class="inner">
+      <nav id="main-nav">
+        <a id="main-nav-toggle" class="nav-icon"></a>
+        
+          <a class="main-nav-link" href="/">Home</a>
+        
+          <a class="main-nav-link" href="/archives">Archives</a>
+        
+      </nav>
+      <nav id="sub-nav">
+        
+          <a id="nav-rss-link" class="nav-icon" href="/atom.xml" title="RSS Feed"></a>
+        
+        <a id="nav-search-btn" class="nav-icon" title="搜索"></a>
+      </nav>
+      <div id="search-form-wrap">
+        <form action="//google.com/search" method="get" accept-charset="UTF-8" class="search-form"><input type="search" name="q" class="search-form-input" placeholder="Search"><button type="submit" class="search-form-submit">&#xF002;</button><input type="hidden" name="sitesearch" value="http://yoursite.com"></form>
+      </div>
+    </div>
+  </div>
+</header>
+      <div class="outer">
+        <section id="main"><article id="post-Handler源码解析" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/2017/05/10/Handler%E6%BA%90%E7%A0%81%E8%A7%A3%E6%9E%90/" class="article-date">
+  <time datetime="2017-05-10T08:13:39.000Z" itemprop="datePublished">2017-05-10</time>
+</a>
+    
+  <div class="article-category">
+    <a class="article-category-link" href="/categories/Android/">Android</a>
+  </div>
+
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 class="article-title" itemprop="name">
+      Handler源码解析
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <blockquote>
+<p>本文为作者原创，转载请注明链接</p>
+</blockquote>
+<blockquote>
+<p>Handler的运行机制是Android程序员面试中经常被问到的一个问题，因为该问题可以考察面试者对于Android源码的了解程度。本文将以源码的角度来探索Handler的机制和原理。</p>
+</blockquote>
+<p><img src="http://upload-images.jianshu.io/upload_images/5586297-ebad33f3bcaf7fb8.jpg?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="Handler消息处理机制"></p>
+<p>这张图是本人画的，下面通过绑定Looper和MessageQueue、发送消息、处理消息三个步骤来解析Handler的源码。<br>##Looper.prepare()和Looper.loop()方法<br>要在某一个线程中使用Handler接受处理消息，必须在该线程中执行这两个方法。那为什么我们平时好像没有调用过着两个方法呢？那是因为Android主线程已经帮我们调用了这两个方法。例如要在子线程中使用Handler接收处理消息，就需要我们自己手动调用这两个方法了。在本文中只讨论在主线程中使用Handler接受处理消息的情况(在子线程的情况也是一样的)。</p>
+<p>先来看看Looper.prepare()和Looper构造函数的源码：</p>
+<pre><code>public static void prepare() &#123;
+    prepare(true);
+&#125;
+
+private static void prepare(boolean quitAllowed) &#123;
+    if (sThreadLocal.get() != null) &#123;
+        throw new RuntimeException(&quot;Only one Looper may be created per thread&quot;);
+    &#125;
+    sThreadLocal.set(new Looper(quitAllowed));
+&#125;
+
+private Looper(boolean quitAllowed) &#123;
+    mQueue = new MessageQueue(quitAllowed);
+    mThread = Thread.currentThread();
+&#125;</code></pre>
+<p>可以看到在这段源码中，new了一个Looper对象保存到了sThreadLocal中。那么ThreadLocal又是什么东西呢？ThreadLocal是一个线程内部的数据存储类，这里不展开介绍它。简单来说ThreadLocal可以根据不同的线程保存和读取不同的数据，由于Handler使用的时候就是多线程的情景，在这里使用ThreadLocal来保存主线程中的Looper对象再合适不过了。而在Looper的构造函数中，new了一个MessageQueue并赋值给成员变量mQueue，即为该Looper对象绑定了一个MessageQueue。</p>
+<p>那么这段代码总结起来，它的目的就是在为主线程创造并绑定一个Looper对象，并为该Looper对象绑定一个MessageQueue对象。</p>
+<p>下面再来看看Looper.loop()方法做了什么事：</p>
+<pre><code>public static void loop() &#123;
+    final Looper me = myLooper();
+    if (me == null) &#123;
+        throw new RuntimeException(&quot;No Looper; Looper.prepare() wasn&#39;t called on this thread.&quot;);
+    &#125;
+    final MessageQueue queue = me.mQueue;
+
+    Binder.clearCallingIdentity();
+    final long ident = Binder.clearCallingIdentity();
+
+    for (;;) &#123;
+        Message msg = queue.next(); // might block
+        if (msg == null) &#123;
+            // No message indicates that the message queue is quitting.
+            return;
+        &#125;
+        ......
+    &#125;
+&#125;</code></pre>
+<p>这段源码就比较长了，没关系我们只看重点。</p>
+<p>首先通过myLooper()方法拿到looper对象，然后通过该对象拿到MessageQueue对象queue。下面使用Binder和底层通信，这里不展开。</p>
+<p>重点在于下面的无限for循环。for (;;)非常简单粗暴，调用了MessageQueue的next()方法。后面的注释提示了这个方法可能会阻塞。如果返回的消息为null，代表MessageQueue已退出，return退出loop()方法。如果MessageQueue中没有消息对象，next()方法会阻塞，直到再有消息传进来。</p>
+<p>##Handle发送消息方法<br>Handle的sendMessage方法最终调用的是sendMessageAtTime方法，来看看这个方法干了什么：</p>
+<pre><code>public boolean sendMessageAtTime(Message msg, long uptimeMillis) &#123;
+    MessageQueue queue = mQueue;
+    if (queue == null) &#123;
+        RuntimeException e = new RuntimeException(
+                this + &quot; sendMessageAtTime() called with no mQueue&quot;);
+        Log.w(&quot;Looper&quot;, e.getMessage(), e);
+        return false;
+    &#125;
+    return enqueueMessage(queue, msg, uptimeMillis);
+&#125;</code></pre>
+<p>很简单，先判断有没有绑定的MessageQueue对象，如果没有就要抛异常。有的话执行enqueueMessage方法。</p>
+<pre><code>private boolean enqueueMessage(MessageQueue queue, Message msg, long uptimeMillis) &#123;
+    msg.target = this;
+    if (mAsynchronous) &#123;
+        msg.setAsynchronous(true);
+    &#125;
+    return queue.enqueueMessage(msg, uptimeMillis);
+&#125;</code></pre>
+<p>msg.target这个成员变量就是Hanlder类，赋值为this代表，把消息发给调用这个方法的Handler。然后执行queue.enqueueMessage方法。这个方法将消息加进MessageQueue中，如果原来的MessageQueue中没有消息，会唤醒它执行next()方法取消息。具体的源码涉及native层的操作，在这里就不展开讨论了，有兴趣的朋友可以研究下。</p>
+<p>如果是用post(Runnable r)方法发消息呢？</p>
+<pre><code>public final boolean postAtTime(Runnable r, long uptimeMillis) &#123;
+    return sendMessageAtTime(getPostMessage(r), uptimeMillis);
+&#125;
+
+private static Message getPostMessage(Runnable r) &#123;
+    Message m = Message.obtain();
+    m.callback = r;
+    return m;
+&#125;</code></pre>
+<p>可以看到最终调用的还是sendMessageAtTime方法，只是通过getPostMessage方法把runnable对象放进一个消息对象传出去。</p>
+<p>##Handler处理消息<br>通过上面的流程，消息发出来了，进入MessageQueue中，我们在主线程又通过Looper.loop()方法把消息取出来了，那下面怎么处理消息呢？继续来看Looper.loop()方法，取出消息后有这么一段代码：</p>
+<pre><code>try &#123;
+    msg.target.dispatchMessage(msg);
+&#125; finally &#123;
+    if (traceTag != 0) &#123;
+        Trace.traceEnd(traceTag);
+    &#125;
+&#125;</code></pre>
+<p>msg.target是什么？不就是上面enqueueMessage方法中，我们传人的handle对象嘛。也就是说这里调用了handle对象的dispatchMessage(msg)方法来处理消息，继续看该方法：</p>
+<pre><code>public void dispatchMessage(Message msg) &#123;
+    if (msg.callback != null) &#123;
+        handleCallback(msg);
+    &#125; else &#123;
+        if (mCallback != null) &#123;
+            if (mCallback.handleMessage(msg)) &#123;
+                return;
+            &#125;
+        &#125;
+        handleMessage(msg);
+    &#125;
+&#125;
+
+private static void handleCallback(Message message) &#123;
+    message.callback.run();
+&#125;</code></pre>
+<p>首先判断消息中的callback是否为空，如果post(Runnable r)发来的消息，这里的callback就是传来的runnable对象了，调用handleCallback(msg)处理。这个方法就简单了，直接运行该runnable即可。</p>
+<p>callback对象为空，会判断mCallback是否为空。这里的mCallback对象是Handler构造函数中传进来的，是Hanlder中的内部接口。如果有就回调接口实现的handleMessage(msg)方法。没有的话，调用handleMessage(msg)方法。该方法默认什么都不做，一般是我们自己重写该方法处理消息。</p>
+<p>##总结<br>至此，Handler发送消息，取消息，处理消息的流程我们已经从源码的角度剖析完成了。下次面试再被问到就可以游刃有余地回答了。MessageQueue中的next()和enqueueMessage方法涉及到很多native方法，在本文中没有展开研究，有兴趣的朋友可以把这部分也搞明白了，对Handler机制会有一个更深的理解。</p>
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="http://yoursite.com/2017/05/10/Handler%E6%BA%90%E7%A0%81%E8%A7%A3%E6%9E%90/" data-id="ckj2v1spx0008bkus67sg7zlz" class="article-share-link">Share</a>
+      
+      
+  <ul class="article-tag-list" itemprop="keywords"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Android/" rel="tag">Android</a></li></ul>
+
+    </footer>
+  </div>
+  
+    
+<nav id="article-nav">
+  
+    <a href="/2017/07/24/Android%E6%80%A7%E8%83%BD%E4%BC%98%E5%8C%96%E4%B9%8B%E5%B7%A5%E5%85%B7%E5%92%8C%E4%BC%98%E5%8C%96%E7%82%B9%E6%80%BB%E7%BB%93/" id="article-nav-newer" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">Newer</strong>
+      <div class="article-nav-title">
+        
+          Android性能优化之工具和优化点总结
+        
+      </div>
+    </a>
+  
+  
+    <a href="/2017/05/02/Android%E4%BA%8B%E4%BB%B6%E5%88%86%E5%8F%91%E6%9C%BA%E5%88%B6/" id="article-nav-older" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">Older</strong>
+      <div class="article-nav-title">Android事件分发机制</div>
+    </a>
+  
+</nav>
+
+  
+</article>
+
+</section>
+        
+          <aside id="sidebar">
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">分类</h3>
+    <div class="widget">
+      <ul class="category-list"><li class="category-list-item"><a class="category-list-link" href="/categories/Android/">Android</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/Java/">Java</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/JavaScript/">JavaScript</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/Linux/">Linux</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/Node-js/">Node.js</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/git/">git</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/%E7%88%AC%E8%99%AB/">爬虫</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/%E9%9A%8F%E7%AC%94/">随笔</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/%E9%A1%B9%E7%9B%AE%E7%AE%A1%E7%90%86/">项目管理</a></li></ul>
+    </div>
+  </div>
+
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">标签</h3>
+    <div class="widget">
+      <ul class="tag-list" itemprop="keywords"><li class="tag-list-item"><a class="tag-list-link" href="/tags/Android/" rel="tag">Android</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Android-Studio/" rel="tag">Android Studio</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Github/" rel="tag">Github</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/JPA/" rel="tag">JPA</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/JVM/" rel="tag">JVM</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Java/" rel="tag">Java</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/JavaScript/" rel="tag">JavaScript</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Koa/" rel="tag">Koa</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Kotlin/" rel="tag">Kotlin</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Linux/" rel="tag">Linux</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/MongoDB/" rel="tag">MongoDB</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Node-js/" rel="tag">Node.js</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/OKHttp/" rel="tag">OKHttp</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Profiler/" rel="tag">Profiler</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/RESTful/" rel="tag">RESTful</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Spring-Boot/" rel="tag">Spring Boot</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Ubuntu/" rel="tag">Ubuntu</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/ava/" rel="tag">ava</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/git/" rel="tag">git</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/mongoose/" rel="tag">mongoose</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/python/" rel="tag">python</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E6%80%A7%E8%83%BD%E4%BC%98%E5%8C%96/" rel="tag">性能优化</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E6%BA%90%E7%A0%81%E5%88%86%E6%9E%90/" rel="tag">源码分析</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E7%88%AC%E8%99%AB/" rel="tag">爬虫</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E7%8E%AF%E5%A2%83%E9%85%8D%E7%BD%AE/" rel="tag">环境配置</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E7%94%9F%E6%B4%BB/" rel="tag">生活</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E8%81%8C%E4%B8%9A%E8%A7%84%E5%88%92/" rel="tag">职业规划</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E9%9A%8F%E7%AC%94/" rel="tag">随笔</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E9%A1%B9%E7%9B%AE%E7%AE%A1%E7%90%86/" rel="tag">项目管理</a></li></ul>
+    </div>
+  </div>
+
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">标签云</h3>
+    <div class="widget tagcloud">
+      <a href="/tags/Android/" style="font-size: 20px;">Android</a> <a href="/tags/Android-Studio/" style="font-size: 12.5px;">Android Studio</a> <a href="/tags/Github/" style="font-size: 10px;">Github</a> <a href="/tags/JPA/" style="font-size: 10px;">JPA</a> <a href="/tags/JVM/" style="font-size: 12.5px;">JVM</a> <a href="/tags/Java/" style="font-size: 15px;">Java</a> <a href="/tags/JavaScript/" style="font-size: 10px;">JavaScript</a> <a href="/tags/Koa/" style="font-size: 10px;">Koa</a> <a href="/tags/Kotlin/" style="font-size: 12.5px;">Kotlin</a> <a href="/tags/Linux/" style="font-size: 12.5px;">Linux</a> <a href="/tags/MongoDB/" style="font-size: 10px;">MongoDB</a> <a href="/tags/Node-js/" style="font-size: 15px;">Node.js</a> <a href="/tags/OKHttp/" style="font-size: 15px;">OKHttp</a> <a href="/tags/Profiler/" style="font-size: 10px;">Profiler</a> <a href="/tags/RESTful/" style="font-size: 10px;">RESTful</a> <a href="/tags/Spring-Boot/" style="font-size: 10px;">Spring Boot</a> <a href="/tags/Ubuntu/" style="font-size: 10px;">Ubuntu</a> <a href="/tags/ava/" style="font-size: 10px;">ava</a> <a href="/tags/git/" style="font-size: 12.5px;">git</a> <a href="/tags/mongoose/" style="font-size: 10px;">mongoose</a> <a href="/tags/python/" style="font-size: 10px;">python</a> <a href="/tags/%E6%80%A7%E8%83%BD%E4%BC%98%E5%8C%96/" style="font-size: 10px;">性能优化</a> <a href="/tags/%E6%BA%90%E7%A0%81%E5%88%86%E6%9E%90/" style="font-size: 15px;">源码分析</a> <a href="/tags/%E7%88%AC%E8%99%AB/" style="font-size: 10px;">爬虫</a> <a href="/tags/%E7%8E%AF%E5%A2%83%E9%85%8D%E7%BD%AE/" style="font-size: 15px;">环境配置</a> <a href="/tags/%E7%94%9F%E6%B4%BB/" style="font-size: 12.5px;">生活</a> <a href="/tags/%E8%81%8C%E4%B8%9A%E8%A7%84%E5%88%92/" style="font-size: 10px;">职业规划</a> <a href="/tags/%E9%9A%8F%E7%AC%94/" style="font-size: 17.5px;">随笔</a> <a href="/tags/%E9%A1%B9%E7%9B%AE%E7%AE%A1%E7%90%86/" style="font-size: 10px;">项目管理</a>
+    </div>
+  </div>
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">归档</h3>
+    <div class="widget">
+      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2020/12/">十二月 2020</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/01/">一月 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/12/">十二月 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/11/">十一月 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/10/">十月 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/09/">九月 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/07/">七月 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/05/">五月 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/03/">三月 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/09/">九月 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/07/">七月 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/05/">五月 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/04/">四月 2017</a></li></ul>
+    </div>
+  </div>
+
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">最新文章</h3>
+    <div class="widget">
+      <ul>
+        
+          <li>
+            <a href="/2020/12/24/%E8%80%81%E5%AE%9E%E4%BA%BA%E6%80%95%E5%BC%80%E5%8F%A3/">老实人怕开口</a>
+          </li>
+        
+          <li>
+            <a href="/2019/01/01/2019%E7%AC%AC%E4%B8%80%E5%A4%A9%E5%85%88%E7%AB%8Bflag/">2019第一天先立flag</a>
+          </li>
+        
+          <li>
+            <a href="/2018/12/31/2018%E7%BB%99%E8%87%AA%E5%B7%B1%E4%B8%80%E4%B8%AA%E7%AE%80%E5%8D%95%E7%9A%84%E6%80%BB%E7%BB%93/">2018给自己一个简单的总结</a>
+          </li>
+        
+          <li>
+            <a href="/2018/12/29/%E4%BD%BF%E7%94%A8jsonwebtoken%E5%AE%8C%E6%88%90nodejs%E7%9A%84%E7%99%BB%E9%99%86%E7%B3%BB%E7%BB%9F/">使用jsonwebtoken完成nodejs的登陆系统</a>
+          </li>
+        
+          <li>
+            <a href="/2018/12/28/Android%E4%B8%89%E5%A4%A7%E9%A1%B9%E7%9B%AE%E6%9E%B6%E6%9E%84MVC%E3%80%81MVP%E3%80%81MVVM%E4%BD%BF%E7%94%A8%E4%BD%93%E9%AA%8C/">Android三大项目架构MVC、MVP、MVVM使用体验</a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+
+  
+</aside>
+        
+      </div>
+      <footer id="footer">
+  
+  <div class="outer">
+    <div id="footer-info" class="inner">
+      &copy; 2020 业松<br>
+      Powered by <a href="http://hexo.io/" target="_blank">Hexo</a>
+    </div>
+  </div>
+</footer>
+    </div>
+    <nav id="mobile-nav">
+  
+    <a href="/" class="mobile-nav-link">Home</a>
+  
+    <a href="/archives" class="mobile-nav-link">Archives</a>
+  
+</nav>
+    
+
+<script src="//ajax.googleapis.com/ajax/libs/jquery/2.0.3/jquery.min.js"></script>
+
+
+  
+<link rel="stylesheet" href="/fancybox/jquery.fancybox.css">
+
+  
+<script src="/fancybox/jquery.fancybox.pack.js"></script>
+
+
+
+
+<script src="/js/script.js"></script>
+
+
+
+
+  </div>
+</body>
+</html>

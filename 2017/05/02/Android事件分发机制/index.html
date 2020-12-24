@@ -1,0 +1,291 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  
+
+  
+  <title>Android事件分发机制 | 业松 Studio</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+  <meta name="description" content="本文由本人原创，转载请注明作者  Android中的事件分发机制是新手学习的一个重难点。而且往往学习了之后以为掌握的差不多了，但遇到新问题的时候又发现没有掌握到位或者又忘掉了。笔者就是这种情况，因此将自己已掌握的事件分发机制记录下来，作为记录和交流。 一、背景目的 什么是Android事件分发机制？  事件分发机制是处理Android各种滑动冲突的理论基础，也是学习Android的核心知识点，掌">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Android事件分发机制">
+<meta property="og:url" content="http://yoursite.com/2017/05/02/Android%E4%BA%8B%E4%BB%B6%E5%88%86%E5%8F%91%E6%9C%BA%E5%88%B6/index.html">
+<meta property="og:site_name" content="业松 Studio">
+<meta property="og:description" content="本文由本人原创，转载请注明作者  Android中的事件分发机制是新手学习的一个重难点。而且往往学习了之后以为掌握的差不多了，但遇到新问题的时候又发现没有掌握到位或者又忘掉了。笔者就是这种情况，因此将自己已掌握的事件分发机制记录下来，作为记录和交流。 一、背景目的 什么是Android事件分发机制？  事件分发机制是处理Android各种滑动冲突的理论基础，也是学习Android的核心知识点，掌">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="http://upload-images.jianshu.io/upload_images/5586297-c462585648e867b6.jpg?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240">
+<meta property="article:published_time" content="2017-05-02T08:14:10.000Z">
+<meta property="article:modified_time" content="2020-12-24T11:34:17.234Z">
+<meta property="article:author" content="业松">
+<meta property="article:tag" content="Android">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="http://upload-images.jianshu.io/upload_images/5586297-c462585648e867b6.jpg?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240">
+  
+    <link rel="alternate" href="/atom.xml" title="业松 Studio" type="application/atom+xml">
+  
+  
+    <link rel="icon" href="/favicon.png">
+  
+  
+    <link href="//fonts.googleapis.com/css?family=Source+Code+Pro" rel="stylesheet" type="text/css">
+  
+  
+<link rel="stylesheet" href="/css/style.css">
+
+<meta name="generator" content="Hexo 5.3.0"></head>
+
+<body>
+  <div id="container">
+    <div id="wrap">
+      <header id="header">
+  <div id="banner"></div>
+  <div id="header-outer" class="outer">
+    <div id="header-title" class="inner">
+      <h1 id="logo-wrap">
+        <a href="/" id="logo">业松 Studio</a>
+      </h1>
+      
+    </div>
+    <div id="header-inner" class="inner">
+      <nav id="main-nav">
+        <a id="main-nav-toggle" class="nav-icon"></a>
+        
+          <a class="main-nav-link" href="/">Home</a>
+        
+          <a class="main-nav-link" href="/archives">Archives</a>
+        
+      </nav>
+      <nav id="sub-nav">
+        
+          <a id="nav-rss-link" class="nav-icon" href="/atom.xml" title="RSS Feed"></a>
+        
+        <a id="nav-search-btn" class="nav-icon" title="搜索"></a>
+      </nav>
+      <div id="search-form-wrap">
+        <form action="//google.com/search" method="get" accept-charset="UTF-8" class="search-form"><input type="search" name="q" class="search-form-input" placeholder="Search"><button type="submit" class="search-form-submit">&#xF002;</button><input type="hidden" name="sitesearch" value="http://yoursite.com"></form>
+      </div>
+    </div>
+  </div>
+</header>
+      <div class="outer">
+        <section id="main"><article id="post-Android事件分发机制" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/2017/05/02/Android%E4%BA%8B%E4%BB%B6%E5%88%86%E5%8F%91%E6%9C%BA%E5%88%B6/" class="article-date">
+  <time datetime="2017-05-02T08:14:10.000Z" itemprop="datePublished">2017-05-02</time>
+</a>
+    
+  <div class="article-category">
+    <a class="article-category-link" href="/categories/Android/">Android</a>
+  </div>
+
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 class="article-title" itemprop="name">
+      Android事件分发机制
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <blockquote>
+<p>本文由本人原创，转载请注明作者</p>
+</blockquote>
+<p>Android中的事件分发机制是新手学习的一个重难点。而且往往学习了之后以为掌握的差不多了，但遇到新问题的时候又发现没有掌握到位或者又忘掉了。笔者就是这种情况，因此将自己已掌握的事件分发机制记录下来，作为记录和交流。</p>
+<h1 id="一、背景目的"><a href="#一、背景目的" class="headerlink" title="一、背景目的"></a>一、背景目的</h1><ul>
+<li>什么是Android事件分发机制？ <blockquote>
+<p>事件分发机制是处理Android各种滑动冲突的理论基础，也是学习Android的核心知识点，掌握好View和ViewGroup的事件分发机制是十分重要的。</p>
+</blockquote>
+</li>
+</ul>
+<ul>
+<li><p>为什么Android要设计一套事件分发机制？</p>
+<blockquote>
+<p>当父控件和子控件都可以响应用户输入作出行为的时候（比如触摸滑动），这时候就会造成事件冲突。如何判断用户的输入事件由父控件处理还是子控件处理，就需要设计出一套规则了，这套规则就是Android事件分发机制。</p>
+</blockquote>
+</li>
+<li><p>没有子父关系的控件会出现事件冲突吗？</p>
+<blockquote>
+<p>没有子父关系的控件，它们是不会产生事件冲突的。因此在处理事件冲突的时候，首先要分析产生冲突的子控件是哪一个，父控件是哪一个。</p>
+</blockquote>
+</li>
+</ul>
+<h1 id="二、基础知识"><a href="#二、基础知识" class="headerlink" title="二、基础知识"></a>二、基础知识</h1><ul>
+<li>View和ViewGroup </li>
+</ul>
+<p>Android中的控件大致可以分为两类，分别是View和ViewGroup。其中ViewGroup实际上也是继承自View。ViewGroup表示可以拥有子控件的控件，常见的有LinearLayout、ListView这些。后面我们将通过学习知道，在Android事件分发机制中，View是没有拦截方法的，而ViewGroup的拦截方法没有重写的话默认也是不进行拦截的。</p>
+<ul>
+<li>MotionEvent分类</li>
+</ul>
+<p>Android设备可以接收的事件总类很多，比如按压、拖拽、滑动，这些事件分类是由android底层完成的。总的来说，用户操作可以分为三类，及MotionEvent中的ACTION_DOWN（按下），ACTION_MOVE（移动），ACTION_UP（抬起）。从用户手指按下到抬起这一连串的事件被称之为一个事件序列。关于事件序列，下面也会说到。</p>
+<h1 id="三、事件分发流程"><a href="#三、事件分发流程" class="headerlink" title="三、事件分发流程"></a>三、事件分发流程</h1><p><img src="http://upload-images.jianshu.io/upload_images/5586297-c462585648e867b6.jpg?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="图片来自网络"><br>从这张图片来看一次点击事件的传递。在这张图中有三个存在子父View关系的View，其中上面两个能作为父View的自然是属于ViewGroup了。</p>
+<h3 id="ViewGroup—dispatchTouchEvent方法"><a href="#ViewGroup—dispatchTouchEvent方法" class="headerlink" title="ViewGroup—dispatchTouchEvent方法"></a>ViewGroup—dispatchTouchEvent方法</h3><p>Touch事件发生后，顶级父View先接受到消息，此时会先调用顶级View的dispatchTouchEvent方法，这在图片上没有画出来。该方法的返回true的话，代表事件被消费掉了（当事件被消费时便不再传递）；返回false的话事件不再往下传递，由上一级View的onTouchEvent方法来处理。如果没有重写该方法的话（即调用ViewGroup中的dispatchTouchEvent方法），会判断onInterceptTouchEvent的返回值来确定下一步传递方向。</p>
+<h3 id="ViewGroup—onInterceptTouchEvent方法"><a href="#ViewGroup—onInterceptTouchEvent方法" class="headerlink" title="ViewGroup—onInterceptTouchEvent方法"></a>ViewGroup—onInterceptTouchEvent方法</h3><p>该方法顾名思义，判断当前View是否拦截该事件。如图所示，返回Ture的话会拦截事件传递，调用顶级View的onTouchEvent方法来处理事件。返回false的话表示不中断，事件继续向下传递。传递到下一级父View的过程也是一样，onInterceptTouchEvent方法返回false的话会一直向下传递到子View。</p>
+<h3 id="View-dispatchTouchEvent方法"><a href="#View-dispatchTouchEvent方法" class="headerlink" title="View-dispatchTouchEvent方法"></a>View-dispatchTouchEvent方法</h3><p>View的dispatchTouchEvent方法跟ViewGroup是有区别的。通过看源码可以知道，View没有onInterceptTouchEvent方法，因此也它会直接调用onTouchEvent方法来判断事件是否被消耗。另外如果View被设置了各种Listener（如OnClickListener）之后，对应的事件也会随着Listener中对应的方法返回true而被消耗。</p>
+<h3 id="View—onTouchEvent方法"><a href="#View—onTouchEvent方法" class="headerlink" title="View—onTouchEvent方法"></a>View—onTouchEvent方法</h3><p>传递到子View的时候会调用子View的dispatchTouchEvent方法，一般自定义View的时候在onTouchEvent中处理与用户触摸按压的交互逻辑。不管该方法过程如何，如果onTouchEvent的返回值为True表示事件被消耗，事件不再传递。反之，事件将向上传递，传给父View去处理。另外需要注意的是当View的clickable和longClickabale属性同时为false的时候，代表View不可点击（如TextView），因此onTouchEvent方法也会默认返回false不消耗事件。</p>
+<h3 id="ViewGroup—onTouchEvent方法"><a href="#ViewGroup—onTouchEvent方法" class="headerlink" title="ViewGroup—onTouchEvent方法"></a>ViewGroup—onTouchEvent方法</h3><p>ViewGroup对onTouchEvent的方法和View一样，返回true的话代表事件被消耗，返回false将事件继续向上传递。具体的行为要看具体的重写方法。</p>
+<h1 id="四、总结分发流程"><a href="#四、总结分发流程" class="headerlink" title="四、总结分发流程"></a>四、总结分发流程</h1><p>可以看到事件传递时是一层层向下传递接受，再由下往上进行处理。这和现实工作也很类似：</p>
+<blockquote>
+<p>产品经理提了一个新的需求，高级程序员接到需求先考虑下要不要自己做（onInterceptTouchEvent方法过程），觉得应该自己处理就自己完成了（ViewGroup—onTouchEvent方法过程）；觉得应该由下属去做就下发给见习程序员，见习程序员没有下属只能自己去处理（View—onTouchEvent方法过程）；见习程序员如果很好地解决需求了（onTouchEvent方法返回true），这个事件就到此结束了。如果需求太难，见习程序员处理不了这个需求（onTouchEvent方法返回false），那么就会再交给上级去处理。</p>
+</blockquote>
+<p>可见Google的程序员在设计这些代码时的用的方法十分巧妙，也是和现实相结合地去设计代码，对于开发者也便于理解。<br>任玉刚大神在《Android开发艺术探索》一书中对事件分发机制的讲解十分到位，推荐有兴趣的朋友去看看。书中用一段伪代码把事件分发机制抽象的非常清楚：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">boolean</span> <span class="title">dispatchTouchEvent</span><span class="params">(MotionEvent event)</span> </span>&#123;</span><br><span class="line">    <span class="keyword">boolean</span> consume =<span class="keyword">false</span>;</span><br><span class="line">    <span class="keyword">if</span>(onInterceptTouchEvent(ev)) &#123;</span><br><span class="line">        consume = onTouchEvent(ev);</span><br><span class="line">    &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">        consume = child.dispatchTouchEvent(ev);</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">return</span> consume;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>其中comsume代表事件是否被消耗。当事件传递到ViewGroup的时候，先判断是否拦截。拦截的话由自己的onTouchEvent方法处理；不拦截的话，分发给子View处理，调用子View的dispatchTouchEvent方法。</p>
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="http://yoursite.com/2017/05/02/Android%E4%BA%8B%E4%BB%B6%E5%88%86%E5%8F%91%E6%9C%BA%E5%88%B6/" data-id="ckj2v1spw0007bkus9cfid82t" class="article-share-link">Share</a>
+      
+      
+  <ul class="article-tag-list" itemprop="keywords"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Android/" rel="tag">Android</a></li></ul>
+
+    </footer>
+  </div>
+  
+    
+<nav id="article-nav">
+  
+    <a href="/2017/05/10/Handler%E6%BA%90%E7%A0%81%E8%A7%A3%E6%9E%90/" id="article-nav-newer" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">Newer</strong>
+      <div class="article-nav-title">
+        
+          Handler源码解析
+        
+      </div>
+    </a>
+  
+  
+    <a href="/2017/04/24/geenDao%E4%BD%BF%E7%94%A8%E4%BB%8B%E7%BB%8D%E2%80%94%E2%80%94%E5%A6%82%E4%BD%95%E5%BC%80%E5%A7%8B%EF%BC%9F/" id="article-nav-older" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">Older</strong>
+      <div class="article-nav-title">geenDao使用介绍——如何开始？</div>
+    </a>
+  
+</nav>
+
+  
+</article>
+
+</section>
+        
+          <aside id="sidebar">
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">分类</h3>
+    <div class="widget">
+      <ul class="category-list"><li class="category-list-item"><a class="category-list-link" href="/categories/Android/">Android</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/Java/">Java</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/JavaScript/">JavaScript</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/Linux/">Linux</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/Node-js/">Node.js</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/git/">git</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/%E7%88%AC%E8%99%AB/">爬虫</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/%E9%9A%8F%E7%AC%94/">随笔</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/%E9%A1%B9%E7%9B%AE%E7%AE%A1%E7%90%86/">项目管理</a></li></ul>
+    </div>
+  </div>
+
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">标签</h3>
+    <div class="widget">
+      <ul class="tag-list" itemprop="keywords"><li class="tag-list-item"><a class="tag-list-link" href="/tags/Android/" rel="tag">Android</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Android-Studio/" rel="tag">Android Studio</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Github/" rel="tag">Github</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/JPA/" rel="tag">JPA</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/JVM/" rel="tag">JVM</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Java/" rel="tag">Java</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/JavaScript/" rel="tag">JavaScript</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Koa/" rel="tag">Koa</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Kotlin/" rel="tag">Kotlin</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Linux/" rel="tag">Linux</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/MongoDB/" rel="tag">MongoDB</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Node-js/" rel="tag">Node.js</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/OKHttp/" rel="tag">OKHttp</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Profiler/" rel="tag">Profiler</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/RESTful/" rel="tag">RESTful</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Spring-Boot/" rel="tag">Spring Boot</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Ubuntu/" rel="tag">Ubuntu</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/ava/" rel="tag">ava</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/git/" rel="tag">git</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/mongoose/" rel="tag">mongoose</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/python/" rel="tag">python</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E6%80%A7%E8%83%BD%E4%BC%98%E5%8C%96/" rel="tag">性能优化</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E6%BA%90%E7%A0%81%E5%88%86%E6%9E%90/" rel="tag">源码分析</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E7%88%AC%E8%99%AB/" rel="tag">爬虫</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E7%8E%AF%E5%A2%83%E9%85%8D%E7%BD%AE/" rel="tag">环境配置</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E7%94%9F%E6%B4%BB/" rel="tag">生活</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E8%81%8C%E4%B8%9A%E8%A7%84%E5%88%92/" rel="tag">职业规划</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E9%9A%8F%E7%AC%94/" rel="tag">随笔</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E9%A1%B9%E7%9B%AE%E7%AE%A1%E7%90%86/" rel="tag">项目管理</a></li></ul>
+    </div>
+  </div>
+
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">标签云</h3>
+    <div class="widget tagcloud">
+      <a href="/tags/Android/" style="font-size: 20px;">Android</a> <a href="/tags/Android-Studio/" style="font-size: 12.5px;">Android Studio</a> <a href="/tags/Github/" style="font-size: 10px;">Github</a> <a href="/tags/JPA/" style="font-size: 10px;">JPA</a> <a href="/tags/JVM/" style="font-size: 12.5px;">JVM</a> <a href="/tags/Java/" style="font-size: 15px;">Java</a> <a href="/tags/JavaScript/" style="font-size: 10px;">JavaScript</a> <a href="/tags/Koa/" style="font-size: 10px;">Koa</a> <a href="/tags/Kotlin/" style="font-size: 12.5px;">Kotlin</a> <a href="/tags/Linux/" style="font-size: 12.5px;">Linux</a> <a href="/tags/MongoDB/" style="font-size: 10px;">MongoDB</a> <a href="/tags/Node-js/" style="font-size: 15px;">Node.js</a> <a href="/tags/OKHttp/" style="font-size: 15px;">OKHttp</a> <a href="/tags/Profiler/" style="font-size: 10px;">Profiler</a> <a href="/tags/RESTful/" style="font-size: 10px;">RESTful</a> <a href="/tags/Spring-Boot/" style="font-size: 10px;">Spring Boot</a> <a href="/tags/Ubuntu/" style="font-size: 10px;">Ubuntu</a> <a href="/tags/ava/" style="font-size: 10px;">ava</a> <a href="/tags/git/" style="font-size: 12.5px;">git</a> <a href="/tags/mongoose/" style="font-size: 10px;">mongoose</a> <a href="/tags/python/" style="font-size: 10px;">python</a> <a href="/tags/%E6%80%A7%E8%83%BD%E4%BC%98%E5%8C%96/" style="font-size: 10px;">性能优化</a> <a href="/tags/%E6%BA%90%E7%A0%81%E5%88%86%E6%9E%90/" style="font-size: 15px;">源码分析</a> <a href="/tags/%E7%88%AC%E8%99%AB/" style="font-size: 10px;">爬虫</a> <a href="/tags/%E7%8E%AF%E5%A2%83%E9%85%8D%E7%BD%AE/" style="font-size: 15px;">环境配置</a> <a href="/tags/%E7%94%9F%E6%B4%BB/" style="font-size: 12.5px;">生活</a> <a href="/tags/%E8%81%8C%E4%B8%9A%E8%A7%84%E5%88%92/" style="font-size: 10px;">职业规划</a> <a href="/tags/%E9%9A%8F%E7%AC%94/" style="font-size: 17.5px;">随笔</a> <a href="/tags/%E9%A1%B9%E7%9B%AE%E7%AE%A1%E7%90%86/" style="font-size: 10px;">项目管理</a>
+    </div>
+  </div>
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">归档</h3>
+    <div class="widget">
+      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2020/12/">十二月 2020</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/01/">一月 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/12/">十二月 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/11/">十一月 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/10/">十月 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/09/">九月 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/07/">七月 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/05/">五月 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/03/">三月 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/09/">九月 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/07/">七月 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/05/">五月 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/04/">四月 2017</a></li></ul>
+    </div>
+  </div>
+
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">最新文章</h3>
+    <div class="widget">
+      <ul>
+        
+          <li>
+            <a href="/2020/12/24/%E8%80%81%E5%AE%9E%E4%BA%BA%E6%80%95%E5%BC%80%E5%8F%A3/">老实人怕开口</a>
+          </li>
+        
+          <li>
+            <a href="/2019/01/01/2019%E7%AC%AC%E4%B8%80%E5%A4%A9%E5%85%88%E7%AB%8Bflag/">2019第一天先立flag</a>
+          </li>
+        
+          <li>
+            <a href="/2018/12/31/2018%E7%BB%99%E8%87%AA%E5%B7%B1%E4%B8%80%E4%B8%AA%E7%AE%80%E5%8D%95%E7%9A%84%E6%80%BB%E7%BB%93/">2018给自己一个简单的总结</a>
+          </li>
+        
+          <li>
+            <a href="/2018/12/29/%E4%BD%BF%E7%94%A8jsonwebtoken%E5%AE%8C%E6%88%90nodejs%E7%9A%84%E7%99%BB%E9%99%86%E7%B3%BB%E7%BB%9F/">使用jsonwebtoken完成nodejs的登陆系统</a>
+          </li>
+        
+          <li>
+            <a href="/2018/12/28/Android%E4%B8%89%E5%A4%A7%E9%A1%B9%E7%9B%AE%E6%9E%B6%E6%9E%84MVC%E3%80%81MVP%E3%80%81MVVM%E4%BD%BF%E7%94%A8%E4%BD%93%E9%AA%8C/">Android三大项目架构MVC、MVP、MVVM使用体验</a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+
+  
+</aside>
+        
+      </div>
+      <footer id="footer">
+  
+  <div class="outer">
+    <div id="footer-info" class="inner">
+      &copy; 2020 业松<br>
+      Powered by <a href="http://hexo.io/" target="_blank">Hexo</a>
+    </div>
+  </div>
+</footer>
+    </div>
+    <nav id="mobile-nav">
+  
+    <a href="/" class="mobile-nav-link">Home</a>
+  
+    <a href="/archives" class="mobile-nav-link">Archives</a>
+  
+</nav>
+    
+
+<script src="//ajax.googleapis.com/ajax/libs/jquery/2.0.3/jquery.min.js"></script>
+
+
+  
+<link rel="stylesheet" href="/fancybox/jquery.fancybox.css">
+
+  
+<script src="/fancybox/jquery.fancybox.pack.js"></script>
+
+
+
+
+<script src="/js/script.js"></script>
+
+
+
+
+  </div>
+</body>
+</html>

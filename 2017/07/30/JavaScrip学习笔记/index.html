@@ -1,0 +1,282 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  
+
+  
+  <title>JavaScript学习笔记 | 业松 Studio</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+  <meta name="description" content="本文为本人原创，转载请注明作者和出处。另：本文针对的是ECMAScript 5标准。   学习编程有这么一种说法，最难学的是你的第二门编程语言。因为第一门编程语言的语法、思维乃至内在的思想内核深深地影响着你学习第二门语言。  正在学习JavaScript的我对这样的说法大致赞同。虽然最早学过c语言，但Java才是我的第一门掌握的比较深入的语言。Java和JavaScript看着名字挺像，但实际上">
+<meta property="og:type" content="article">
+<meta property="og:title" content="JavaScript学习笔记">
+<meta property="og:url" content="http://yoursite.com/2017/07/30/JavaScrip%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/index.html">
+<meta property="og:site_name" content="业松 Studio">
+<meta property="og:description" content="本文为本人原创，转载请注明作者和出处。另：本文针对的是ECMAScript 5标准。   学习编程有这么一种说法，最难学的是你的第二门编程语言。因为第一门编程语言的语法、思维乃至内在的思想内核深深地影响着你学习第二门语言。  正在学习JavaScript的我对这样的说法大致赞同。虽然最早学过c语言，但Java才是我的第一门掌握的比较深入的语言。Java和JavaScript看着名字挺像，但实际上">
+<meta property="og:locale" content="zh_CN">
+<meta property="article:published_time" content="2017-07-30T08:12:45.000Z">
+<meta property="article:modified_time" content="2020-12-24T11:34:17.236Z">
+<meta property="article:author" content="业松">
+<meta property="article:tag" content="JavaScript">
+<meta name="twitter:card" content="summary">
+  
+    <link rel="alternate" href="/atom.xml" title="业松 Studio" type="application/atom+xml">
+  
+  
+    <link rel="icon" href="/favicon.png">
+  
+  
+    <link href="//fonts.googleapis.com/css?family=Source+Code+Pro" rel="stylesheet" type="text/css">
+  
+  
+<link rel="stylesheet" href="/css/style.css">
+
+<meta name="generator" content="Hexo 5.3.0"></head>
+
+<body>
+  <div id="container">
+    <div id="wrap">
+      <header id="header">
+  <div id="banner"></div>
+  <div id="header-outer" class="outer">
+    <div id="header-title" class="inner">
+      <h1 id="logo-wrap">
+        <a href="/" id="logo">业松 Studio</a>
+      </h1>
+      
+    </div>
+    <div id="header-inner" class="inner">
+      <nav id="main-nav">
+        <a id="main-nav-toggle" class="nav-icon"></a>
+        
+          <a class="main-nav-link" href="/">Home</a>
+        
+          <a class="main-nav-link" href="/archives">Archives</a>
+        
+      </nav>
+      <nav id="sub-nav">
+        
+          <a id="nav-rss-link" class="nav-icon" href="/atom.xml" title="RSS Feed"></a>
+        
+        <a id="nav-search-btn" class="nav-icon" title="搜索"></a>
+      </nav>
+      <div id="search-form-wrap">
+        <form action="//google.com/search" method="get" accept-charset="UTF-8" class="search-form"><input type="search" name="q" class="search-form-input" placeholder="Search"><button type="submit" class="search-form-submit">&#xF002;</button><input type="hidden" name="sitesearch" value="http://yoursite.com"></form>
+      </div>
+    </div>
+  </div>
+</header>
+      <div class="outer">
+        <section id="main"><article id="post-JavaScrip学习笔记" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/2017/07/30/JavaScrip%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/" class="article-date">
+  <time datetime="2017-07-30T08:12:45.000Z" itemprop="datePublished">2017-07-30</time>
+</a>
+    
+  <div class="article-category">
+    <a class="article-category-link" href="/categories/JavaScript/">JavaScript</a>
+  </div>
+
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 class="article-title" itemprop="name">
+      JavaScript学习笔记
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <blockquote>
+<p>本文为本人原创，转载请注明作者和出处。<br>另：本文针对的是ECMAScript 5标准。</p>
+</blockquote>
+<blockquote>
+<p>学习编程有这么一种说法，最难学的是你的第二门编程语言。因为第一门编程语言的语法、思维乃至内在的思想内核深深地影响着你学习第二门语言。</p>
+</blockquote>
+<p>正在学习JavaScript的我对这样的说法大致赞同。虽然最早学过c语言，但Java才是我的第一门掌握的比较深入的语言。Java和JavaScript看着名字挺像，但实际上是差别挺大的两门语言，并且JavaScript和其他基于类的面向对象语言也有很大不同。下面会记录一下作为一个Java程序员在学习JavaScrip的时候觉得比较关键的地方。</p>
+<h3 id="变量"><a href="#变量" class="headerlink" title="变量"></a>变量</h3><p>Java是强类型语言，变量都是强类型的，而JavaScript是弱类型语言，变量没有类型。这是两者最大的不同点之一。都说习惯了Java这种强类型语言的人开始使用弱类型语言会有种从如释重负的感觉，但我想大多数人会觉得很不习惯而不是很爽。尽管在JavaScript中，一个变量可以保存任意类型的数据，但我们还是尽量不要随意去改变一个变量的数据类型。</p>
+<h3 id="数据类型"><a href="#数据类型" class="headerlink" title="数据类型"></a>数据类型</h3><p>JavaScript包含五种基本数据类型和一种引用数据类型。基本数据类型为：number，boolean，string，null，undefined；引用数据类型为object。</p>
+<p>很多像Java这样面向对象的语言把string当作引用数据类型，但在JavaScript中它和number一样是基本数据类型，这样似乎更符合人的思维方式？JavaScript中的string既可以用双引号括起来，可以用单引号。</p>
+<p>由于JavaScript中声明对象的时候并不会指定对象的类型，因此需要undefined这种数据类型来代表一个变量还没有被定义类型。</p>
+<p>通过typeof关键字可以来查看一个变量的数据类型。对于引用数据类型，和Java一样通过instanceof关键字可以查看其“类型”。</p>
+<h3 id="循环语句"><a href="#循环语句" class="headerlink" title="循环语句"></a>循环语句</h3><p>JavaScript支持以下四种循环语句：</p>
+<ul>
+<li><strong>for</strong> - 循环代码块一定的次数</li>
+<li><strong>for/in</strong> - 循环遍历对象的属性</li>
+<li><strong>while</strong> - 当指定的条件为 true 时循环指定的代码块</li>
+<li><strong>do/while</strong> - 同样当指定的条件为 true 时循环指定的代码块</li>
+</ul>
+<p>其他都没什么特别，for/in和Java中后来的foreach循环一样，同样是对数组中每一个元素进行操作。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">for (property in window) &#123;</span><br><span class="line">  document.write(property+&quot;&lt;br&#x2F;&gt;&quot;)</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>如上的代码就是遍历window对象中的每一个属性，大家可以看看window对象里有多少属性哦。</p>
+<h3 id="方法"><a href="#方法" class="headerlink" title="方法"></a>方法</h3><p>在JavaScript中方法实际上也是一种对象，而不像Java中方法只是对象的功能。在JavaScript中没有方法重载，但不管在定义方法的时候有几个参数，调用参数的时候可以传递任意个参数。这是因为所有参数传进来时是被当作一个数组，这个数组的名字就是arguments。虽然不支持重载，但我们可以通过如下方法来实现函数重载：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">function add()&#123;</span><br><span class="line">  if(arguments.length &#x3D;&#x3D; 2) &#123;</span><br><span class="line">    return arguments[0] + arguments[1];</span><br><span class="line">  &#125; else if(arguments.length &#x3D;&#x3D; 3)&#123;</span><br><span class="line">    return arguments[0] + arguments[1] + arguments[2];</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br><span class="line">alert(add(1,2));&#x2F;&#x2F;输出3</span><br><span class="line">alert(add(1,2,3));&#x2F;／输出6</span><br></pre></td></tr></table></figure>
+<h3 id="块级作用域"><a href="#块级作用域" class="headerlink" title="块级作用域"></a>块级作用域</h3><p>JavaScript中是没有块级作用域这一概念的。而在有这一概念的语言中，if和for语句，代码块中的代码执行完之后，在其中定义的变量就会被回收而无法使用。在JavaScript中不会出现这样的情况。这也是需要注意的一点。</p>
+<h3 id="创建类型和对象"><a href="#创建类型和对象" class="headerlink" title="创建类型和对象"></a>创建类型和对象</h3><p>JavaScript没有类的概念，如何去自定义类型并创建对象呢？工厂模式是一种方法，但工厂模式得到的对象都是直接继承Object，彼此直接没有关系。因此可以使用自定义构造函数来批量创建一类对象。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line">function Person(name, age) &#123;</span><br><span class="line">    this.name &#x3D; name;</span><br><span class="line">    this.age &#x3D; age;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">Person.prototype &#x3D; &#123;</span><br><span class="line">    constructor : Person,</span><br><span class="line">    sayName : function() &#123;</span><br><span class="line">        alert(this.name);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">var person1 &#x3D; new Person(&quot;Jack&quot;,18);</span><br><span class="line">var person2 &#x3D; new Person(&quot;Rose&quot;,16);</span><br><span class="line">document.write(person1.name+&quot;:&quot;+person1.age);</span><br><span class="line">document.write(person2.name+&quot;:&quot;+person2.age);</span><br><span class="line">person1.sayName();</span><br><span class="line">person2.sayName();</span><br></pre></td></tr></table></figure>
+<p>来看一段示例代码。这段代码组合使用了构造函数模式和原型模式，构造函数定义实例属性，原型模式定义方法和共同的属性。这也是现在js最常见的自定义类型的方式。</p>
+<p>先看构造函数，几乎与Java中的构造函数一模一样，不需要return，类型名首字母大写。在构造函数中也是可以定义函数的，但是在JavaScript中函数也是对象，为了避免重复创建对象，因此把函数放到外部或者原型中是更好地选择。</p>
+<p>再来看原型模式，其实就是定义Person的prototype属性，定义构造函数为上面的Person，并定义一个公共的方法sayName。prototype中的属性方法是所有实例化共有的，因此相当于Java中加了static的属性和方法。和static关键字一对比的话，就很容易理解了。</p>
+<p>学了创建类型和对象之后，我依然感到很惆怅，继承和方法重写怎么办？而且JavaScript还没有方法重载。以前学Java的时候只知道封装、继承、多态是面向对象的基础，但不明白为什么它们为何如此重要。学了新的面向对象语言之后，对封装、继承、多态这些理解更深了。</p>
+<h3 id="继承"><a href="#继承" class="headerlink" title="继承"></a>继承</h3><p>越学越觉得JavaScript比较奇怪，无怪它被称之为最让人“misunderstanding”的语言之一了。身为面向对象语言却居然连继承的关键词都没有。那么JavaScript是如何实现继承的呢————通过原型链。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br></pre></td><td class="code"><pre><span class="line">function Person(name, age) &#123;</span><br><span class="line">    this.name &#x3D; name;</span><br><span class="line">    this.age &#x3D; age;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">Person.prototype &#x3D; &#123;</span><br><span class="line">    constructor : Person,</span><br><span class="line">    sayName : function() &#123;</span><br><span class="line">        alert(this.name);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">function Employee(name, age, salary) &#123;</span><br><span class="line">    this.name &#x3D; name;</span><br><span class="line">    this.age &#x3D; age;</span><br><span class="line">    this.salary &#x3D; salary;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">Employee.prototype &#x3D; new Person();</span><br><span class="line">Employee.prototype.sayName &#x3D; function() &#123;</span><br><span class="line">    alert(&quot;I&#39;m a worker name of &quot; + this.name)</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">var employee &#x3D; new Employee(&quot;zhangsan&quot;, 23, 12000);</span><br><span class="line">document.write(employee.name+&quot;:&quot;+employee.age+&quot;:&quot;+employee.salary);</span><br><span class="line">employee.sayName();</span><br></pre></td></tr></table></figure>
+<p>这里定义一个Employee类型继承于Person对象，增加了属性salary，并重写了sayName。其他的还好理解，之一Employee.prototype = new Person()这一句实现继承的关键代码有点费解。</p>
+<p>原型链的基本思想是让一个引用类型继承另一个引用类型的属性和方法。每个构造函数都有一个原型对象，原型对象都包含一个指向构造函数的指针，这里我们让Employee的原型对象等于一个Person的对象的实例。此时Employee的原型对象就包含了指向Person原型对象的指针，Person的原型也包含了指向Employee构造函数的指针。如果Person也继承例如Animal这样的类型，这个原型的指向关系就会层层递进，形成实例与原型的链条，从而在JavaScript中实现继承。</p>
+<p>当然JavaScript中还有借用构造函数、组合继承的方式实现继承，这里就不多写了。</p>
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="http://yoursite.com/2017/07/30/JavaScrip%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/" data-id="ckj2v1sq3000mbkusap8j9ugc" class="article-share-link">Share</a>
+      
+      
+  <ul class="article-tag-list" itemprop="keywords"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/JavaScript/" rel="tag">JavaScript</a></li></ul>
+
+    </footer>
+  </div>
+  
+    
+<nav id="article-nav">
+  
+    <a href="/2017/07/30/Android%E4%B8%ADRTL%E5%B8%83%E5%B1%80%E7%9A%84%E9%80%82%E9%85%8D/" id="article-nav-newer" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">Newer</strong>
+      <div class="article-nav-title">
+        
+          Android中RTL布局的适配
+        
+      </div>
+    </a>
+  
+  
+    <a href="/2017/07/24/%E9%AD%94%E9%83%BD%EF%BC%8C%E8%AE%A4%E7%9C%9F%E5%91%8A%E5%88%AB%E6%AF%8F%E4%B8%80%E4%B8%AA%E8%BF%87%E5%AE%A2/" id="article-nav-older" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">Older</strong>
+      <div class="article-nav-title">魔都，认真告别每一个过客</div>
+    </a>
+  
+</nav>
+
+  
+</article>
+
+</section>
+        
+          <aside id="sidebar">
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">分类</h3>
+    <div class="widget">
+      <ul class="category-list"><li class="category-list-item"><a class="category-list-link" href="/categories/Android/">Android</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/Java/">Java</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/JavaScript/">JavaScript</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/Linux/">Linux</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/Node-js/">Node.js</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/git/">git</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/%E7%88%AC%E8%99%AB/">爬虫</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/%E9%9A%8F%E7%AC%94/">随笔</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/%E9%A1%B9%E7%9B%AE%E7%AE%A1%E7%90%86/">项目管理</a></li></ul>
+    </div>
+  </div>
+
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">标签</h3>
+    <div class="widget">
+      <ul class="tag-list" itemprop="keywords"><li class="tag-list-item"><a class="tag-list-link" href="/tags/Android/" rel="tag">Android</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Android-Studio/" rel="tag">Android Studio</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Github/" rel="tag">Github</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/JPA/" rel="tag">JPA</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/JVM/" rel="tag">JVM</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Java/" rel="tag">Java</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/JavaScript/" rel="tag">JavaScript</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Koa/" rel="tag">Koa</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Kotlin/" rel="tag">Kotlin</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Linux/" rel="tag">Linux</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/MongoDB/" rel="tag">MongoDB</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Node-js/" rel="tag">Node.js</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/OKHttp/" rel="tag">OKHttp</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Profiler/" rel="tag">Profiler</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/RESTful/" rel="tag">RESTful</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Spring-Boot/" rel="tag">Spring Boot</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Ubuntu/" rel="tag">Ubuntu</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/ava/" rel="tag">ava</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/git/" rel="tag">git</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/mongoose/" rel="tag">mongoose</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/python/" rel="tag">python</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E6%80%A7%E8%83%BD%E4%BC%98%E5%8C%96/" rel="tag">性能优化</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E6%BA%90%E7%A0%81%E5%88%86%E6%9E%90/" rel="tag">源码分析</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E7%88%AC%E8%99%AB/" rel="tag">爬虫</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E7%8E%AF%E5%A2%83%E9%85%8D%E7%BD%AE/" rel="tag">环境配置</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E7%94%9F%E6%B4%BB/" rel="tag">生活</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E8%81%8C%E4%B8%9A%E8%A7%84%E5%88%92/" rel="tag">职业规划</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E9%9A%8F%E7%AC%94/" rel="tag">随笔</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E9%A1%B9%E7%9B%AE%E7%AE%A1%E7%90%86/" rel="tag">项目管理</a></li></ul>
+    </div>
+  </div>
+
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">标签云</h3>
+    <div class="widget tagcloud">
+      <a href="/tags/Android/" style="font-size: 20px;">Android</a> <a href="/tags/Android-Studio/" style="font-size: 12.5px;">Android Studio</a> <a href="/tags/Github/" style="font-size: 10px;">Github</a> <a href="/tags/JPA/" style="font-size: 10px;">JPA</a> <a href="/tags/JVM/" style="font-size: 12.5px;">JVM</a> <a href="/tags/Java/" style="font-size: 15px;">Java</a> <a href="/tags/JavaScript/" style="font-size: 10px;">JavaScript</a> <a href="/tags/Koa/" style="font-size: 10px;">Koa</a> <a href="/tags/Kotlin/" style="font-size: 12.5px;">Kotlin</a> <a href="/tags/Linux/" style="font-size: 12.5px;">Linux</a> <a href="/tags/MongoDB/" style="font-size: 10px;">MongoDB</a> <a href="/tags/Node-js/" style="font-size: 15px;">Node.js</a> <a href="/tags/OKHttp/" style="font-size: 15px;">OKHttp</a> <a href="/tags/Profiler/" style="font-size: 10px;">Profiler</a> <a href="/tags/RESTful/" style="font-size: 10px;">RESTful</a> <a href="/tags/Spring-Boot/" style="font-size: 10px;">Spring Boot</a> <a href="/tags/Ubuntu/" style="font-size: 10px;">Ubuntu</a> <a href="/tags/ava/" style="font-size: 10px;">ava</a> <a href="/tags/git/" style="font-size: 12.5px;">git</a> <a href="/tags/mongoose/" style="font-size: 10px;">mongoose</a> <a href="/tags/python/" style="font-size: 10px;">python</a> <a href="/tags/%E6%80%A7%E8%83%BD%E4%BC%98%E5%8C%96/" style="font-size: 10px;">性能优化</a> <a href="/tags/%E6%BA%90%E7%A0%81%E5%88%86%E6%9E%90/" style="font-size: 15px;">源码分析</a> <a href="/tags/%E7%88%AC%E8%99%AB/" style="font-size: 10px;">爬虫</a> <a href="/tags/%E7%8E%AF%E5%A2%83%E9%85%8D%E7%BD%AE/" style="font-size: 15px;">环境配置</a> <a href="/tags/%E7%94%9F%E6%B4%BB/" style="font-size: 12.5px;">生活</a> <a href="/tags/%E8%81%8C%E4%B8%9A%E8%A7%84%E5%88%92/" style="font-size: 10px;">职业规划</a> <a href="/tags/%E9%9A%8F%E7%AC%94/" style="font-size: 17.5px;">随笔</a> <a href="/tags/%E9%A1%B9%E7%9B%AE%E7%AE%A1%E7%90%86/" style="font-size: 10px;">项目管理</a>
+    </div>
+  </div>
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">归档</h3>
+    <div class="widget">
+      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2020/12/">十二月 2020</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/01/">一月 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/12/">十二月 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/11/">十一月 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/10/">十月 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/09/">九月 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/07/">七月 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/05/">五月 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/03/">三月 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/09/">九月 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/07/">七月 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/05/">五月 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/04/">四月 2017</a></li></ul>
+    </div>
+  </div>
+
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">最新文章</h3>
+    <div class="widget">
+      <ul>
+        
+          <li>
+            <a href="/2020/12/24/%E8%80%81%E5%AE%9E%E4%BA%BA%E6%80%95%E5%BC%80%E5%8F%A3/">老实人怕开口</a>
+          </li>
+        
+          <li>
+            <a href="/2019/01/01/2019%E7%AC%AC%E4%B8%80%E5%A4%A9%E5%85%88%E7%AB%8Bflag/">2019第一天先立flag</a>
+          </li>
+        
+          <li>
+            <a href="/2018/12/31/2018%E7%BB%99%E8%87%AA%E5%B7%B1%E4%B8%80%E4%B8%AA%E7%AE%80%E5%8D%95%E7%9A%84%E6%80%BB%E7%BB%93/">2018给自己一个简单的总结</a>
+          </li>
+        
+          <li>
+            <a href="/2018/12/29/%E4%BD%BF%E7%94%A8jsonwebtoken%E5%AE%8C%E6%88%90nodejs%E7%9A%84%E7%99%BB%E9%99%86%E7%B3%BB%E7%BB%9F/">使用jsonwebtoken完成nodejs的登陆系统</a>
+          </li>
+        
+          <li>
+            <a href="/2018/12/28/Android%E4%B8%89%E5%A4%A7%E9%A1%B9%E7%9B%AE%E6%9E%B6%E6%9E%84MVC%E3%80%81MVP%E3%80%81MVVM%E4%BD%BF%E7%94%A8%E4%BD%93%E9%AA%8C/">Android三大项目架构MVC、MVP、MVVM使用体验</a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+
+  
+</aside>
+        
+      </div>
+      <footer id="footer">
+  
+  <div class="outer">
+    <div id="footer-info" class="inner">
+      &copy; 2020 业松<br>
+      Powered by <a href="http://hexo.io/" target="_blank">Hexo</a>
+    </div>
+  </div>
+</footer>
+    </div>
+    <nav id="mobile-nav">
+  
+    <a href="/" class="mobile-nav-link">Home</a>
+  
+    <a href="/archives" class="mobile-nav-link">Archives</a>
+  
+</nav>
+    
+
+<script src="//ajax.googleapis.com/ajax/libs/jquery/2.0.3/jquery.min.js"></script>
+
+
+  
+<link rel="stylesheet" href="/fancybox/jquery.fancybox.css">
+
+  
+<script src="/fancybox/jquery.fancybox.pack.js"></script>
+
+
+
+
+<script src="/js/script.js"></script>
+
+
+
+
+  </div>
+</body>
+</html>

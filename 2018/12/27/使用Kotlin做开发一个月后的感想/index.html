@@ -1,0 +1,269 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  
+
+  
+  <title>使用Kotlin做开发一个月后的感想 | 业松 Studio</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+  <meta name="description" content="本文由业松所写，转载请注明作者。  谈kotlin之前有一类程序员，自己根本没体验过的东西，看了几篇哗众取宠的博文自己也来嘲讽，我称之为云程序员。就比如Kotlin，有人蹭热度写几篇类似“我为什么从kotlin又回到java”的博文，就把kotlin一通批判。有空看看这些蹭热度博文为啥不看看Android Developer官网所有示例代码都是kotlin版本在前，java版本在后呢？ 争论语言">
+<meta property="og:type" content="article">
+<meta property="og:title" content="使用Kotlin做开发一个月后的感想">
+<meta property="og:url" content="http://yoursite.com/2018/12/27/%E4%BD%BF%E7%94%A8Kotlin%E5%81%9A%E5%BC%80%E5%8F%91%E4%B8%80%E4%B8%AA%E6%9C%88%E5%90%8E%E7%9A%84%E6%84%9F%E6%83%B3/index.html">
+<meta property="og:site_name" content="业松 Studio">
+<meta property="og:description" content="本文由业松所写，转载请注明作者。  谈kotlin之前有一类程序员，自己根本没体验过的东西，看了几篇哗众取宠的博文自己也来嘲讽，我称之为云程序员。就比如Kotlin，有人蹭热度写几篇类似“我为什么从kotlin又回到java”的博文，就把kotlin一通批判。有空看看这些蹭热度博文为啥不看看Android Developer官网所有示例代码都是kotlin版本在前，java版本在后呢？ 争论语言">
+<meta property="og:locale" content="zh_CN">
+<meta property="article:published_time" content="2018-12-27T09:36:23.000Z">
+<meta property="article:modified_time" content="2020-12-24T11:34:17.251Z">
+<meta property="article:author" content="业松">
+<meta property="article:tag" content="Android">
+<meta property="article:tag" content="Kotlin">
+<meta name="twitter:card" content="summary">
+  
+    <link rel="alternate" href="/atom.xml" title="业松 Studio" type="application/atom+xml">
+  
+  
+    <link rel="icon" href="/favicon.png">
+  
+  
+    <link href="//fonts.googleapis.com/css?family=Source+Code+Pro" rel="stylesheet" type="text/css">
+  
+  
+<link rel="stylesheet" href="/css/style.css">
+
+<meta name="generator" content="Hexo 5.3.0"></head>
+
+<body>
+  <div id="container">
+    <div id="wrap">
+      <header id="header">
+  <div id="banner"></div>
+  <div id="header-outer" class="outer">
+    <div id="header-title" class="inner">
+      <h1 id="logo-wrap">
+        <a href="/" id="logo">业松 Studio</a>
+      </h1>
+      
+    </div>
+    <div id="header-inner" class="inner">
+      <nav id="main-nav">
+        <a id="main-nav-toggle" class="nav-icon"></a>
+        
+          <a class="main-nav-link" href="/">Home</a>
+        
+          <a class="main-nav-link" href="/archives">Archives</a>
+        
+      </nav>
+      <nav id="sub-nav">
+        
+          <a id="nav-rss-link" class="nav-icon" href="/atom.xml" title="RSS Feed"></a>
+        
+        <a id="nav-search-btn" class="nav-icon" title="搜索"></a>
+      </nav>
+      <div id="search-form-wrap">
+        <form action="//google.com/search" method="get" accept-charset="UTF-8" class="search-form"><input type="search" name="q" class="search-form-input" placeholder="Search"><button type="submit" class="search-form-submit">&#xF002;</button><input type="hidden" name="sitesearch" value="http://yoursite.com"></form>
+      </div>
+    </div>
+  </div>
+</header>
+      <div class="outer">
+        <section id="main"><article id="post-使用Kotlin做开发一个月后的感想" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/2018/12/27/%E4%BD%BF%E7%94%A8Kotlin%E5%81%9A%E5%BC%80%E5%8F%91%E4%B8%80%E4%B8%AA%E6%9C%88%E5%90%8E%E7%9A%84%E6%84%9F%E6%83%B3/" class="article-date">
+  <time datetime="2018-12-27T09:36:23.000Z" itemprop="datePublished">2018-12-27</time>
+</a>
+    
+  <div class="article-category">
+    <a class="article-category-link" href="/categories/Android/">Android</a>
+  </div>
+
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 class="article-title" itemprop="name">
+      使用Kotlin做开发一个月后的感想
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <blockquote>
+<p>本文由<a target="_blank" rel="noopener" href="http://blog.zhangyesong.com/">业松</a>所写，转载请注明作者。</p>
+</blockquote>
+<h3 id="谈kotlin之前"><a href="#谈kotlin之前" class="headerlink" title="谈kotlin之前"></a>谈kotlin之前</h3><p>有一类程序员，自己根本没体验过的东西，看了几篇哗众取宠的博文自己也来嘲讽，我称之为云程序员。就比如Kotlin，有人蹭热度写几篇类似“我为什么从kotlin又回到java”的博文，就把kotlin一通批判。有空看看这些蹭热度博文为啥不看看Android Developer官网所有示例代码都是kotlin版本在前，java版本在后呢？</p>
+<p>争论语言、框架的优劣是没有意义的。很多程序员总是对自己一直使用的语言、框架大肆吹捧而对其他语言、框架各种贬低，很明显这样的程序员太狭隘了。Java确实常年排名第一，其他语言就没有意义了吗？当然不是，即使是批判，你也得自己真的体验过了才有资格。这可不是你行你上的翻版，毕竟了解一门新语言对一个真正程序员老说是很轻松的事。</p>
+<h3 id="简洁的语法"><a href="#简洁的语法" class="headerlink" title="简洁的语法"></a>简洁的语法</h3><p>Kotlin给我的感觉就是它就是针对Java里所有的痛点来做改变的，比如语法繁琐，烦人的空指针，缺少函数式编程支持（Java8虽然支持Lambda表达式但还远远不够）等等。不像它的孪生兄弟Scala那样奔放，Kotlin给我的感受是聪明又克制，对Java程序员来说半天就足够上手开干了，不像Scala门槛那么高。</p>
+<p>Java语言是我所接触过语言中语法最繁琐的（有更繁琐的请告知），这种繁琐在main函数就可以体现，而且Java可能也是唯一一个几乎没法不用IDE的语言。其他语言脱离了IDE的语法警告和代码生成模版也勉强能写一写，Java代码你没有试试看？</p>
+<p>但是Java的语法之严谨和繁琐恰恰是Java如此流行的原因。没写过Java的人可能没法理解这句话。人们对于Java严苛的语法还不够满意，还要再加上check-style，findbugs以及各种XXX公司Java代码规范等各种条条框框，最终得到的结果是所有Java程序员写出来的代码都能互相看懂。即使是刚毕业不久的Java程序员，只要熟悉Java面向对象语法，几乎不存在看不懂其他Java代码的情况（业务看不懂除外）。这样保证了Java程序员的代码下限非常之高，能够保证大型项目的成功。</p>
+<p>好像扯Java扯的有点多了。接触Kotlin之后会发现，kotlin在尽可能保持和Java一样的语法严苛性的情况下，大幅度地精简了Java代码，写起来非常之爽。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line">&#x2F;&#x2F;快速创建一个Bean类</span><br><span class="line">data class Person(val id: Long, var name: String, var age: Int)</span><br><span class="line"></span><br><span class="line">fun main() &#123;</span><br><span class="line">    &#x2F;&#x2F; 创建实例</span><br><span class="line">    val zhangsan &#x3D; Person(0L, &quot;zhangsan&quot;, 23)</span><br><span class="line">    &#x2F;&#x2F; set&#x2F;get方法</span><br><span class="line">    zhangsan.age &#x3D; 24</span><br><span class="line">    val name &#x3D; zhangsan.name</span><br><span class="line">    </span><br><span class="line">    &#x2F;&#x2F;copy方法</span><br><span class="line">    val lisi &#x3D; zhangsan.copy(id &#x3D; 1, name &#x3D; &quot;lisi&quot;)</span><br><span class="line">    &#x2F;&#x2F;默认生成的tostring和equals&#x2F;hashcode方法，可重写</span><br><span class="line">    zhangsan.toString()</span><br><span class="line">    zhangsan.hashCode()</span><br><span class="line">    var isEqual &#x3D; zhangsan.equals(lisi)</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>简洁的语法无处不在，比如上面的Bean类如果用java来写至少要多好几倍的代码。单例模式只需要把class换成object即可。这些虽然用Java的IDE的各种模版生成工具一样可以秒生成，但是还是kotlin写起来更舒服一些。</p>
+<p>我想强调的是，Kotlin并不是无脑地利用语法糖和新关键字来精简语法，我们可以很清晰地感受到Kotlin在设计过程中尽可能地保证它尽可能的语法严苛性。</p>
+<h3 id="空指针"><a href="#空指针" class="headerlink" title="空指针"></a>空指针</h3><p>Java的空指针异常被称之为“Billion Dollar Mistake”。在上家公司的时候为了避免空指针异常，代码规范要求几乎所有的对象都要进行判空操作，那种嵌套很深的json对象，判空起来真的是又臭又长。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">val name: String?</span><br><span class="line">&#x2F;&#x2F;这里要吐槽下为啥kotlin没有三目运算符？</span><br><span class="line">name &#x3D; if(Random.nextBoolean()) &quot;Ann&quot; else null</span><br><span class="line">&#x2F;&#x2F;加上？则只在name不为null的时候会调用，得到的len1类型也是有问号的，即Int?</span><br><span class="line">val len1 &#x3D; name?.length</span><br><span class="line">&#x2F;&#x2F;这种写法是如果为空给一个默认值，得到的len2类型为Int，不带问号</span><br><span class="line">val len2 &#x3D; name?.length?:0</span><br><span class="line">&#x2F;&#x2F;加上双感叹号其实就是java什么都不加的写法了，如果为null会报空指针异常</span><br><span class="line">val len3 &#x3D; name!!.length</span><br></pre></td></tr></table></figure>
+<p>上面的代码解释了三种对可能为空的对象的处理。其实我把Kotlin对空指针的处理归类为给所有对象加了个范型——符号？，对于带？的对象则表明它可能为空，你不处理直接使用的话不让编译，也就是把空指针尽量扼杀在编译期间。这个想法真的是简单又巧妙。很多人一听Kotlin就说没有空指针了，但是没用过的话并不知道怎么实现的。现在再有面试官问你，知道怎么回答了吧？</p>
+<h3 id="函数式编程"><a href="#函数式编程" class="headerlink" title="函数式编程"></a>函数式编程</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br></pre></td><td class="code"><pre><span class="line">fun AppCompatActivity.setupActionBar(@IdRes toolbarId: Int, action: ActionBar.() -&gt; Unit) &#123;</span><br><span class="line">    val toolbar &#x3D; findViewById&lt;Toolbar&gt;(toolbarId)</span><br><span class="line">    setSupportActionBar(toolbar)</span><br><span class="line">    supportActionBar?.run &#123;</span><br><span class="line">        &#x2F;&#x2F;执行参数中的函数，这样用户在调用该方法的时候更加灵活</span><br><span class="line">        action()</span><br><span class="line">    &#125;</span><br><span class="line">    toolbar.setNavigationOnClickListener &#123;</span><br><span class="line">        Log.d(&quot;AppCompatActivity&quot;, &quot;finish&quot;)</span><br><span class="line">        finish()</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">&#x2F;&#x2F;------------------------分割线-----------------------------</span><br><span class="line">&#x2F;&#x2F;类似的单方法接口现在只需要写一个闭包就行了</span><br><span class="line">binding.aliPayIcon.setOnClickListener &#123;</span><br><span class="line">    Log.d(&quot;example&quot;, it.contentDescription.toString())</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">&#x2F;&#x2F;扩展函数let，只有在对象不为空的时候会调用，相当于做了判空</span><br><span class="line">binding.let &#123;</span><br><span class="line">    it.setLifecycleOwner(this@WithdrawActivity)</span><br><span class="line">    it.viewModel &#x3D; vm</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">&#x2F;&#x2F;扩展函数apply, 在闭包内可直接调用对象的方法属性，有个好处就是可以直接操作对象不需要先生成变量</span><br><span class="line">vm.accountName.apply &#123;</span><br><span class="line">    this.value &#x3D; &quot;aaaa&quot;</span><br><span class="line">    Log.d(&quot;example&quot;, this.value?.toString() + &quot;:&quot; + this.hashCode())</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">&#x2F;&#x2F;还有其他基础扩展函数run, with, also等等，可以看看这篇博客的介绍：https:&#x2F;&#x2F;www.jianshu.com&#x2F;p&#x2F;28ce69d58fea</span><br></pre></td></tr></table></figure>
+<p>函数式编程对很多Java程序员来说是很陌生的。尽管我不想黑，但是Java真的强到让很多Java程序员只会Java一门语言，并且基本上Java8以上的版本也没接触过。而除了Java（Java8以下）我还真不知道哪门语言不支持函数式编程。</p>
+<p>几乎所有语言都支持函数式编程，因此会灵活使用函数式编程真的挺重要。Java不支持是因为函数式编程相对要难一点，不支持函数式编程反而让Java代码的下限更高。除了难度大一点，函数式编程最令人不爽的就是阅读性差（可能比较依赖写代码的人的水平），我看Java框架源码基本都很顺畅，但是看JavaScript框架简直懵逼。我现在的水平看Kotlin函数式代码也费劲，但是kotlin毕竟是强类型语言，函数的参数和返回值类型固定的话，认真读还是不难读懂的。</p>
+<p>扯远了，函数式编程的好处就是代码灵活度加倍提高，可以写出各种秀操作的代码，显然这也是一把双刃剑。不过随着函数式编程越来越流行，大家的水平越来越高，写出来的函数式代码势必越来越好。</p>
+<p>可以说Java程序员学习Kotlin唯一的难点就是函数式编程了，当然如果你本身就有函数式编程经验这点也不是事。如果没有的话就要好好学习参悟下函数式编程了，这是一个相对漫长的过程。在熟练掌握之前，不使用函数式编程也一样可以写Kotlin。</p>
+<h3 id="结语"><a href="#结语" class="headerlink" title="结语"></a>结语</h3><p>总的来说我对Kotlin的评价总体是正面的。不过有些人的脑回路不正常，我还是想说一下：说Kotlin好，有优点，马上又有人惊呼Java要被取代啦！过两天又有人大喊Kotlin怎么怎么不好马上要凉。Java的好处和适用范围相信你也明白。而现在还在大量使用的语言都有它各自的优点，这个我就不唠了，毕竟水平不够。我是真恶心某些蹭热度、发软文各自骗的博主和公众号。</p>
+<p>不要听信我和谷歌说它好，也不要听信那些碰瓷博主说它不好，有那时间坐而论道，为啥不抽出半小时来体验一下Kotlin呢？</p>
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="http://yoursite.com/2018/12/27/%E4%BD%BF%E7%94%A8Kotlin%E5%81%9A%E5%BC%80%E5%8F%91%E4%B8%80%E4%B8%AA%E6%9C%88%E5%90%8E%E7%9A%84%E6%84%9F%E6%83%B3/" data-id="ckj2v1sqw002nbkuset1s9au8" class="article-share-link">Share</a>
+      
+      
+  <ul class="article-tag-list" itemprop="keywords"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Android/" rel="tag">Android</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Kotlin/" rel="tag">Kotlin</a></li></ul>
+
+    </footer>
+  </div>
+  
+    
+<nav id="article-nav">
+  
+    <a href="/2018/12/28/Android%E4%B8%89%E5%A4%A7%E9%A1%B9%E7%9B%AE%E6%9E%B6%E6%9E%84MVC%E3%80%81MVP%E3%80%81MVVM%E4%BD%BF%E7%94%A8%E4%BD%93%E9%AA%8C/" id="article-nav-newer" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">Newer</strong>
+      <div class="article-nav-title">
+        
+          Android三大项目架构MVC、MVP、MVVM使用体验
+        
+      </div>
+    </a>
+  
+  
+    <a href="/2018/12/26/Alfred-Workflow%E8%AE%A9%E5%B7%A5%E4%BD%9C%E6%95%88%E7%8E%87%E5%8D%87%E7%BA%A7/" id="article-nav-older" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">Older</strong>
+      <div class="article-nav-title">Alfred+Workflow让工作效率升级</div>
+    </a>
+  
+</nav>
+
+  
+</article>
+
+</section>
+        
+          <aside id="sidebar">
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">分类</h3>
+    <div class="widget">
+      <ul class="category-list"><li class="category-list-item"><a class="category-list-link" href="/categories/Android/">Android</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/Java/">Java</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/JavaScript/">JavaScript</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/Linux/">Linux</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/Node-js/">Node.js</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/git/">git</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/%E7%88%AC%E8%99%AB/">爬虫</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/%E9%9A%8F%E7%AC%94/">随笔</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/%E9%A1%B9%E7%9B%AE%E7%AE%A1%E7%90%86/">项目管理</a></li></ul>
+    </div>
+  </div>
+
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">标签</h3>
+    <div class="widget">
+      <ul class="tag-list" itemprop="keywords"><li class="tag-list-item"><a class="tag-list-link" href="/tags/Android/" rel="tag">Android</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Android-Studio/" rel="tag">Android Studio</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Github/" rel="tag">Github</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/JPA/" rel="tag">JPA</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/JVM/" rel="tag">JVM</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Java/" rel="tag">Java</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/JavaScript/" rel="tag">JavaScript</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Koa/" rel="tag">Koa</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Kotlin/" rel="tag">Kotlin</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Linux/" rel="tag">Linux</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/MongoDB/" rel="tag">MongoDB</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Node-js/" rel="tag">Node.js</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/OKHttp/" rel="tag">OKHttp</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Profiler/" rel="tag">Profiler</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/RESTful/" rel="tag">RESTful</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Spring-Boot/" rel="tag">Spring Boot</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Ubuntu/" rel="tag">Ubuntu</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/ava/" rel="tag">ava</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/git/" rel="tag">git</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/mongoose/" rel="tag">mongoose</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/python/" rel="tag">python</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E6%80%A7%E8%83%BD%E4%BC%98%E5%8C%96/" rel="tag">性能优化</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E6%BA%90%E7%A0%81%E5%88%86%E6%9E%90/" rel="tag">源码分析</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E7%88%AC%E8%99%AB/" rel="tag">爬虫</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E7%8E%AF%E5%A2%83%E9%85%8D%E7%BD%AE/" rel="tag">环境配置</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E7%94%9F%E6%B4%BB/" rel="tag">生活</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E8%81%8C%E4%B8%9A%E8%A7%84%E5%88%92/" rel="tag">职业规划</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E9%9A%8F%E7%AC%94/" rel="tag">随笔</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E9%A1%B9%E7%9B%AE%E7%AE%A1%E7%90%86/" rel="tag">项目管理</a></li></ul>
+    </div>
+  </div>
+
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">标签云</h3>
+    <div class="widget tagcloud">
+      <a href="/tags/Android/" style="font-size: 20px;">Android</a> <a href="/tags/Android-Studio/" style="font-size: 12.5px;">Android Studio</a> <a href="/tags/Github/" style="font-size: 10px;">Github</a> <a href="/tags/JPA/" style="font-size: 10px;">JPA</a> <a href="/tags/JVM/" style="font-size: 12.5px;">JVM</a> <a href="/tags/Java/" style="font-size: 15px;">Java</a> <a href="/tags/JavaScript/" style="font-size: 10px;">JavaScript</a> <a href="/tags/Koa/" style="font-size: 10px;">Koa</a> <a href="/tags/Kotlin/" style="font-size: 12.5px;">Kotlin</a> <a href="/tags/Linux/" style="font-size: 12.5px;">Linux</a> <a href="/tags/MongoDB/" style="font-size: 10px;">MongoDB</a> <a href="/tags/Node-js/" style="font-size: 15px;">Node.js</a> <a href="/tags/OKHttp/" style="font-size: 15px;">OKHttp</a> <a href="/tags/Profiler/" style="font-size: 10px;">Profiler</a> <a href="/tags/RESTful/" style="font-size: 10px;">RESTful</a> <a href="/tags/Spring-Boot/" style="font-size: 10px;">Spring Boot</a> <a href="/tags/Ubuntu/" style="font-size: 10px;">Ubuntu</a> <a href="/tags/ava/" style="font-size: 10px;">ava</a> <a href="/tags/git/" style="font-size: 12.5px;">git</a> <a href="/tags/mongoose/" style="font-size: 10px;">mongoose</a> <a href="/tags/python/" style="font-size: 10px;">python</a> <a href="/tags/%E6%80%A7%E8%83%BD%E4%BC%98%E5%8C%96/" style="font-size: 10px;">性能优化</a> <a href="/tags/%E6%BA%90%E7%A0%81%E5%88%86%E6%9E%90/" style="font-size: 15px;">源码分析</a> <a href="/tags/%E7%88%AC%E8%99%AB/" style="font-size: 10px;">爬虫</a> <a href="/tags/%E7%8E%AF%E5%A2%83%E9%85%8D%E7%BD%AE/" style="font-size: 15px;">环境配置</a> <a href="/tags/%E7%94%9F%E6%B4%BB/" style="font-size: 12.5px;">生活</a> <a href="/tags/%E8%81%8C%E4%B8%9A%E8%A7%84%E5%88%92/" style="font-size: 10px;">职业规划</a> <a href="/tags/%E9%9A%8F%E7%AC%94/" style="font-size: 17.5px;">随笔</a> <a href="/tags/%E9%A1%B9%E7%9B%AE%E7%AE%A1%E7%90%86/" style="font-size: 10px;">项目管理</a>
+    </div>
+  </div>
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">归档</h3>
+    <div class="widget">
+      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2020/12/">十二月 2020</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/01/">一月 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/12/">十二月 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/11/">十一月 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/10/">十月 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/09/">九月 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/07/">七月 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/05/">五月 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/03/">三月 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/09/">九月 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/07/">七月 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/05/">五月 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/04/">四月 2017</a></li></ul>
+    </div>
+  </div>
+
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">最新文章</h3>
+    <div class="widget">
+      <ul>
+        
+          <li>
+            <a href="/2020/12/24/%E8%80%81%E5%AE%9E%E4%BA%BA%E6%80%95%E5%BC%80%E5%8F%A3/">老实人怕开口</a>
+          </li>
+        
+          <li>
+            <a href="/2019/01/01/2019%E7%AC%AC%E4%B8%80%E5%A4%A9%E5%85%88%E7%AB%8Bflag/">2019第一天先立flag</a>
+          </li>
+        
+          <li>
+            <a href="/2018/12/31/2018%E7%BB%99%E8%87%AA%E5%B7%B1%E4%B8%80%E4%B8%AA%E7%AE%80%E5%8D%95%E7%9A%84%E6%80%BB%E7%BB%93/">2018给自己一个简单的总结</a>
+          </li>
+        
+          <li>
+            <a href="/2018/12/29/%E4%BD%BF%E7%94%A8jsonwebtoken%E5%AE%8C%E6%88%90nodejs%E7%9A%84%E7%99%BB%E9%99%86%E7%B3%BB%E7%BB%9F/">使用jsonwebtoken完成nodejs的登陆系统</a>
+          </li>
+        
+          <li>
+            <a href="/2018/12/28/Android%E4%B8%89%E5%A4%A7%E9%A1%B9%E7%9B%AE%E6%9E%B6%E6%9E%84MVC%E3%80%81MVP%E3%80%81MVVM%E4%BD%BF%E7%94%A8%E4%BD%93%E9%AA%8C/">Android三大项目架构MVC、MVP、MVVM使用体验</a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+
+  
+</aside>
+        
+      </div>
+      <footer id="footer">
+  
+  <div class="outer">
+    <div id="footer-info" class="inner">
+      &copy; 2020 业松<br>
+      Powered by <a href="http://hexo.io/" target="_blank">Hexo</a>
+    </div>
+  </div>
+</footer>
+    </div>
+    <nav id="mobile-nav">
+  
+    <a href="/" class="mobile-nav-link">Home</a>
+  
+    <a href="/archives" class="mobile-nav-link">Archives</a>
+  
+</nav>
+    
+
+<script src="//ajax.googleapis.com/ajax/libs/jquery/2.0.3/jquery.min.js"></script>
+
+
+  
+<link rel="stylesheet" href="/fancybox/jquery.fancybox.css">
+
+  
+<script src="/fancybox/jquery.fancybox.pack.js"></script>
+
+
+
+
+<script src="/js/script.js"></script>
+
+
+
+
+  </div>
+</body>
+</html>

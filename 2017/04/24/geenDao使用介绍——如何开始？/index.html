@@ -1,0 +1,271 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  
+
+  
+  <title>geenDao使用介绍——如何开始？ | 业松 Studio</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+  <meta name="description" content="本文由本人翻译自greenDao官方文档，转载请注明作者  greenDao简介greenDao是一个用于Android的ORM（对象关系映射）工具。它提供了一个面向对象的接口来进行SQlite数据库的操作。greenDao这样的ORM工具可以替你做很多重复的操作，并为你提供一个简单的接口来操作你的数据。 在Gradle中配置greenDao为了在你的Android项目中使用greenDao，需">
+<meta property="og:type" content="article">
+<meta property="og:title" content="geenDao使用介绍——如何开始？">
+<meta property="og:url" content="http://yoursite.com/2017/04/24/geenDao%E4%BD%BF%E7%94%A8%E4%BB%8B%E7%BB%8D%E2%80%94%E2%80%94%E5%A6%82%E4%BD%95%E5%BC%80%E5%A7%8B%EF%BC%9F/index.html">
+<meta property="og:site_name" content="业松 Studio">
+<meta property="og:description" content="本文由本人翻译自greenDao官方文档，转载请注明作者  greenDao简介greenDao是一个用于Android的ORM（对象关系映射）工具。它提供了一个面向对象的接口来进行SQlite数据库的操作。greenDao这样的ORM工具可以替你做很多重复的操作，并为你提供一个简单的接口来操作你的数据。 在Gradle中配置greenDao为了在你的Android项目中使用greenDao，需">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="http://upload-images.jianshu.io/upload_images/5586297-7c8c79b375a7b02f.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240">
+<meta property="article:published_time" content="2017-04-24T08:14:43.000Z">
+<meta property="article:modified_time" content="2020-12-24T11:34:17.234Z">
+<meta property="article:author" content="业松">
+<meta property="article:tag" content="Android">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="http://upload-images.jianshu.io/upload_images/5586297-7c8c79b375a7b02f.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240">
+  
+    <link rel="alternate" href="/atom.xml" title="业松 Studio" type="application/atom+xml">
+  
+  
+    <link rel="icon" href="/favicon.png">
+  
+  
+    <link href="//fonts.googleapis.com/css?family=Source+Code+Pro" rel="stylesheet" type="text/css">
+  
+  
+<link rel="stylesheet" href="/css/style.css">
+
+<meta name="generator" content="Hexo 5.3.0"></head>
+
+<body>
+  <div id="container">
+    <div id="wrap">
+      <header id="header">
+  <div id="banner"></div>
+  <div id="header-outer" class="outer">
+    <div id="header-title" class="inner">
+      <h1 id="logo-wrap">
+        <a href="/" id="logo">业松 Studio</a>
+      </h1>
+      
+    </div>
+    <div id="header-inner" class="inner">
+      <nav id="main-nav">
+        <a id="main-nav-toggle" class="nav-icon"></a>
+        
+          <a class="main-nav-link" href="/">Home</a>
+        
+          <a class="main-nav-link" href="/archives">Archives</a>
+        
+      </nav>
+      <nav id="sub-nav">
+        
+          <a id="nav-rss-link" class="nav-icon" href="/atom.xml" title="RSS Feed"></a>
+        
+        <a id="nav-search-btn" class="nav-icon" title="搜索"></a>
+      </nav>
+      <div id="search-form-wrap">
+        <form action="//google.com/search" method="get" accept-charset="UTF-8" class="search-form"><input type="search" name="q" class="search-form-input" placeholder="Search"><button type="submit" class="search-form-submit">&#xF002;</button><input type="hidden" name="sitesearch" value="http://yoursite.com"></form>
+      </div>
+    </div>
+  </div>
+</header>
+      <div class="outer">
+        <section id="main"><article id="post-geenDao使用介绍——如何开始？" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/2017/04/24/geenDao%E4%BD%BF%E7%94%A8%E4%BB%8B%E7%BB%8D%E2%80%94%E2%80%94%E5%A6%82%E4%BD%95%E5%BC%80%E5%A7%8B%EF%BC%9F/" class="article-date">
+  <time datetime="2017-04-24T08:14:43.000Z" itemprop="datePublished">2017-04-24</time>
+</a>
+    
+  <div class="article-category">
+    <a class="article-category-link" href="/categories/Android/">Android</a>
+  </div>
+
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 class="article-title" itemprop="name">
+      geenDao使用介绍——如何开始？
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <blockquote>
+<p>本文由本人翻译自greenDao官方文档，转载请注明作者</p>
+</blockquote>
+<h1 id="greenDao简介"><a href="#greenDao简介" class="headerlink" title="greenDao简介"></a>greenDao简介</h1><p><img src="http://upload-images.jianshu.io/upload_images/5586297-7c8c79b375a7b02f.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="greenDao与数据库和Java对象的映射关系"><br>greenDao是一个用于Android的ORM（对象关系映射）工具。它提供了一个面向对象的接口来进行SQlite数据库的操作。greenDao这样的ORM工具可以替你做很多重复的操作，并为你提供一个简单的接口来操作你的数据。</p>
+<h1 id="在Gradle中配置greenDao"><a href="#在Gradle中配置greenDao" class="headerlink" title="在Gradle中配置greenDao"></a>在Gradle中配置greenDao</h1><p>为了在你的Android项目中使用greenDao，需要在gradle中进行配置并添加依赖库。</p>
+<figure class="highlight groovy"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// In your root build.gradle file:</span></span><br><span class="line">buildscript &#123;</span><br><span class="line">    repositories &#123;</span><br><span class="line">        jcenter()</span><br><span class="line">        mavenCentral() <span class="comment">// add repository</span></span><br><span class="line">    &#125;</span><br><span class="line">    dependencies &#123;</span><br><span class="line">        classpath <span class="string">&#x27;com.android.tools.build:gradle:2.3.0&#x27;</span></span><br><span class="line">        classpath <span class="string">&#x27;org.greenrobot:greendao-gradle-plugin:3.2.2&#x27;</span> <span class="comment">// add plugin</span></span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"> </span><br><span class="line"><span class="comment">// In your app projects build.gradle file:</span></span><br><span class="line">apply <span class="attr">plugin:</span> <span class="string">&#x27;com.android.application&#x27;</span></span><br><span class="line">apply <span class="attr">plugin:</span> <span class="string">&#x27;org.greenrobot.greendao&#x27;</span> <span class="comment">// apply plugin</span></span><br><span class="line"> </span><br><span class="line">dependencies &#123;</span><br><span class="line">    compile <span class="string">&#x27;org.greenrobot:greendao:3.2.2&#x27;</span> <span class="comment">// add library</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h1 id="如何开始使用"><a href="#如何开始使用" class="headerlink" title="如何开始使用"></a>如何开始使用</h1><p>下面我们通过一个简单的官方项目示例——<a target="_blank" rel="noopener" href="https://github.com/greenrobot/greenDAO/tree/master/examples/DaoExample">DaoExample</a>来帮助你开始使用GreenDao。你可以自由克隆这个项目的代码并运行，或者直接在github上查看代码。<br>DaoExample是一个简单的记录笔记的安卓APP，你可以添加新的笔记，或者点击一个已存在的笔记来删除它。</p>
+<p>#笔记实体和DAO类（The Note entity and DAO class）<br>我们直接来看代码，在src目录下你会找到叫<a target="_blank" rel="noopener" href="https://github.com/greenrobot/greenDAO/blob/master/examples/DaoExample/src/main/java/org/greenrobot/greendao/example/Note.java">Note.java</a>的笔记实体类。这个类包含了一个笔记的所有数据，比如笔记的id，内容，创建时间等信息。</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">@Entity(indexes = &#123;</span></span><br><span class="line"><span class="meta">    @Index(value = &quot;text, date DESC&quot;, unique = true)</span></span><br><span class="line"><span class="meta">&#125;)</span></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">Note</span> </span>&#123;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@Id</span></span><br><span class="line">    <span class="keyword">private</span> Long id;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@NotNull</span></span><br><span class="line">    <span class="keyword">private</span> String text;</span><br><span class="line">    <span class="keyword">private</span> Date date;</span><br><span class="line">    ...</span><br></pre></td></tr></table></figure>
+<p>大致来说，实体类是表示数据库信息的一个类，它的每一个属性，代表了数据库表中相对应的列。<br>现在开始编译这个项目，比如在Android Studio中使用 <strong>Build&gt;Make Project</strong>，这会触发greenDao生成DAO(Data Access Object)类，例如这个项目中的NoteDao.java，它可以帮助我们添加笔记到数据库中。</p>
+<p>#添加和删除笔记<br>为了学习怎样添加笔记，我们来看<a target="_blank" rel="noopener" href="https://github.com/greenrobot/greenDAO/blob/master/examples/DaoExample/src/main/java/org/greenrobot/greendao/example/NoteActivity.java">NoteActivity.java</a>这个类。首先我们需要为Note这个实体准备一个DAO类，我们在onCreate方法中获取DAO对象。</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// get the note DAO</span></span><br><span class="line">DaoSession daoSession = ((App) getApplication()).getDaoSession();</span><br><span class="line">noteDao = daoSession.getNoteDao();</span><br></pre></td></tr></table></figure>
+<p>当用户点击按钮，addNote()方法被执行。在这个方法里，我们创建一个笔记实例，并通过DAO对象的insert()方法将它添加到数据库中。</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">Note note = <span class="keyword">new</span> Note();</span><br><span class="line">note.setText(noteText);</span><br><span class="line">note.setComment(comment);</span><br><span class="line">note.setDate(<span class="keyword">new</span> Date());</span><br><span class="line">note.setType(NoteType.TEXT);</span><br><span class="line">noteDao.insert(note);</span><br><span class="line">Log.d(<span class="string">&quot;DaoExample&quot;</span>, <span class="string">&quot;Inserted new note, ID: &quot;</span> + note.getId());</span><br></pre></td></tr></table></figure>
+<p>在将这个笔记添加到数据库的时候我们没有为其指定id，这种情况下数据库会自动为其设置一个id。<br>删除一个笔记也非常简单，见NoteClickListener方法：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">noteDao.deleteByKey(id);</span><br></pre></td></tr></table></figure>
+<h1 id="修改笔记"><a href="#修改笔记" class="headerlink" title="修改笔记"></a>修改笔记</h1><p>示例项目中没有修改笔记的操作，不过也非常简单：只要在改变笔记的任何属性之后调用DAO的update方法：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">note.setText(<span class="string">&quot;This note has changed.&quot;</span>);</span><br><span class="line">noteDao.update(note);</span><br></pre></td></tr></table></figure>
+<p>除此之外还有其他的一些<strong>增、删、改、查</strong>的方法，greenDao所有DAO类都继承自<a target="_blank" rel="noopener" href="http://greenrobot.org/files/greendao/javadoc/current/org/greenrobot/greendao/AbstractDao.html#method.summary">the AbstractDao class</a>，可以查看这个类来学习更多的方法。</p>
+<h1 id="配置数据库"><a href="#配置数据库" class="headerlink" title="配置数据库"></a>配置数据库</h1><p>我们已经学习了DAO类的使用，那么我们是如何初始化greenDao和其内在的数据库呢？一般情况下，我们需要初始化一个<a target="_blank" rel="noopener" href="http://greenrobot.org/files/greendao/javadoc/current/org/greenrobot/greendao/AbstractDaoSession.html">DaoSession</a>，通常在项目的<a target="_blank" rel="noopener" href="https://github.com/greenrobot/greenDAO/blob/master/examples/DaoExample/src/main/java/org/greenrobot/greendao/example/App.java">the Application class</a>中进行初始化：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">DevOpenHelper helper = <span class="keyword">new</span> DevOpenHelper(<span class="keyword">this</span>, <span class="string">&quot;notes-db&quot;</span>);</span><br><span class="line">Database db = helper.getWritableDb();</span><br><span class="line">daoSession = <span class="keyword">new</span> DaoMaster(db).newSession();</span><br></pre></td></tr></table></figure>
+<p>数据库通过<strong>DevOpenHelper</strong>这个helper类来创建，这个类由<strong>DaoMaster</strong>提供，它是DaoMaster中继承自OpenHelper的内部类。它为你做好所有创建数据库的工作，你不需要再写”CREATE TABLE”这样的sql语句。<br>在activity和fragment中可以通过调用getDaoSession()方法来获得DaoSession并进一步获得实体DAO类，如上面添加和删除笔记那样。</p>
+<h1 id="扩展和添加实体类"><a href="#扩展和添加实体类" class="headerlink" title="扩展和添加实体类"></a>扩展和添加实体类</h1><p>为了扩展我们的Note类或者创建新的实体类，你只要修改或创建新的java类，然后加上注解，重新Build项目就可以了。</p>
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="http://yoursite.com/2017/04/24/geenDao%E4%BD%BF%E7%94%A8%E4%BB%8B%E7%BB%8D%E2%80%94%E2%80%94%E5%A6%82%E4%BD%95%E5%BC%80%E5%A7%8B%EF%BC%9F/" data-id="ckj2v1spo0006bkushvmzc39v" class="article-share-link">Share</a>
+      
+      
+  <ul class="article-tag-list" itemprop="keywords"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Android/" rel="tag">Android</a></li></ul>
+
+    </footer>
+  </div>
+  
+    
+<nav id="article-nav">
+  
+    <a href="/2017/05/02/Android%E4%BA%8B%E4%BB%B6%E5%88%86%E5%8F%91%E6%9C%BA%E5%88%B6/" id="article-nav-newer" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">Newer</strong>
+      <div class="article-nav-title">
+        
+          Android事件分发机制
+        
+      </div>
+    </a>
+  
+  
+    <a href="/2017/04/14/Android%E5%BC%80%E5%8F%91%E4%B8%AD%E7%9A%84%E9%95%BF%E5%BA%A6%E5%8D%95%E4%BD%8D%E8%AF%A6%E8%A7%A3/" id="article-nav-older" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">Older</strong>
+      <div class="article-nav-title">Android开发中的长度单位详解</div>
+    </a>
+  
+</nav>
+
+  
+</article>
+
+</section>
+        
+          <aside id="sidebar">
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">分类</h3>
+    <div class="widget">
+      <ul class="category-list"><li class="category-list-item"><a class="category-list-link" href="/categories/Android/">Android</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/Java/">Java</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/JavaScript/">JavaScript</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/Linux/">Linux</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/Node-js/">Node.js</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/git/">git</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/%E7%88%AC%E8%99%AB/">爬虫</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/%E9%9A%8F%E7%AC%94/">随笔</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/%E9%A1%B9%E7%9B%AE%E7%AE%A1%E7%90%86/">项目管理</a></li></ul>
+    </div>
+  </div>
+
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">标签</h3>
+    <div class="widget">
+      <ul class="tag-list" itemprop="keywords"><li class="tag-list-item"><a class="tag-list-link" href="/tags/Android/" rel="tag">Android</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Android-Studio/" rel="tag">Android Studio</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Github/" rel="tag">Github</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/JPA/" rel="tag">JPA</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/JVM/" rel="tag">JVM</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Java/" rel="tag">Java</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/JavaScript/" rel="tag">JavaScript</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Koa/" rel="tag">Koa</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Kotlin/" rel="tag">Kotlin</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Linux/" rel="tag">Linux</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/MongoDB/" rel="tag">MongoDB</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Node-js/" rel="tag">Node.js</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/OKHttp/" rel="tag">OKHttp</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Profiler/" rel="tag">Profiler</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/RESTful/" rel="tag">RESTful</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Spring-Boot/" rel="tag">Spring Boot</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Ubuntu/" rel="tag">Ubuntu</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/ava/" rel="tag">ava</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/git/" rel="tag">git</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/mongoose/" rel="tag">mongoose</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/python/" rel="tag">python</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E6%80%A7%E8%83%BD%E4%BC%98%E5%8C%96/" rel="tag">性能优化</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E6%BA%90%E7%A0%81%E5%88%86%E6%9E%90/" rel="tag">源码分析</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E7%88%AC%E8%99%AB/" rel="tag">爬虫</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E7%8E%AF%E5%A2%83%E9%85%8D%E7%BD%AE/" rel="tag">环境配置</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E7%94%9F%E6%B4%BB/" rel="tag">生活</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E8%81%8C%E4%B8%9A%E8%A7%84%E5%88%92/" rel="tag">职业规划</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E9%9A%8F%E7%AC%94/" rel="tag">随笔</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E9%A1%B9%E7%9B%AE%E7%AE%A1%E7%90%86/" rel="tag">项目管理</a></li></ul>
+    </div>
+  </div>
+
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">标签云</h3>
+    <div class="widget tagcloud">
+      <a href="/tags/Android/" style="font-size: 20px;">Android</a> <a href="/tags/Android-Studio/" style="font-size: 12.5px;">Android Studio</a> <a href="/tags/Github/" style="font-size: 10px;">Github</a> <a href="/tags/JPA/" style="font-size: 10px;">JPA</a> <a href="/tags/JVM/" style="font-size: 12.5px;">JVM</a> <a href="/tags/Java/" style="font-size: 15px;">Java</a> <a href="/tags/JavaScript/" style="font-size: 10px;">JavaScript</a> <a href="/tags/Koa/" style="font-size: 10px;">Koa</a> <a href="/tags/Kotlin/" style="font-size: 12.5px;">Kotlin</a> <a href="/tags/Linux/" style="font-size: 12.5px;">Linux</a> <a href="/tags/MongoDB/" style="font-size: 10px;">MongoDB</a> <a href="/tags/Node-js/" style="font-size: 15px;">Node.js</a> <a href="/tags/OKHttp/" style="font-size: 15px;">OKHttp</a> <a href="/tags/Profiler/" style="font-size: 10px;">Profiler</a> <a href="/tags/RESTful/" style="font-size: 10px;">RESTful</a> <a href="/tags/Spring-Boot/" style="font-size: 10px;">Spring Boot</a> <a href="/tags/Ubuntu/" style="font-size: 10px;">Ubuntu</a> <a href="/tags/ava/" style="font-size: 10px;">ava</a> <a href="/tags/git/" style="font-size: 12.5px;">git</a> <a href="/tags/mongoose/" style="font-size: 10px;">mongoose</a> <a href="/tags/python/" style="font-size: 10px;">python</a> <a href="/tags/%E6%80%A7%E8%83%BD%E4%BC%98%E5%8C%96/" style="font-size: 10px;">性能优化</a> <a href="/tags/%E6%BA%90%E7%A0%81%E5%88%86%E6%9E%90/" style="font-size: 15px;">源码分析</a> <a href="/tags/%E7%88%AC%E8%99%AB/" style="font-size: 10px;">爬虫</a> <a href="/tags/%E7%8E%AF%E5%A2%83%E9%85%8D%E7%BD%AE/" style="font-size: 15px;">环境配置</a> <a href="/tags/%E7%94%9F%E6%B4%BB/" style="font-size: 12.5px;">生活</a> <a href="/tags/%E8%81%8C%E4%B8%9A%E8%A7%84%E5%88%92/" style="font-size: 10px;">职业规划</a> <a href="/tags/%E9%9A%8F%E7%AC%94/" style="font-size: 17.5px;">随笔</a> <a href="/tags/%E9%A1%B9%E7%9B%AE%E7%AE%A1%E7%90%86/" style="font-size: 10px;">项目管理</a>
+    </div>
+  </div>
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">归档</h3>
+    <div class="widget">
+      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2020/12/">十二月 2020</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/01/">一月 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/12/">十二月 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/11/">十一月 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/10/">十月 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/09/">九月 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/07/">七月 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/05/">五月 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/03/">三月 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/09/">九月 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/07/">七月 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/05/">五月 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/04/">四月 2017</a></li></ul>
+    </div>
+  </div>
+
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">最新文章</h3>
+    <div class="widget">
+      <ul>
+        
+          <li>
+            <a href="/2020/12/24/%E8%80%81%E5%AE%9E%E4%BA%BA%E6%80%95%E5%BC%80%E5%8F%A3/">老实人怕开口</a>
+          </li>
+        
+          <li>
+            <a href="/2019/01/01/2019%E7%AC%AC%E4%B8%80%E5%A4%A9%E5%85%88%E7%AB%8Bflag/">2019第一天先立flag</a>
+          </li>
+        
+          <li>
+            <a href="/2018/12/31/2018%E7%BB%99%E8%87%AA%E5%B7%B1%E4%B8%80%E4%B8%AA%E7%AE%80%E5%8D%95%E7%9A%84%E6%80%BB%E7%BB%93/">2018给自己一个简单的总结</a>
+          </li>
+        
+          <li>
+            <a href="/2018/12/29/%E4%BD%BF%E7%94%A8jsonwebtoken%E5%AE%8C%E6%88%90nodejs%E7%9A%84%E7%99%BB%E9%99%86%E7%B3%BB%E7%BB%9F/">使用jsonwebtoken完成nodejs的登陆系统</a>
+          </li>
+        
+          <li>
+            <a href="/2018/12/28/Android%E4%B8%89%E5%A4%A7%E9%A1%B9%E7%9B%AE%E6%9E%B6%E6%9E%84MVC%E3%80%81MVP%E3%80%81MVVM%E4%BD%BF%E7%94%A8%E4%BD%93%E9%AA%8C/">Android三大项目架构MVC、MVP、MVVM使用体验</a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+
+  
+</aside>
+        
+      </div>
+      <footer id="footer">
+  
+  <div class="outer">
+    <div id="footer-info" class="inner">
+      &copy; 2020 业松<br>
+      Powered by <a href="http://hexo.io/" target="_blank">Hexo</a>
+    </div>
+  </div>
+</footer>
+    </div>
+    <nav id="mobile-nav">
+  
+    <a href="/" class="mobile-nav-link">Home</a>
+  
+    <a href="/archives" class="mobile-nav-link">Archives</a>
+  
+</nav>
+    
+
+<script src="//ajax.googleapis.com/ajax/libs/jquery/2.0.3/jquery.min.js"></script>
+
+
+  
+<link rel="stylesheet" href="/fancybox/jquery.fancybox.css">
+
+  
+<script src="/fancybox/jquery.fancybox.pack.js"></script>
+
+
+
+
+<script src="/js/script.js"></script>
+
+
+
+
+  </div>
+</body>
+</html>
